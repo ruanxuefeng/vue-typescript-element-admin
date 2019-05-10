@@ -5,12 +5,14 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from "vue-property-decorator";
+    import {Component, Prop, Vue} from 'vue-property-decorator';
 
     @Component
     export default class SvgClass extends Vue {
-        @Prop(String) iconClass!: string;
-        @Prop(String) className?: string;
+        @Prop(String)
+        private iconClass!: string;
+        @Prop(String)
+        private className?: string;
 
         get iconName(): string {
             return `#icon-${this.iconClass}`;
@@ -18,9 +20,9 @@
 
         get svgClass(): string {
             if (this.className) {
-                return "svg-icon " + this.className;
+                return 'svg-icon ' + this.className;
             } else {
-                return "svg-icon";
+                return 'svg-icon';
             }
         }
     }

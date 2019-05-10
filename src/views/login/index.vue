@@ -4,7 +4,7 @@
                  ref="loginForm">
 
             <div class="title-container">
-                <h3 class="title">Login Form</h3>
+                <h3 class="title">系统登录</h3>
             </div>
 
             <el-form-item prop="username">
@@ -14,7 +14,7 @@
                 <el-input
                         auto-complete="on"
                         name="username"
-                        placeholder="Username"
+                        placeholder="用户名"
                         ref="username"
                         tabindex="1"
                         type="text"
@@ -35,7 +35,7 @@
                             @keyup.native="checkCapsLock"
                             auto-complete="on"
                             name="password"
-                            placeholder="Password"
+                            placeholder="密码"
                             ref="password"
                             tabindex="2"
                             v-model="loginForm.password"
@@ -47,7 +47,8 @@
             </el-tooltip>
 
             <el-button :loading="loading" @click.native.prevent="handleLogin" style="width:100%;margin-bottom:30px;"
-                       type="primary">Login
+                       type="primary">
+                登录
             </el-button>
         </el-form>
 
@@ -56,32 +57,32 @@
 
 <script lang="ts">
 
-    import {Component, Vue, Watch} from "vue-property-decorator";
+    import {Component, Vue, Watch} from 'vue-property-decorator';
 
-    import SvgClass from "@/components/SvgIcon/index.vue";
-    import {validUsername} from "@/uitils/validate";
-    import Rule from "@/class/Rule";
+    import {validUsername} from '@/uitils/validate';
+    import Rule from '@/class/Rule';
+    import LoginForm from '@/class/LoginForm';
 
     @Component
     export default class Login extends Vue {
 
         private static validateUsername(rule: Rule, value: string, callback: (error?: Error) => void): void {
             if (!validUsername(value)) {
-                callback(new Error("Please enter the correct user name"));
+                callback(new Error('请输入用户名'));
             } else {
                 callback();
             }
         }
 
         private static validatePassword(rule: Rule, value: string, callback: (error?: Error) => void): void {
-            if (value.length < 6) {
-                callback(new Error("The password can not be less than 6 digits"));
+            if (value.length < 5) {
+                callback(new Error('密码必须超过5位'));
             } else {
                 callback();
             }
         }
 
-        $refs: {
+        public $refs!: {
             loginForm: HTMLFormElement;
             username: HTMLInputElement;
             password: HTMLInputElement;
@@ -90,74 +91,69 @@
         private loginForm = new LoginForm();
         private loginRules = {
             username: new Rule(Login.validateUsername),
-            password: new Rule(Login.validatePassword)
+            password: new Rule(Login.validatePassword),
         };
-        private passwordType: string = "password";
+        private passwordType: string = 'password';
         private capsTooltip: boolean = false;
         private loading: boolean = false;
         private redirect?: string;
 
-        mounted() {
-            if (this.loginForm.username === "") {
+        private mounted() {
+            if (this.loginForm.username === '') {
                 this.$refs.username.focus();
-            } else if (this.loginForm.password === "") {
+            } else if (this.loginForm.password === '') {
                 this.$refs.password.focus();
             }
         }
 
-        @Watch("$route")
-        route(route: any) {
+        @Watch('$route')
+        private route(route: any) {
             this.redirect = route.query && route.query.redirect;
         }
 
-        checkCapsLock(shiftKey: string, key: string) {
+        private checkCapsLock(shiftKey: string, key: string) {
             if (key && key.length === 1) {
-                if (shiftKey && (key >= "a" && key <= "z") || !shiftKey && (key >= "A" && key <= "Z")) {
+                if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
                     this.capsTooltip = true;
                 } else {
                     this.capsTooltip = false;
                 }
             }
-            if (key === "CapsLock" && this.capsTooltip) {
+            if (key === 'CapsLock' && this.capsTooltip) {
                 this.capsTooltip = false;
             }
         }
 
-        showPwd() {
-            if (this.passwordType === "password") {
-                this.passwordType = "";
+        private showPwd() {
+            if (this.passwordType === 'password') {
+                this.passwordType = '';
             } else {
-                this.passwordType = "password";
+                this.passwordType = 'password';
             }
             this.$nextTick(() => {
                 this.$refs.password.focus();
             });
         }
 
-        handleLogin() {
+        private handleLogin() {
             this.$refs.loginForm.validate((valid: boolean) => {
                 if (valid) {
                     this.loading = true;
-                    this.$store.dispatch("user/login", this.loginForm)
+                    this.$store.dispatch('login', {username: this.loginForm.username, password: Buffer.from(this.loginForm.password).toString('base64'),})
                         .then(() => {
-                            this.$router.push({path: this.redirect || "/"});
+                            this.$router.push({path: this.redirect || '/'});
                             this.loading = false;
                         })
                         .catch(() => {
                             this.loading = false;
                         });
                 } else {
-                    console.log("error submit!!");
+                    console.log('error submit!!');
                     return false;
                 }
             });
         }
 
-    }
-
-    class LoginForm {
-        public username: string = "admin";
-        public password: string = "123456";
     }
 </script>
 

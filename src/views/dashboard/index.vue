@@ -1,31 +1,16 @@
 <template>
-  <div class="dashboard-container">
-    <component :is="currentRole" />
-  </div>
+    <div>{{name}}</div>
 </template>
 
-<script>
-import { mapGetters } from 'vuex'
-import adminDashboard from './admin'
-import editorDashboard from './editor'
+<script lang="ts">
+    import {Component, Vue} from 'vue-property-decorator';
 
-export default {
-  name: 'Dashboard',
-  components: { adminDashboard, editorDashboard },
-  data() {
-    return {
-      currentRole: 'adminDashboard'
+    @Component
+    export default class Dashboard extends Vue {
+        private name: string = 'asdfasdfsadf';
     }
-  },
-  computed: {
-    ...mapGetters([
-      'roles'
-    ])
-  },
-  created() {
-    if (!this.roles.includes('admin')) {
-      this.currentRole = 'editorDashboard'
-    }
-  }
-}
 </script>
+
+<style scoped>
+
+</style>

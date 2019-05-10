@@ -58,6 +58,7 @@
 <script lang="ts">
 
     import {Component, Vue, Watch} from 'vue-property-decorator';
+    import {Action} from 'vuex-class';
 
     import {validUsername} from '@/uitils/validate';
     import Rule from '@/class/Rule';
@@ -111,6 +112,9 @@
             this.redirect = route.query && route.query.redirect;
         }
 
+        @Action('login')
+        private login!: Function;
+
         private checkCapsLock(shiftKey: string, key: string) {
             if (key && key.length === 1) {
                 if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
@@ -139,14 +143,15 @@
             this.$refs.loginForm.validate((valid: boolean) => {
                 if (valid) {
                     this.loading = true;
-                    this.$store.dispatch('login', {username: this.loginForm.username, password: Buffer.from(this.loginForm.password).toString('base64'),})
-                        .then(() => {
-                            this.$router.push({path: this.redirect || '/'});
-                            this.loading = false;
-                        })
-                        .catch(() => {
-                            this.loading = false;
-                        });
+                    this.login({
+                        username: this.loginForm.username,
+                        password: Buffer.from(this.loginForm.password).toString('base64'),
+                    }).then(() => {
+                        this.$router.push({path: this.redirect || '/'});
+                        this.loading = false;
+                    }).catch(() => {
+                        this.loading = false;
+                    });
                 } else {
                     console.log('error submit!!');
                     return false;

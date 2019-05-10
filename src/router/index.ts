@@ -1,6 +1,8 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+import Layout from '@/layout/index.vue';
+
 Vue.use(Router);
 
 export function resetRouter() {

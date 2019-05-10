@@ -1,4 +1,8 @@
+import variables from '@/styles/element-variables.scss';
+
 export default class Settings {
+    public theme: string = variables.theme;
+
     public title: string = 'Vue Element Admin';
 
     /**

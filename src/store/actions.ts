@@ -3,19 +3,19 @@ import {ActionTree} from 'vuex';
 import State from './state';
 import {removeToken, setToken} from '@/uitils/auth';
 import {getInfo, login, logout} from '@/api/user';
-import router, {resetRouter} from '@/router';
+import {resetRouter} from '@/router';
 
 
 const actions: ActionTree<State, any> = {
     login({commit}, userInfo) {
         const {username, password} = userInfo;
         return new Promise((resolve, reject) => {
-            login({username, password}).then((response: any) => {
-                const {data} = response;
+            login({username, password}).then((resp) => {
+                const {data} = resp;
                 commit('SET_TOKEN', data.token);
                 setToken(data.token);
                 resolve();
-            }).catch((error: any) => {
+            }).catch((error) => {
                 reject(error);
             });
         });
@@ -42,7 +42,6 @@ const actions: ActionTree<State, any> = {
             });
         });
     },
-
     // user logout
     logout({commit}) {
         return new Promise((resolve, reject) => {

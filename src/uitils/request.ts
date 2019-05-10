@@ -1,6 +1,7 @@
 import axios from 'axios';
-import {MessageBox, Message} from 'element-ui';
 import store from '@/store';
+import {Message} from 'element-ui';
+
 import {getToken} from '@/uitils/auth';
 
 // create an axios instance
@@ -35,18 +36,10 @@ service.interceptors.request.use(
 
 // response interceptor
 service.interceptors.response.use(
-    /**
-     * If you want to get http information such as headers or status
-     * Please return  response => response
-     */
-
-    /**
-     * Determine the request status by custom code
-     * Here is just an example
-     * You can also judge the status by HTTP Status Code
-     */
-    (response: any) => response.data,
-    (error: any) => {
+    (response) => {
+        return response;
+    },
+    (error) => {
         console.log('err' + error); // for debug
         Message({
             message: error.message,

@@ -1,34 +1,6 @@
 # vue-typescript-element-admin
 
-## Project setup
-```
-npm install
-```
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+    - 基于typescript的[Vue-Element-Admin](https://github.com/PanJiaChen/vue-element-admin)的精简版
+    - 对应的后台管理[AM-Server](https://gitee.com/ruanxuefeng/am-server)
 
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Run your tests
-```
-npm run test
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

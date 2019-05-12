@@ -1,15 +1,61 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    登陆后
+    <div v-if="device === 'mobile'&& sidebar.opened" class="drawer-bg" @click="handleClickOutside"></div>
+    <sidebar class="sidebar-container"></sidebar>
+    <div :class="{hasTagsView:needTagsView}" class="main-container">
+      <div :class="{'fixed-header':fixedHeader}">
+        <navbar/>
+        <!--<tags-view v-if="needTagsView" />-->
+      </div>
+      <app-main/>
+      <!--<right-panel v-if="showSettings">
+        <settings />
+      </right-panel>-->
+    </div>
   </div>
 </template>
 
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
+  import {Getter} from 'vuex-class';
 
-  @Component
+  import {AppMain, Navbar, Sidebar} from './components';
+  import SideBarClass from '@/store/types/Sidebar';
+  import User from '@/views/system/user/User';
+
+  @Component({
+    components: {
+      AppMain,
+      Sidebar,
+      Navbar,
+    },
+  })
   export default class Layout extends Vue {
 
+    @Getter('device')
+    private device!: string;
+
+    @Getter('sidebar')
+    private sidebar!: SideBarClass;
+
+    @Getter('tagsView')
+    private needTagsView!: boolean;
+
+    @Getter('fixedHeader')
+    private fixedHeader!: boolean;
+
+    get classObj() {
+      return {
+        hideSidebar: !this.sidebar.opened,
+        openSidebar: this.sidebar.opened,
+        withoutAnimation: this.sidebar.withoutAnimation,
+        mobile: this.device === 'mobile',
+      };
+    }
+
+    private handleClickOutside() {
+      console.info(111);
+    }
 
   }
 

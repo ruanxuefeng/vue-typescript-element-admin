@@ -27,7 +27,7 @@ export default class Settings {
      * @type {boolean} true | false
      * @description Whether show the logo in sidebar
      */
-    public sidebarLogo: boolean = false;
+    public sidebarLogo: boolean = true;
 
     /**
      * @type {string | array} 'production' | ['production'; 'development']

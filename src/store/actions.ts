@@ -1,9 +1,10 @@
 import {ActionTree} from 'vuex';
 
 import State from './state';
-import {removeToken, setToken} from '@/uitils/auth';
+import {getToken, removeToken, setToken} from '@/uitils/auth';
 import {getInfo, login, logout} from '@/api/user';
-import {resetRouter} from '@/router';
+import {resetRouter, asyncRoutes} from '@/router';
+import {filterAsyncRoutes} from '@/uitils/permission';
 
 
 const actions: ActionTree<State, any> = {
@@ -11,8 +12,14 @@ const actions: ActionTree<State, any> = {
         const {username, password} = userInfo;
         return new Promise((resolve, reject) => {
             login({username, password}).then((resp) => {
-                const {data} = resp;
-                commit('SET_TOKEN', data.token);
+                const data = resp.data;
+                const {token, name, email, gender, avatar, menus} = data;
+                let {roles} = data;
+
+                roles = roles.map((role: any) => role.name);
+
+                const user = {token, name, email, gender, avatar, roles, menus};
+                commit('setUser', user);
                 setToken(data.token);
                 resolve();
             }).catch((error) => {
@@ -24,19 +31,18 @@ const actions: ActionTree<State, any> = {
     getInfo({commit}) {
         return new Promise((resolve, reject) => {
             getInfo().then((response: any) => {
-                const {data} = response;
+                const data = response.data;
 
-                if (!data) {
-                    reject('Verification failed, please Login again.');
-                }
+                const {name, email, gender, avatar, menus} = data;
+                let {roles} = data;
 
-                const {roleList, name, avatar, introduction} = data;
+                roles = roles.map((role: any) => role.name);
+                const token = getToken();
 
-                commit('SET_ROLES', roleList);
-                commit('SET_NAME', name);
-                commit('SET_AVATAR', avatar);
-                commit('SET_INTRODUCTION', introduction);
-                resolve(data);
+                const user = {token, name, email, gender, avatar, roles, menus};
+                commit('setUser', user);
+
+                resolve(user);
             }).catch((error: any) => {
                 reject(error);
             });
@@ -55,6 +61,16 @@ const actions: ActionTree<State, any> = {
                 reject(error);
             });
         });
+    },
+    generateRoutes({commit}, menus) {
+        return new Promise((resolve) => {
+            const accessedRoutes = filterAsyncRoutes(asyncRoutes, menus);
+            commit('setRoutes', accessedRoutes);
+            resolve(accessedRoutes);
+        });
+    },
+    toggleSideBar({ commit }) {
+        commit('toggleSidebar');
     },
 };
 

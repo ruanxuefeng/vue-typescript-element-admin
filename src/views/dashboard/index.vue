@@ -1,13 +1,21 @@
 <template>
-    <div>{{name}}</div>
+    <div class="dashboard-container">
+        <component :is="currentRole"/>
+    </div>
 </template>
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
 
-    @Component
+    import EditorDashboard from './editor/index.vue';
+
+    @Component({
+        components: {
+            EditorDashboard,
+        },
+    })
     export default class Dashboard extends Vue {
-        private name: string = 'asdfasdfsadf';
+        private currentRole: string = 'EditorDashboard';
     }
 </script>
 

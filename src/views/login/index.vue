@@ -9,7 +9,7 @@
 
             <el-form-item prop="username">
         <span class="svg-container">
-          <svg-icon icon-class="user"/>
+            <svg-icon icon-class="user"></svg-icon>
         </span>
                 <el-input
                         auto-complete="on"
@@ -25,7 +25,7 @@
             <el-tooltip content="Caps lock is On" manual placement="right" v-model="capsTooltip">
                 <el-form-item prop="password">
           <span class="svg-container">
-            <svg-icon icon-class="password"/>
+              <svg-icon icon-class="password"></svg-icon>
           </span>
                     <el-input
                             :key="passwordType"
@@ -68,7 +68,7 @@
     export default class Login extends Vue {
 
         private static validateUsername(rule: Rule, value: string, callback: (error?: Error) => void): void {
-            if (!validUsername(value)) {
+            if (validUsername(value)) {
                 callback(new Error('请输入用户名'));
             } else {
                 callback();
@@ -91,13 +91,16 @@
 
         private loginForm = new LoginForm();
         private loginRules = {
-            username: new Rule(Login.validateUsername),
-            password: new Rule(Login.validatePassword),
+            username: [new Rule({}, Login.validateUsername)],
+            password: [new Rule({}, Login.validatePassword)],
         };
         private passwordType: string = 'password';
         private capsTooltip: boolean = false;
         private loading: boolean = false;
         private redirect?: string;
+
+        @Action('login')
+        private login!: ({}) => any;
 
         private mounted() {
             if (this.loginForm.username === '') {
@@ -111,9 +114,6 @@
         private route(route: any) {
             this.redirect = route.query && route.query.redirect;
         }
-
-        @Action('login')
-        private login!: Function;
 
         private checkCapsLock(shiftKey: string, key: string) {
             if (key && key.length === 1) {

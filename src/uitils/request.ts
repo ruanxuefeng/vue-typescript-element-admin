@@ -1,5 +1,4 @@
 import axios from 'axios';
-import store from '@/store';
 import {Message} from 'element-ui';
 
 import {getToken} from '@/uitils/auth';
@@ -18,13 +17,7 @@ const service = axios.create({
 service.interceptors.request.use(
     (config: any) => {
         // do something before request is sent
-
-        if (store.getters.token) {
-            // let each request carry token
-            // ['X-Token'] is a custom headers key
-            // please modify it according to the actual situation
-            config.headers['X-Token'] = getToken();
-        }
+        config.headers['AM-TOKEN'] = getToken();
         return config;
     },
     (error: any) => {
@@ -42,7 +35,7 @@ service.interceptors.response.use(
     (error) => {
         console.log('err' + error); // for debug
         Message({
-            message: error.message,
+            message: error.response.data.message,
             type: 'error',
             duration: 5 * 1000,
         });

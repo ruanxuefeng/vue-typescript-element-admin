@@ -160,7 +160,8 @@
         }
 
         private handleUpdate(row: any) {
-            this.obj = row;
+            const {id, name, describe} = row;
+            this.obj = {id, name, describe};
             this.data.dialogStatus = 'update';
             this.data.dialogFormVisible = true;
         }

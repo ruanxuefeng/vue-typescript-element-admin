@@ -49,6 +49,13 @@ export const asyncRoutes: RouteConfigImpl[] = [
                 permissions: ['system-role'],
                 meta: {title: '角色管理', icon: 'role'},
             },
+            {
+                path: 'menu',
+                component: () => import('@/views/system/menu/index.vue'),
+                name: 'Menu',
+                permissions: ['system-menu'],
+                meta: {title: '菜单管理', icon: 'menu'},
+            },
         ],
     },
 ];

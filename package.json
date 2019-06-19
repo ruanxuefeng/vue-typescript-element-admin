@@ -9,11 +9,11 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@types/node": "^12.0.0",
+    "@types/node": "^12.0.8",
     "@types/path-to-regexp": "^1.7.0",
-    "axios": "^0.18.0",
-    "core-js": "^2.6.5",
-    "element-ui": "^2.8.2",
+    "axios": "^0.18.1",
+    "core-js": "^2.6.9",
+    "element-ui": "^2.9.1",
     "js-cookie": "^2.2.0",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
@@ -21,11 +21,11 @@
     "svg-sprite-loader": "^4.1.6",
     "tslint-loader": "^3.5.4",
     "vue": "^2.6.10",
-    "vue-class-component": "^7.0.2",
+    "vue-class-component": "^7.1.0",
     "vue-loader": "^15.7.0",
-    "vue-property-decorator": "^8.1.0",
+    "vue-property-decorator": "^8.2.1",
     "vue-router": "^3.0.3",
-    "vuex": "^3.0.1",
+    "vuex": "^3.1.1",
     "vuex-class": "^0.3.2"
   },
   "devDependencies": {
@@ -41,7 +41,7 @@
     "node-sass": "^4.9.0",
     "sass-loader": "^7.1.0",
     "ts-jest": "^23.0.0",
-    "typescript": "^3.4.3",
+    "typescript": "^3.5.2",
     "vue-template-compiler": "^2.5.21"
   }
 }

@@ -12,4 +12,5 @@ export default class RouteConfigImpl implements RouteConfig {
 
     public hidden?: boolean = false;
     public permissions?: string[];
+    public fullPath?: string;
 }

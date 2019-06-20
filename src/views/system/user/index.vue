@@ -147,11 +147,11 @@
 
     import Data from '@/class/Data';
     import Obj from './User';
-    import {validEmail} from '@/uitils/validate';
+    import {validEmail} from '@/utils/validate';
     import {del, isUsernameExist, list, save, update, updateRole, userRoleList} from '@/api/system/user';
     import {roleList} from '@/api/system/role';
     import Rule from '@/class/Rule';
-    import {confirmDelete, success} from '@/uitils/message';
+    import {confirmDelete, success} from '@/utils/message';
     import Query from './Query';
 
     @Component({

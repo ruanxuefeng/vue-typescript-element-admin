@@ -34,7 +34,8 @@
             </el-table-column>
             <el-table-column label="创建时间" prop="createTime" width="200px" :align="data.commonAlign"></el-table-column>
 
-            <el-table-column label="操作" :align="data.commonAlign" class-name="small-padding fixed-width" min-width="300px">
+            <el-table-column label="操作" :align="data.commonAlign" class-name="small-padding fixed-width"
+                             min-width="300px">
                 <template slot-scope="scope">
                     <el-button-group>
                         <el-button type="primary" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -85,7 +86,7 @@
     import Obj from './Menu';
     import Rule from '@/class/Rule';
     import {del, getParentList, list, save, update} from '@/api/system/menu';
-    import {confirmDelete, success} from '@/uitils/message';
+    import {confirmDelete, success} from '@/utils/message';
 
     @Component({
         components: {
@@ -114,7 +115,7 @@
 
         private getList() {
             this.data.tableLoading = true;
-            list(this.query).then(resp => {
+            list(this.query).then((resp) => {
                 const data = resp.data;
                 this.data.list = data.rows;
                 this.query.total = data.total;
@@ -131,7 +132,7 @@
         }
 
         private getParentList() {
-            getParentList().then(resp => {
+            getParentList().then((resp) => {
                 this.parentList = resp.data;
             });
         }
@@ -139,7 +140,7 @@
         private create() {
             this.$refs.dataForm.validate((valid: boolean) => {
                 if (valid) {
-                    save(this.obj).then(resp => {
+                    save(this.obj).then((resp) => {
                         this.editSuccess(resp.data.message);
                     });
                 }
@@ -157,31 +158,31 @@
         private update() {
             this.$refs.dataForm.validate((valid: boolean) => {
                 if (valid) {
-                    update(this.obj).then(resp => {
+                    update(this.obj).then((resp) => {
                         this.editSuccess(resp.data.message);
                     });
                 }
             });
         }
 
-        handleDelete(row: any) {
+        private handleDelete(row: any) {
             const that = this;
-            confirmDelete('删除提示', `${row.name}将会被删除`, '确定', '取消', function() {
-                del(row.id).then(resp => {
+            confirmDelete('删除提示', `${row.name}将会被删除`, '确定', '取消', () => {
+                del(row.id).then((resp) => {
                     success('成功', resp.data.message);
                     that.getList();
                 });
             });
         }
 
-        editSuccess(message: string) {
+        private editSuccess(message: string) {
             success('成功', message);
             this.data.dialogFormVisible = false;
             this.obj = new Obj();
             this.getList();
         }
 
-        cancel() {
+        private cancel() {
             this.data.dialogFormVisible = false;
             this.obj = new Obj();
         }

@@ -64,7 +64,7 @@ export function resetRouter() {
     console.info('reset router');
 }
 
-const routes: RouteConfigImpl[] = [
+export const constantRoutes: RouteConfigImpl[] = [
     {
         path: '/login',
         hidden: true,
@@ -80,5 +80,5 @@ const routes: RouteConfigImpl[] = [
 export default new Router({
     mode: 'history',
     base: process.env.BASE_URL,
-    routes,
+    routes: constantRoutes,
 });

@@ -100,7 +100,7 @@
 
     import Pagination from '@/components/Pagination/index.vue';
 
-    import {confirmDelete, success} from '@/uitils/message';
+    import {confirmDelete, success} from '@/utils/message';
     import Data from '@/class/Data';
     import Query from './Query';
     import Obj from './Role';

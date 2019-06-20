@@ -15,7 +15,7 @@
 
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import {scrollTo} from '@/uitils/scroll-to';
+    import {scrollTo} from '@/utils/scroll-to';
 
     @Component
     export default class Pagination extends Vue {

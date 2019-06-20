@@ -4,8 +4,8 @@ import NProgress from 'nprogress'; // progress bar
 // progress bar style
 import 'nprogress/nprogress.css';
 // get token from cookie
-import {getToken} from '@/uitils/auth';
-import getPageTitle from '@/uitils/get-page-title';
+import {getToken} from '@/utils/auth';
+import getPageTitle from '@/utils/get-page-title';
 import User from '@/store/types/User';
 import {Message} from 'element-ui';
 

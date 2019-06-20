@@ -33,7 +33,7 @@
     import {Getter} from 'vuex-class';
 
     import AppLink from './Link.vue';
-    import {isExternal} from '@/uitils/validate';
+    import {isExternal} from '@/utils/validate';
 
 
     @Component({

@@ -1,4 +1,4 @@
-import {getToken} from '@/uitils/auth';
+import {getToken} from '@/utils/auth';
 
 export default class User {
     public token?: string = getToken();

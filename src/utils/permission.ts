@@ -3,9 +3,11 @@
  * @param menus
  * @param route
  */
-function hasPermission(menus: string[], route: any) {
-    if (route.meta && route.roles) {
-        return menus.some((menu: string) => route.roles.includes(menu));
+import RouteConfigImpl from '@/router/RouteRecordImpl';
+
+function hasPermission(menus: string[], route: RouteConfigImpl) {
+    if (route.meta && route.permissions) {
+        return menus.some((menu) => route.permissions ? route.permissions.includes(menu) : false);
     } else {
         return true;
     }
@@ -16,10 +18,10 @@ function hasPermission(menus: string[], route: any) {
  * @param routes asyncRoutes
  * @param menus
  */
-export function filterAsyncRoutes(routes: any, menus: string[]) {
+export function filterAsyncRoutes(routes: RouteConfigImpl[], menus: string[]) {
     const res: any = [];
 
-    routes.forEach((route: any) => {
+    routes.forEach((route) => {
         const tmp = {...route};
         if (hasPermission(menus, tmp)) {
             if (tmp.children) {

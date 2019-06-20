@@ -1,10 +1,10 @@
 import {ActionTree} from 'vuex';
 
 import State from './state';
-import {getToken, removeToken, setToken} from '@/uitils/auth';
+import {getToken, removeToken, setToken} from '@/utils/auth';
 import {getInfo, login, logout} from '@/api/user';
 import {resetRouter, asyncRoutes} from '@/router';
-import {filterAsyncRoutes} from '@/uitils/permission';
+import {filterAsyncRoutes} from '@/utils/permission';
 
 
 const actions: ActionTree<State, any> = {
@@ -13,12 +13,10 @@ const actions: ActionTree<State, any> = {
         return new Promise((resolve, reject) => {
             login({username, password}).then((resp) => {
                 const data = resp.data;
-                const {token, name, email, gender, avatar, menus} = data;
-                let {roles} = data;
+                const {token, name, email, gender, avatar, roleList, menuList} = data;
 
-                roles = roles.map((role: any) => role.name);
-
-                const user = {token, name, email, gender, avatar, roles, menus};
+                const roles = roleList.map((role: any) => role.name);
+                const user = {token, name, email, gender, avatar, roles, menus: menuList};
                 commit('setUser', user);
                 setToken(data.token);
                 resolve();
@@ -33,13 +31,12 @@ const actions: ActionTree<State, any> = {
             getInfo().then((response: any) => {
                 const data = response.data;
 
-                const {name, email, gender, avatar, menus} = data;
-                let {roles} = data;
+                const {name, email, gender, avatar, roleList, menuList} = data;
 
-                roles = roles.map((role: any) => role.name);
+                const roles = roleList.map((role: any) => role.name);
                 const token = getToken();
 
-                const user = {token, name, email, gender, avatar, roles, menus};
+                const user = {token, name, email, gender, avatar, roles, menus: menuList};
                 commit('setUser', user);
 
                 resolve(user);
@@ -69,7 +66,7 @@ const actions: ActionTree<State, any> = {
             resolve(accessedRoutes);
         });
     },
-    toggleSideBar({ commit }) {
+    toggleSideBar({commit}) {
         commit('toggleSidebar');
     },
 };

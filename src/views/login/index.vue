@@ -60,7 +60,7 @@
     import {Component, Vue, Watch} from 'vue-property-decorator';
     import {Action} from 'vuex-class';
 
-    import {validUsername} from '@/uitils/validate';
+    import {validUsername} from '@/utils/validate';
     import Rule from '@/class/Rule';
     import LoginForm from '@/class/LoginForm';
 

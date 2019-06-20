@@ -1,4 +1,6 @@
+import RouteRecordImpl from '@/router/RouteRecordImpl';
+
 export default class TagsView {
-    public cachedViews: string[] = [];
-    public visitedViews: any[] = [];
+    public visitedViews: RouteRecordImpl[] = [];
+    public cachedViews: RouteRecordImpl[] = [];
 }

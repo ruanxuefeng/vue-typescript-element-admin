@@ -1,4 +1,4 @@
-import request from '@/uitils/request';
+import request from '@/utils/request';
 import Query from '@/class/Query';
 
 export function list(query: Query) {

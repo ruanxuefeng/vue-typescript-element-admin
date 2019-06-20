@@ -6,11 +6,12 @@
 
         <div class="right-menu">
             <template v-if="device!=='mobile'">
+                <screen-full id="screenFull" class="right-menu-item hover-effect"></screen-full>
                 <!--<search id="header-search" class="right-menu-item" />
 
                 <error-log class="errLog-container right-menu-item hover-effect" />
 
-                <screenfull id="screenfull" class="right-menu-item hover-effect" />
+
 
                 <el-tooltip content="Global Size" effect="dark" placement="bottom">
                   <size-select id="size-select" class="right-menu-item hover-effect" />
@@ -51,12 +52,14 @@
 
     import Breadcrumb from '@/components/Breadcrumb/index.vue';
     import Hamburger from '@/components/Hamburger/index.vue';
+    import ScreenFull from '@/components/Screenfull/index.vue';
     import SideBarClass from '@/store/types/Sidebar';
 
     @Component({
         components: {
             Breadcrumb,
             Hamburger,
+            ScreenFull,
         },
     })
     export default class Navbar extends Vue {

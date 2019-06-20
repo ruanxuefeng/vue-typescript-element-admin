@@ -21,7 +21,6 @@
 
   import {AppMain, Navbar, Sidebar} from './components';
   import SideBarClass from '@/store/types/Sidebar';
-  import User from '@/views/system/user/User';
 
   @Component({
     components: {

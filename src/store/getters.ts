@@ -39,5 +39,8 @@ const getters: GetterTree<State, any> = {
     fixedHeader(state): boolean {
         return state.settings.fixedHeader;
     },
+    permissionRoutes(state) {
+        return state.permission.routes;
+    },
 };
 export default getters;

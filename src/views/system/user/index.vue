@@ -217,9 +217,12 @@
         }
 
         private handleCreate() {
-            this.obj = new Obj();
             this.data.dialogStatus = 'create';
             this.data.dialogFormVisible = true;
+            this.$nextTick(() => {
+                this.$refs.dataForm.resetFields();
+            });
+            this.obj = new Obj();
         }
 
         private createFormData(): FormData {
@@ -230,7 +233,9 @@
             data.append('email', this.obj.email);
             data.append('gender', this.obj.gender);
             data.append('avatar', this.obj.avatar);
-            data.append('img', this.img);
+            if (this.img) {
+                data.append('img', this.img);
+            }
             return data;
         }
 
@@ -245,10 +250,13 @@
         }
 
         private handleUpdate(row: any) {
-            const {id, name, username, email, gender, avatar, roleIdList} = row;
-            this.obj = {id, name, username, email, gender, avatar, roleIdList};
             this.data.dialogStatus = 'update';
             this.data.dialogFormVisible = true;
+            this.$nextTick(() => {
+                this.$refs.dataForm.resetFields();
+            });
+            const {id, name, username, email, gender, avatar, roleIdList} = row;
+            this.obj = {id, name, username, email, gender, avatar, roleIdList};
         }
 
         private update() {

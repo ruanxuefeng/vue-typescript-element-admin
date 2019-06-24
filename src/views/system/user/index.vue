@@ -221,8 +221,8 @@
             this.data.dialogFormVisible = true;
             this.$nextTick(() => {
                 this.$refs.dataForm.resetFields();
+                this.obj = new Obj();
             });
-            this.obj = new Obj();
         }
 
         private createFormData(): FormData {
@@ -254,9 +254,9 @@
             this.data.dialogFormVisible = true;
             this.$nextTick(() => {
                 this.$refs.dataForm.resetFields();
+                const {id, name, username, email, gender, avatar, roleIdList} = row;
+                this.obj = {id, name, username, email, gender, avatar, roleIdList};
             });
-            const {id, name, username, email, gender, avatar, roleIdList} = row;
-            this.obj = {id, name, username, email, gender, avatar, roleIdList};
         }
 
         private update() {

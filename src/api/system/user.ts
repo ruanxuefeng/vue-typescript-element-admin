@@ -28,15 +28,15 @@ export function update(data: FormData) {
 export function del(id: string) {
   return request({
     url: '/user/delete',
-    method: 'post',
-    data: {id},
+    method: 'delete',
+    params: {id},
   });
 }
 
 export function isUsernameExist(id: string, username: string) {
   return request({
     url: '/user/isUsernameExist',
-    method: 'post',
+    method: 'get',
     params: {id, username},
   });
 }

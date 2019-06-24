@@ -1,7 +1,7 @@
 <template>
     <el-breadcrumb class="app-breadcrumb" separator="/">
         <transition-group name="breadcrumb">
-            <el-breadcrumb-item v-for="(item,index) in levelList" :key="item.path">
+            <el-breadcrumb-item v-for="(item) in levelList" :key="item.path">
                 <svg-icon :icon-class="item.meta.icon" style="margin-right: 5px"></svg-icon>
                 <span class="no-redirect">{{ item.meta.title }}</span>
             </el-breadcrumb-item>
@@ -28,7 +28,11 @@
         private levelList: RouteRecord[] = [];
 
         @Watch('$route')
-        private routeChange() {
+        private routeChange(route: any) {
+            // if you go to the redirect page, do not update the breadcrumbs
+            if (route.path.startsWith('/redirect/')) {
+                return
+            }
             this.getBreadcrumb();
         }
 

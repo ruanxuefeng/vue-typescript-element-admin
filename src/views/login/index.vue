@@ -162,12 +162,13 @@
     }
 </script>
 
+
 <style lang="scss">
     /* 修复input 背景不协调 和光标变色 */
     /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-    $bg: #283443;
-    $light_gray: #fff;
+    $bg:#283443;
+    $light_gray:#fff;
     $cursor: #fff;
 
     @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -210,9 +211,9 @@
 </style>
 
 <style lang="scss" scoped>
-    $bg: #2d3a4b;
-    $dark_gray: #889aa4;
-    $light_gray: #eee;
+    $bg:#2d3a4b;
+    $dark_gray:#889aa4;
+    $light_gray:#eee;
 
     .login-container {
         min-height: 100%;

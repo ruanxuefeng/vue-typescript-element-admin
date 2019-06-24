@@ -60,9 +60,11 @@ export const asyncRoutes: RouteConfigImpl[] = [
     },
 ];
 
-export function resetRouter() {
-    console.info('reset router');
-}
+const createRouter = () => new Router({
+    mode: 'history',
+    base: process.env.BASE_URL,
+    routes: constantRoutes,
+});
 
 export const constantRoutes: RouteConfigImpl[] = [
     {

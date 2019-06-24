@@ -3,8 +3,9 @@ import {ActionTree} from 'vuex';
 import State from './state';
 import {getToken, removeToken, setToken} from '@/utils/auth';
 import {getInfo, login, logout} from '@/api/user';
-import {resetRouter, asyncRoutes} from '@/router';
+import {asyncRoutes} from '@/router';
 import {filterAsyncRoutes} from '@/utils/permission';
+import User from '@/store/types/User';
 
 
 const actions: ActionTree<State, any> = {
@@ -13,10 +14,9 @@ const actions: ActionTree<State, any> = {
         return new Promise((resolve, reject) => {
             login({username, password}).then((resp) => {
                 const data = resp.data;
-                const {token, name, email, gender, avatar, roleList, menuList} = data;
+                const {token, menus} = data;
 
-                const roles = roleList.map((role: any) => role.name);
-                const user = {token, name, email, gender, avatar, roles, menus: menuList};
+                const user: User = {token, menus};
                 commit('setUser', user);
                 setToken(data.token);
                 resolve();
@@ -31,12 +31,11 @@ const actions: ActionTree<State, any> = {
             getInfo().then((response: any) => {
                 const data = response.data;
 
-                const {name, email, gender, avatar, roleList, menuList} = data;
+                const {name, email, gender, avatar, roles, menus} = data;
 
-                const roles = roleList.map((role: any) => role.name);
                 const token = getToken();
 
-                const user = {token, name, email, gender, avatar, roles, menus: menuList};
+                const user = {token, name, email, gender, avatar, roles, menus};
                 commit('setUser', user);
 
                 resolve(user);
@@ -49,10 +48,9 @@ const actions: ActionTree<State, any> = {
     logout({commit}) {
         return new Promise((resolve, reject) => {
             logout().then(() => {
-                commit('SET_TOKEN', '');
-                commit('SET_ROLES', []);
+                commit('setToken', '');
+                // commit('setRoles', []);
                 removeToken();
-                resetRouter();
                 resolve();
             }).catch((error: any) => {
                 reject(error);

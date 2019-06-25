@@ -29,15 +29,8 @@ export function update(data: Role) {
 export function del(id: string) {
   return request({
     url: '/role/delete',
-    method: 'post',
-    data: {id},
-  });
-}
-
-export function allMenuList() {
-  return request({
-    url: '/role/menu/list',
-    method: 'get',
+    method: 'delete',
+    params: {id},
   });
 }
 

@@ -4,6 +4,7 @@ import Router from 'vue-router';
 
 import Layout from '@/layout/index.vue';
 import RouteConfigImpl from '@/router/RouteRecordImpl';
+import VueRouter from 'vue-router';
 
 Vue.use(Router);
 
@@ -60,7 +61,7 @@ export const asyncRoutes: RouteConfigImpl[] = [
     },
 ];
 
-const createRouter = () => new Router({
+const createRouter = () => new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: constantRoutes,
@@ -79,7 +80,7 @@ export const constantRoutes: RouteConfigImpl[] = [
     },
 ];
 
-export default new Router({
+export default new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: constantRoutes,

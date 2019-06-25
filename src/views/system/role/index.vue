@@ -104,7 +104,8 @@
     import Data from '@/class/Data';
     import Query from './Query';
     import Obj from './Role';
-    import {allMenuList, del, list, roleMenuList, save, update, updateMenuList} from '@/api/system/role';
+    import {del, list, roleMenuList, save, update, updateMenuList} from '@/api/system/role';
+    import {allMenuList} from '@/api/system/menu';
     import Rule from '@/class/Rule';
 
     @Component({
@@ -147,12 +148,17 @@
         private handleCreate() {
             this.data.dialogStatus = 'create';
             this.data.dialogFormVisible = true;
+            this.$nextTick(() => {
+                this.$refs.dataForm.resetFields();
+                this.obj = new Obj();
+            });
         }
 
         private create() {
             this.$refs.dataForm.validate((valid: boolean) => {
                 if (valid) {
-                    save(this.obj).then((resp: any) => {
+                    const {name, describe} = this.obj;
+                    save({name, describe}).then((resp: any) => {
                         this.editSuccess(resp.data.message);
                     });
                 }
@@ -160,10 +166,13 @@
         }
 
         private handleUpdate(row: any) {
-            const {id, name, describe} = row;
-            this.obj = {id, name, describe};
             this.data.dialogStatus = 'update';
             this.data.dialogFormVisible = true;
+            this.$nextTick(() => {
+                this.$refs.dataForm.resetFields();
+                const {id, name, describe} = row;
+                this.obj = {id, name, describe};
+            });
         }
 
         private update() {

@@ -29,14 +29,21 @@ export function update(data: Menu) {
 export function del(id: string) {
     return request({
         url: '/menu/delete',
-        method: 'post',
-        data: {id},
+        method: 'delete',
+        params: {id},
     });
 }
 
 export function getParentList() {
     return request({
         url: '/menu/parent/list',
+        method: 'get',
+    });
+}
+
+export function allMenuList() {
+    return request({
+        url: '/menu/all/list',
         method: 'get',
     });
 }

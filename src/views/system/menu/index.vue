@@ -129,6 +129,10 @@
             this.getParentList();
             this.data.dialogStatus = 'create';
             this.data.dialogFormVisible = true;
+            this.$nextTick(() => {
+                this.$refs.dataForm.resetFields();
+                this.obj = new Obj();
+            });
         }
 
         private getParentList() {
@@ -140,7 +144,8 @@
         private create() {
             this.$refs.dataForm.validate((valid: boolean) => {
                 if (valid) {
-                    save(this.obj).then((resp) => {
+                    const {name, pid, key} = this.obj;
+                    save({name, pid, key}).then((resp) => {
                         this.editSuccess(resp.data.message);
                     });
                 }
@@ -149,16 +154,20 @@
 
         private handleUpdate(row: any) {
             this.getParentList();
-            const {id, name, key, pid} = row;
-            this.obj = {id, name, key, pid};
             this.data.dialogStatus = 'update';
             this.data.dialogFormVisible = true;
+            this.$nextTick(() => {
+                this.$refs.dataForm.resetFields();
+                const {id, name, key, pid} = row;
+                this.obj = {id, name, key, pid};
+            });
         }
 
         private update() {
             this.$refs.dataForm.validate((valid: boolean) => {
                 if (valid) {
-                    update(this.obj).then((resp) => {
+                    const {id, name, pid, key} = this.obj;
+                    update({id, name, pid, key}).then((resp) => {
                         this.editSuccess(resp.data.message);
                     });
                 }

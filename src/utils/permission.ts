@@ -19,7 +19,7 @@ function hasPermission(menus: string[], route: RouteConfigImpl) {
  * @param menus
  */
 export function filterAsyncRoutes(routes: RouteConfigImpl[], menus: string[]) {
-    const res: any = [];
+    const res: RouteConfigImpl[] = [];
 
     routes.forEach((route) => {
         const tmp = {...route};

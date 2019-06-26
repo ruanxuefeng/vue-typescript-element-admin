@@ -25,6 +25,7 @@
     import Logo from './Logo.vue';
     import SidebarItem from './SidebarItem.vue';
     import SideBarClass from '@/store/types/Sidebar';
+    import RouteConfigImpl from '@/router/RouteRecordImpl';
 
     @Component({
         components: {
@@ -35,7 +36,7 @@
     export default class Sidebar extends Vue {
 
         @Getter('routers')
-        private routers!: any[];
+        private routers!: RouteConfigImpl[];
 
         @Getter('sidebar')
         private sidebar!: SideBarClass;

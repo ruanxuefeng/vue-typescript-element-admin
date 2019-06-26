@@ -1,4 +1,5 @@
 import {getToken} from '@/utils/auth';
+import RouteConfigImpl from '@/router/RouteRecordImpl';
 
 export default class User {
     public token?: string = getToken();
@@ -9,5 +10,5 @@ export default class User {
     public roles?: string[];
     public menus?: string[];
 
-    public routers?: any[];
+    public routers?: RouteConfigImpl[];
 }

@@ -28,7 +28,6 @@ export const asyncRoutes: RouteConfigImpl[] = [
     {
         path: '/system',
         component: Layout,
-        redirect: '/system',
         name: 'system',
         permissions: ['system', 'system-menu', 'system-role', 'system-user'],
         meta: {
@@ -56,6 +55,25 @@ export const asyncRoutes: RouteConfigImpl[] = [
                 name: 'Menu',
                 permissions: ['system-menu'],
                 meta: {title: '菜单管理', icon: 'menu'},
+            },
+        ],
+    },
+    {
+        path: '/log',
+        component: Layout,
+        name: 'Log',
+        permissions: ['log'],
+        redirect: '/log/index',
+        children: [
+            {
+                path: 'index',
+                component: () => import('@/views/log/index.vue'),
+                name: 'LogIndex',
+                permissions: ['log'],
+                meta: {
+                    title: '日志',
+                    icon: 'log',
+                },
             },
         ],
     },

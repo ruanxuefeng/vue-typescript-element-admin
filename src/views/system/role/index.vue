@@ -49,7 +49,8 @@
         </el-table>
 
         <pagination v-show="query.total > query.pageSize" :total="query.total" :page.sync="query.page"
-                    :limit.sync="query.pageSize" :page-sizes="data.pageSizes" :layout="data.layout" @pagination="getList"/>
+                    :limit.sync="query.pageSize" :page-sizes="data.pageSizes" :layout="data.layout"
+                    @pagination="getList"/>
 
         <!--编辑弹窗-->
         <el-dialog :visible.sync="data.dialogFormVisible" :title="data.dialogStatus === 'create' ? '新增' : '编辑'">
@@ -219,10 +220,12 @@
         }
 
         private assignPermissions() {
-            updateMenuList(this.obj.id, this.$refs.tree.getCheckedKeys()).then((resp: any) => {
-                success('成功', resp.data.message);
-                this.dialogAssignPermissionsVisible = false;
-            });
+            if (this.obj.id) {
+                updateMenuList(this.obj.id, this.$refs.tree.getCheckedKeys()).then((resp: any) => {
+                    success('成功', resp.data.message);
+                    this.dialogAssignPermissionsVisible = false;
+                });
+            }
         }
     }
 </script>

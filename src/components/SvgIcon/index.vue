@@ -9,7 +9,7 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
 
     // doc: https://panjiachen.github.io/vue-element-admin-site/feature/component/svg-icon.html#usage
-    import { isExternal } from '@/utils/validate'
+    import {isExternal} from '@/utils/validate';
 
     @Component
     export default class SvgClass extends Vue {
@@ -18,11 +18,11 @@
         @Prop(String)
         private className?: string;
 
-        get styleExternalIcon() {
+        get styleExternalIcon(): object {
             return {
-                mask: `url(${this.iconClass}) no-repeat 50% 50%`,
-                '-webkit-mask': `url(${this.iconClass}) no-repeat 50% 50%`
-            }
+                'mask': `url(${this.iconClass}) no-repeat 50% 50%`,
+                '-webkit-mask': `url(${this.iconClass}) no-repeat 50% 50%`,
+            };
         }
 
         get isExternal() {
@@ -54,7 +54,7 @@
 
     .svg-external-icon {
         background-color: currentColor;
-        mask-size: cover!important;
+        mask-size: cover !important;
         display: inline-block;
     }
 </style>

@@ -31,7 +31,7 @@
         private routeChange(route: any) {
             // if you go to the redirect page, do not update the breadcrumbs
             if (route.path.startsWith('/redirect/')) {
-                return
+                return;
             }
             this.getBreadcrumb();
         }

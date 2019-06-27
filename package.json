@@ -11,6 +11,7 @@
   "dependencies": {
     "@types/node": "^12.0.10",
     "@types/path-to-regexp": "^1.7.0",
+    "@types/stompjs": "^2.3.4",
     "axios": "^0.18.1",
     "core-js": "^2.6.9",
     "element-ui": "^2.10.0",
@@ -20,6 +21,7 @@
     "nprogress": "^0.2.0",
     "path-to-regexp": "^3.0.0",
     "screenfull": "^4.2.0",
+    "stompjs": "^2.3.3",
     "svg-sprite-loader": "^4.1.6",
     "tslint-loader": "^3.5.4",
     "vue": "^2.6.10",

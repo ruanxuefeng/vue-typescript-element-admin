@@ -5,6 +5,7 @@
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar/>
+        <receive-bulletin></receive-bulletin>
         <!--<tags-view v-if="needTagsView" />-->
       </div>
       <app-main/>
@@ -21,12 +22,14 @@
 
   import {AppMain, Navbar, Sidebar} from './components';
   import SideBarClass from '@/store/types/Sidebar';
+  import ReceiveBulletin from '@/components/ReceiveBulletin/index.vue';
 
   @Component({
     components: {
       AppMain,
       Sidebar,
       Navbar,
+      ReceiveBulletin,
     },
   })
   export default class Layout extends Vue {

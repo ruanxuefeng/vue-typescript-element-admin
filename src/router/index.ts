@@ -59,6 +59,25 @@ export const asyncRoutes: RouteConfigImpl[] = [
         ],
     },
     {
+        path: '/bulletin',
+        component: Layout,
+        name: 'Bulletin',
+        permissions: ['bulletin'],
+        redirect: '/bulletin/index',
+        children: [
+            {
+                path: 'index',
+                component: () => import('@/views/bulletin/index.vue'),
+                name: 'BulletinIndex',
+                permissions: ['bulletin'],
+                meta: {
+                    title: '公告',
+                    icon: 'bulletin',
+                },
+            },
+        ],
+    },
+    {
         path: '/log',
         component: Layout,
         name: 'Log',

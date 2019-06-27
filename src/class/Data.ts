@@ -8,6 +8,7 @@ export default class Data {
     public dialogFormVisible: boolean = false;
     public dialogStatus: string = 'create';
     public commonAlign: string = 'center';
+    public labelPosition: string = 'right';
 
     public query!: Query;
 }

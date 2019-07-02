@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+    import {Component, Vue, Watch} from 'vue-property-decorator';
     import {Getter} from 'vuex-class';
 
     import variables from '@/styles/variables.scss';

@@ -9,22 +9,7 @@ import VueRouter from 'vue-router';
 Vue.use(Router);
 
 
-export const dashboard: RouteConfigImpl = {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-        {
-            path: 'dashboard',
-            component: () => import('@/views/dashboard/index.vue'),
-            name: 'Dashboard',
-            meta: {title: '首页', icon: 'dashboard', affix: true},
-        },
-    ],
-};
-
 export const asyncRoutes: RouteConfigImpl[] = [
-    dashboard,
     {
         path: '/system',
         component: Layout,
@@ -98,13 +83,20 @@ export const asyncRoutes: RouteConfigImpl[] = [
     },
 ];
 
-const createRouter = () => new VueRouter({
-    mode: 'history',
-    base: process.env.BASE_URL,
-    routes: constantRoutes,
-});
-
 export const constantRoutes: RouteConfigImpl[] = [
+    {
+        path: '/',
+        component: Layout,
+        redirect: '/dashboard',
+        children: [
+            {
+                path: 'dashboard',
+                component: () => import('@/views/dashboard/index.vue'),
+                name: 'Dashboard',
+                meta: {title: '首页', icon: 'dashboard', affix: true},
+            },
+        ],
+    },
     {
         path: '/login',
         hidden: true,
@@ -116,6 +108,7 @@ export const constantRoutes: RouteConfigImpl[] = [
         component: () => import('@/views/login/auth-redirect.vue'),
     },
 ];
+
 
 export default new VueRouter({
     mode: 'history',

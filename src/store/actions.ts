@@ -67,6 +67,38 @@ const actions: ActionTree<State, any> = {
     toggleSideBar({commit}) {
         commit('toggleSidebar');
     },
+    addVisitedView({ commit }, view) {
+        commit('addVisitedView', view);
+    },
+    addCachedView({ commit }, view) {
+        commit('addCachedView', view);
+    },
+    addView({dispatch}, route) {
+        dispatch('addVisitedView', route);
+        dispatch('addCachedView', route);
+    },
+    delVisitedView({ commit, state }, view) {
+        return new Promise((resolve) => {
+            commit('delVisitedView', view);
+            resolve([...state.tagsView.visitedViews]);
+        });
+    },
+    delCachedView({ commit, state }, view) {
+        return new Promise((resolve) => {
+            commit('delCachedView', view);
+            resolve([...state.tagsView.cachedViews]);
+        });
+    },
+    deleteView({ dispatch, state }, route) {
+        return new Promise((resolve) => {
+            dispatch('delVisitedView', route);
+            dispatch('delCachedView', route);
+            resolve({
+                visitedViews: [...state.tagsView.visitedViews],
+                cachedViews: [...state.tagsView.cachedViews],
+            });
+        });
+    },
 };
 
 export default actions;

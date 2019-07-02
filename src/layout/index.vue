@@ -6,7 +6,7 @@
       <div :class="{'fixed-header':fixedHeader}">
         <navbar/>
         <receive-bulletin></receive-bulletin>
-        <!--<tags-view v-if="needTagsView" />-->
+        <tags-view v-if="needTagsView" />
       </div>
       <app-main/>
       <!--<right-panel v-if="showSettings">
@@ -20,7 +20,7 @@
   import {Component, Vue} from 'vue-property-decorator';
   import {Getter} from 'vuex-class';
 
-  import {AppMain, Navbar, Sidebar} from './components';
+  import {AppMain, Navbar, Sidebar, TagsView} from './components';
   import SideBarClass from '@/store/types/Sidebar';
   import ReceiveBulletin from '@/components/ReceiveBulletin/index.vue';
 
@@ -30,6 +30,7 @@
       Sidebar,
       Navbar,
       ReceiveBulletin,
+      TagsView,
     },
   })
   export default class Layout extends Vue {

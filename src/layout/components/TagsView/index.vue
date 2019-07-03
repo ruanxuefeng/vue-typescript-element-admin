@@ -65,7 +65,7 @@
 
         private filterAffixTags(routes: RouteRecordImpl[], basePath = '/') {
             let tags: RouteRecordImpl[] = [];
-            routes.forEach(route => {
+            routes.forEach((route) => {
                 if (route.meta && route.meta.affix) {
                     const tagPath = path.resolve(basePath, route.path);
                     const {name, component, children, meta} = route;
@@ -73,9 +73,9 @@
                         name,
                         path: tagPath,
                         fullPath: tagPath,
-                        children: children,
+                        children,
                         meta,
-                        component
+                        component,
                     };
                     tags.push(newRoute);
                 }
@@ -105,7 +105,7 @@
             });
         }
 
-        toLastView(visitedViews: RouteRecordImpl[], view: RouteRecordImpl) {
+        private toLastView(visitedViews: RouteRecordImpl[], view: RouteRecordImpl) {
             const latestView = visitedViews.slice(-1)[0];
             if (latestView) {
                 this.$router.push(latestView);

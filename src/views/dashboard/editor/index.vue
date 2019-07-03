@@ -18,9 +18,9 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {Getter} from 'vuex-class';
 
     import PanThumb from '@/components/PanThumb/index.vue';
+    import {UserState} from '@/store/modules/User';
 
     @Component({
         components: {
@@ -30,14 +30,16 @@
     export default class EditorDashboard extends Vue {
         private emptyGif: string = 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3';
 
-        @Getter('name')
-        private name!: string;
+        get roles() {
+            return UserState.roles;
+        }
+        get avatar() {
+            return UserState.avatar;
+        }
 
-        @Getter('avatar')
-        private avatar!: string;
-
-        @Getter('roles')
-        private roles!: string[];
+        get name() {
+            return UserState.name;
+        }
     }
 </script>
 

@@ -109,9 +109,25 @@ export const constantRoutes: RouteConfigImpl[] = [
     },
 ];
 
-
-export default new VueRouter({
+const createRouter = () => new VueRouter({
+    scrollBehavior: (to, from, savedPosition) => {
+        if (savedPosition) {
+            return savedPosition;
+        } else {
+            return {x: 0, y: 0};
+        }
+    },
     mode: 'history',
     base: process.env.BASE_URL,
     routes: constantRoutes,
 });
+
+const router = createRouter();
+
+export function resetRouter() {
+    const newRouter = createRouter();
+    (router as any).matcher = (newRouter as any).matcher;
+}
+
+
+export default router;

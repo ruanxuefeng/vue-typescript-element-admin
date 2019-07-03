@@ -4,7 +4,7 @@ import NProgress from 'nprogress'; // progress bar
 // progress bar style
 import 'nprogress/nprogress.css';
 // get token from cookie
-import {getToken} from '@/utils/auth';
+import {getToken, removeToken} from '@/utils/auth';
 import getPageTitle from '@/utils/get-page-title';
 import User from '@/store/types/User';
 import {Message} from 'element-ui';
@@ -42,6 +42,7 @@ router.beforeEach(async (to, from, next) => {
                     })
                     .catch((error) => {
                         Message.error('获取用户信息失败，返回登录页');
+                        removeToken();
                         console.error(error);
                         next(`/login?redirect=${to.path}`);
                         NProgress.done();

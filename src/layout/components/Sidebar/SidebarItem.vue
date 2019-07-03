@@ -32,11 +32,11 @@
     import path from 'path';
 
     import {Component, Prop, Vue} from 'vue-property-decorator';
-    import {Getter} from 'vuex-class';
 
     import AppLink from './Link.vue';
     import {isExternal} from '@/utils/validate';
     import RouteConfigImpl from '@/router/RouteRecordImpl';
+    import {AppState} from '@/store/modules/App';
 
 
     @Component({
@@ -55,10 +55,11 @@
         @Prop(String)
         private basePath!: string;
 
-        @Getter('sidebarOpened')
-        private sidebarOpened!: boolean;
-
         private onlyOneChild?: RouteConfigImpl;
+
+        get sidebarOpened() {
+            return AppState.sidebar.opened;
+        }
 
         private hasOneShowingChild(children: RouteConfigImpl[] = [], parent: RouteConfigImpl) {
             const showingChildren = children.filter((item: RouteConfigImpl) => {

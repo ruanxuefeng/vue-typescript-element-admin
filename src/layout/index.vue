@@ -18,11 +18,11 @@
 
 <script lang="ts">
   import {Component, Vue} from 'vue-property-decorator';
-  import {Getter} from 'vuex-class';
 
   import {AppMain, Navbar, Sidebar, TagsView} from './components';
-  import SideBarClass from '@/store/types/Sidebar';
   import ReceiveBulletin from '@/components/ReceiveBulletin/index.vue';
+  import {AppState} from '@/store/modules/App';
+  import {SettingsState} from '@/store/modules/Setting';
 
   @Component({
     components: {
@@ -35,18 +35,6 @@
   })
   export default class Layout extends Vue {
 
-    @Getter('device')
-    private device!: string;
-
-    @Getter('sidebar')
-    private sidebar!: SideBarClass;
-
-    @Getter('tagsView')
-    private needTagsView!: boolean;
-
-    @Getter('fixedHeader')
-    private fixedHeader!: boolean;
-
     get classObj() {
       return {
         hideSidebar: !this.sidebar.opened,
@@ -54,6 +42,22 @@
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile',
       };
+    }
+
+    get fixedHeader() {
+      return SettingsState.fixedHeader;
+    }
+
+    get needTagsView() {
+      return SettingsState.tagsView;
+    }
+
+    get sidebar() {
+      return AppState.sidebar;
+    }
+
+    get device() {
+      return AppState.device;
     }
 
     private handleClickOutside() {

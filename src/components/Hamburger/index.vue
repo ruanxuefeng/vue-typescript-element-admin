@@ -16,18 +16,18 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {Getter} from 'vuex-class';
 
-    import SideBarClass from '@/store/types/Sidebar';
+    import {AppState} from '@/store/modules/App';
 
     @Component
     export default class Hamburger extends Vue {
 
-        @Getter('sidebar')
-        private sidebar!: SideBarClass;
-
         private toggleClick() {
             this.$emit('toggleClick');
+        }
+
+        get sidebar() {
+            return AppState.sidebar;
         }
 
         get isActive() {

@@ -58,11 +58,11 @@
 <script lang="ts">
 
     import {Component, Vue, Watch} from 'vue-property-decorator';
-    import {Action} from 'vuex-class';
 
     import {validUsername} from '@/utils/validate';
     import Rule from '@/class/Rule';
     import LoginForm from '@/class/LoginForm';
+    import {UserState} from '@/store/modules/User';
 
     @Component
     export default class Login extends Vue {
@@ -98,9 +98,6 @@
         private capsTooltip: boolean = false;
         private loading: boolean = false;
         private redirect?: string;
-
-        @Action('login')
-        private login!: ({}) => any;
 
         private mounted() {
             if (this.loginForm.username === '') {
@@ -143,7 +140,7 @@
             this.$refs.loginForm.validate((valid: boolean) => {
                 if (valid) {
                     this.loading = true;
-                    this.login({
+                    UserState.login({
                         username: this.loginForm.username,
                         password: Buffer.from(this.loginForm.password).toString('base64'),
                     }).then(() => {

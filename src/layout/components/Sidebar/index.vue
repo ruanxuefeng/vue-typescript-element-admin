@@ -11,21 +11,22 @@
                     :active-text-color="variables.menuActiveText"
                     :collapse-transition="false"
                     mode="vertical">
-                <sidebar-item v-for="route in routers" :key="route.path" :item="route" :base-path="route.path" :is-nest="false"></sidebar-item>
+                <sidebar-item v-for="route in routers" :key="route.path" :item="route" :base-path="route.path"
+                              :is-nest="false"></sidebar-item>
             </el-menu>
         </el-scrollbar>
     </div>
 </template>
 
 <script lang="ts">
-    import {Component, Vue, Watch} from 'vue-property-decorator';
-    import {Getter} from 'vuex-class';
+    import {Component, Vue} from 'vue-property-decorator';
 
     import variables from '@/styles/variables.scss';
     import Logo from './Logo.vue';
     import SidebarItem from './SidebarItem.vue';
-    import SideBarClass from '@/store/types/Sidebar';
-    import RouteConfigImpl from '@/router/RouteRecordImpl';
+    import {UserState} from '@/store/modules/User';
+    import {AppState} from '@/store/modules/App';
+    import {SettingsState} from '@/store/modules/Setting';
 
     @Component({
         components: {
@@ -35,11 +36,6 @@
     })
     export default class Sidebar extends Vue {
 
-        @Getter('routers')
-        private routers!: RouteConfigImpl[];
-
-        @Getter('sidebar')
-        private sidebar!: SideBarClass;
 
         get activeMenu() {
             const route = this.$route;
@@ -51,8 +47,17 @@
             return path;
         }
 
+        get sidebar() {
+            return AppState.sidebar;
+        }
+
+        get routers() {
+            console.info(UserState.routers);
+            return UserState.routers;
+        }
+
         get showLogo() {
-            return this.$store.state.settings.sidebarLogo;
+            return SettingsState.sidebarLogo;
         }
 
         get variables() {

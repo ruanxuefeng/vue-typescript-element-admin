@@ -11,7 +11,7 @@
 
             <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
                 <div class="avatar-wrapper">
-                    <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+                    <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar" alt="头像">
                     <i class="el-icon-caret-bottom"></i>
                 </div>
                 <el-dropdown-menu slot="dropdown">
@@ -29,12 +29,12 @@
 
 <script lang="ts">
     import {Component, Vue} from 'vue-property-decorator';
-    import {Getter, Action} from 'vuex-class';
 
     import Breadcrumb from '@/components/Breadcrumb/index.vue';
     import Hamburger from '@/components/Hamburger/index.vue';
     import ScreenFull from '@/components/Screenfull/index.vue';
-    import SideBarClass from '@/store/types/Sidebar';
+    import {AppState} from '@/store/modules/App';
+    import {UserState} from '@/store/modules/User';
 
     @Component({
         components: {
@@ -44,27 +44,25 @@
         },
     })
     export default class Navbar extends Vue {
-        @Getter('device')
-        private device!: string;
 
-        @Getter('sidebar')
-        private sidebar!: SideBarClass;
-
-        @Getter('avatar')
-        private avatar!: string;
-
-        @Action('toggleSideBar')
-        private toggleSideBarAction!: () => any;
-
-        @Action('logout')
-        private logoutAction!: () => any;
-
-        private toggleSideBar() {
-            this.toggleSideBarAction();
+        get avatar() {
+            return UserState.avatar;
         }
 
-        private async logout() {
-            await this.logoutAction();
+        get sidebar() {
+            return AppState.sidebar;
+        }
+
+        get device() {
+            return AppState.device;
+        }
+
+        private toggleSideBar() {
+            AppState.toggleSideBar(false);
+        }
+
+        private logout() {
+            UserState.logout();
             this.$router.push(`/login?redirect=${this.$route.fullPath}`);
         }
     }
@@ -76,7 +74,7 @@
         overflow: hidden;
         position: relative;
         background: #fff;
-        box-shadow: 0 1px 4px rgba(0,21,41,.08);
+        box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 
         .hamburger-container {
             line-height: 46px;
@@ -84,7 +82,7 @@
             float: left;
             cursor: pointer;
             transition: background .3s;
-            -webkit-tap-highlight-color:transparent;
+            -webkit-tap-highlight-color: transparent;
 
             &:hover {
                 background: rgba(0, 0, 0, .025)

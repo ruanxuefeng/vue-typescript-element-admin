@@ -1,13 +1,13 @@
 import router from './router/index';
-import store from './store/index';
 import NProgress from 'nprogress'; // progress bar
+import {UserState} from '@/store/modules/User';
 // progress bar style
 import 'nprogress/nprogress.css';
 // get token from cookie
 import {getToken, removeToken} from '@/utils/auth';
 import getPageTitle from '@/utils/get-page-title';
-import User from '@/store/types/User';
 import {Message} from 'element-ui';
+import RouteRecordImpl from '@/router/RouteRecordImpl';
 
 NProgress.configure({showSpinner: false}); // NProgress Configuration
 
@@ -26,27 +26,22 @@ router.beforeEach(async (to, from, next) => {
             next({path: '/'});
             NProgress.done();
         } else {
-            const isGetPermission = store.state.user && store.state.user.menus && store.state.user.menus.length > 0;
+            const isGetPermission = UserState.menus.length > 0;
             if (isGetPermission) {
                 next();
             } else {
-                store.dispatch('getInfo')
-                    .then((user: User) => {
-                        const {menus} = user;
-                        store.dispatch('generateRoutes', menus)
-                            .then((accessRoutes) => {
-                                router.addRoutes(accessRoutes);
-
-                                next({...to, replace: true});
-                            });
-                    })
-                    .catch((error) => {
-                        Message.error('获取用户信息失败，返回登录页');
-                        removeToken();
-                        console.error(error);
-                        next(`/login?redirect=${to.path}`);
-                        NProgress.done();
+                UserState.getInfo().then((menus) => {
+                    UserState.generateRoutes((menus as string[])).then((routers) => {
+                        router.addRoutes((routers as RouteRecordImpl[]));
+                        next({...to, replace: true});
                     });
+                }).catch((error) => {
+                    Message.error('获取用户信息失败，返回登录页');
+                    removeToken();
+                    console.error(error);
+                    next(`/login?redirect=${to.path}`);
+                    NProgress.done();
+                });
             }
         }
     } else {

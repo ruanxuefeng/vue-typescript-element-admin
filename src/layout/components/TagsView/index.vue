@@ -20,11 +20,12 @@
 
 <script lang="ts">
     import {Component, Vue, Watch} from 'vue-property-decorator';
-    import {Getter, Action} from 'vuex-class';
     import path from 'path';
 
     import RouteRecordImpl from '@/router/RouteRecordImpl';
     import {RouteConfig} from 'vue-router';
+    import {TagsViewState} from '@/store/modules/TagsView';
+    import {UserState} from '@/store/modules/User';
 
     @Component
     export default class TagsView extends Vue {
@@ -32,21 +33,17 @@
         private affixTags!: RouteRecordImpl[];
         private selectedTag!: RouteConfig;
 
-        @Getter('visitedViews')
-        private visitedViews!: RouteRecordImpl[];
-
-        @Getter('routers')
-        private routers!: RouteRecordImpl[];
-
-        @Action('addView')
-        private addView!: ({}) => {};
-
-        @Action('deleteView')
-        private deleteView!: ({}) => any;
-
         @Watch('$route')
         private route() {
             this.addTags();
+        }
+
+        get visitedViews() {
+            return TagsViewState.visitedViews;
+        }
+
+        get routers() {
+            return UserState.routers;
         }
 
         private mounted() {
@@ -60,7 +57,10 @@
 
         private init() {
             const affixTags = this.affixTags = this.filterAffixTags(this.routers);
-            affixTags.forEach((item) => this.addView(item));
+            affixTags.forEach((item) => {
+                const {path, name, fullPath, meta} = item;
+                TagsViewState.addView({path, name, fullPath, meta});
+            });
         }
 
         private filterAffixTags(routes: RouteRecordImpl[], basePath = '/') {
@@ -92,12 +92,14 @@
         private addTags() {
             const {name} = this.$route;
             if (name) {
-                this.addView(this.$route);
+                const {path, name, fullPath, meta} = this.$route;
+                TagsViewState.addView({path, name, fullPath, meta});
             }
         }
 
         private closeTag(tag: RouteRecordImpl) {
-            this.deleteView(tag).then((obj: any) => {
+            const {path, name, fullPath, meta} = tag;
+            TagsViewState.deleteView({path, name, fullPath, meta}).then((obj: any) => {
                 const {visitedViews} = obj;
                 if (this.isActive(tag)) {
                     this.toLastView(visitedViews, tag);

@@ -1,0 +1,85 @@
+import {VuexModule, Module, Mutation, Action, getModule} from 'vuex-module-decorators';
+
+import store from '@/store';
+
+export class View {
+    public path!: string;
+    public name?: string;
+    public fullPath?: string;
+    public meta?: any;
+}
+
+@Module({dynamic: true, store, name: 'tagsView'})
+export default class TagsView extends VuexModule {
+    public visitedViews: View[] = [];
+    public cachedViews: View[] = [];
+
+    @Action
+    public addVisitedView(view: View) {
+        this.ADD_VISITED_VIEW(view);
+    }
+
+    @Action
+    public addCachedView(view: View) {
+        this.ADD_CACHED_VIEW(view);
+    }
+
+    @Action
+    public addView(view: View) {
+        this.ADD_VISITED_VIEW(view);
+        this.ADD_CACHED_VIEW(view);
+    }
+
+    @Action
+    public deleteView(view: View) {
+        return new Promise(((resolve) => {
+            this.DEL_VISITED_VIEW(view);
+            this.DEL_CACHED_VIEW(view);
+            resolve({
+                visitedViews: [...this.visitedViews],
+                cachedViews: [...this.cachedViews],
+            });
+        }));
+    }
+
+    @Mutation
+    private ADD_VISITED_VIEW(view: View) {
+        if (this.visitedViews.some((item) => item.path === view.path)) {
+            return;
+        } else {
+            this.visitedViews.push(view);
+        }
+    }
+
+    @Mutation
+    private ADD_CACHED_VIEW(view: View) {
+        if (this.cachedViews.some((item) => item.path === view.path)) {
+            return;
+        }
+        if (!view.meta.noCache) {
+            this.cachedViews.push(view);
+        }
+    }
+
+    @Mutation
+    private DEL_VISITED_VIEW(route: View) {
+        for (const [i, v] of this.visitedViews.entries()) {
+            if (v.path === route.path) {
+                this.visitedViews.splice(i, 1);
+                break;
+            }
+        }
+    }
+
+    @Mutation
+    private DEL_CACHED_VIEW(route: View) {
+        for (const [i, item] of this.cachedViews.entries()) {
+            if (item.name === route.name) {
+                this.cachedViews.splice(i, 1);
+                break;
+            }
+        }
+    }
+}
+
+export const TagsViewState = getModule(TagsView);

@@ -1,20 +1,27 @@
 <template>
     <div id="tags-view-container" class="tags-view-container">
-        <el-scrollbar ref="scrollContainer" :vertical="false" class="tags-view-wrapper scroll-container">
+        <scroll-pane ref="scrollPane" class="tags-view-wrapper">
             <router-link
                     v-for="tag in visitedViews"
                     ref="tag"
                     :key="tag.path"
-                    :class="isActive(tag)?'active':''"
-                    :to="{ path: tag.path, query: tag.query, fullPath: tag.fullPath }"
+                    :class="isActive(tag) ? 'active' : ''"
+                    :to="{path: tag.path, query: tag.query, fullPath: tag.fullPath}"
                     tag="span"
                     class="tags-view-item"
                     @click.middle.native="closeTag(tag)"
+                    @contextmenu.prevent.native="openMenu(tag, $event)"
             >
                 {{ tag.meta.title }}
                 <span v-if="!tag.meta.affix" class="el-icon-close" @click.prevent.stop="closeTag(tag)"></span>
             </router-link>
-        </el-scrollbar>
+        </scroll-pane>
+        <ul v-show="visible" :style="{left: left+'px', top: top+'px'}" class="contextmenu">
+            <li @click="refreshSelectedTag(selectedTag)">刷新</li>
+            <li v-if="!(selectedTag.meta&&selectedTag.meta.affix)" @click="closeTag(selectedTag)">关闭</li>
+            <li @click="closeOthersTags">关闭其他</li>
+            <li @click="closeAllTags(selectedTag)">关闭所有</li>
+        </ul>
     </div>
 </template>
 
@@ -23,19 +30,35 @@
     import path from 'path';
 
     import RouteRecordImpl from '@/router/RouteRecordImpl';
-    import {RouteConfig} from 'vue-router';
-    import {TagsViewState} from '@/store/modules/TagsView';
+    import {TagsViewState, View} from '@/store/modules/TagsView';
     import {UserState} from '@/store/modules/User';
+    import ScrollPane from './ScrollPane.vue';
 
-    @Component
+    @Component({
+        components: {
+            ScrollPane,
+        },
+    })
     export default class TagsView extends Vue {
 
+        private visible: boolean = false;
+        private top: number = 0;
+        private left: number = 0;
         private affixTags!: RouteRecordImpl[];
-        private selectedTag!: RouteConfig;
+        private selectedTag: View = {};
 
         @Watch('$route')
         private route() {
             this.addTags();
+        }
+
+        @Watch('visible')
+        private onVisibleChange(value: boolean) {
+            if (value) {
+                document.body.addEventListener('click', this.closeMenu);
+            } else {
+                document.body.removeEventListener('click', this.closeMenu);
+            }
         }
 
         get visitedViews() {
@@ -107,7 +130,47 @@
             });
         }
 
-        private toLastView(visitedViews: RouteRecordImpl[], view: RouteRecordImpl) {
+        private refreshSelectedTag(view: RouteRecordImpl) {
+            TagsViewState.deleteCachedView(view);
+            const {fullPath} = view;
+            this.$nextTick(() => {
+                this.$router.replace({
+                    path: '/redirect' + fullPath
+                });
+            });
+        }
+
+        private closeOthersTags() {
+            this.$router.push(this.selectedTag);
+            TagsViewState.deleteOthersViews(this.selectedTag);
+            this.moveToCurrentTag();
+        }
+
+        private closeAllTags(view: RouteRecordImpl) {
+            TagsViewState.deleteAllViews();
+            if (this.affixTags.some(tag => tag.path === this.$route.path)) {
+                return;
+            }
+            this.toLastView(TagsViewState.visitedViews, view);
+        }
+
+        private moveToCurrentTag() {
+            const tags = this.$refs.tag as any[]; // TODO: better typescript support for router-link
+            this.$nextTick(() => {
+                for (const tag of tags) {
+                    if ((tag.to as View).path === this.$route.path) {
+                        (this.$refs.scrollPane as ScrollPane).moveToTarget(tag as any);
+                        // When query is different then update
+                        if ((tag.to as View).fullPath !== this.$route.fullPath) {
+                            TagsViewState.updateVisitedView(this.$route);
+                        }
+                        break;
+                    }
+                }
+            });
+        }
+
+        private toLastView(visitedViews: View[], view: RouteRecordImpl) {
             const latestView = visitedViews.slice(-1)[0];
             if (latestView) {
                 this.$router.push(latestView);
@@ -121,6 +184,26 @@
                     this.$router.push('/');
                 }
             }
+        }
+
+        private openMenu(tag: View, e: MouseEvent) {
+            const menuMinWidth = 105;
+            const offsetLeft = this.$el.getBoundingClientRect().left; // container margin left
+            const offsetWidth = (this.$el as HTMLElement).offsetWidth; // container width
+            const maxLeft = offsetWidth - menuMinWidth; // left boundary
+            const left = e.clientX - offsetLeft + 15; // 15: margin right
+            if (left > maxLeft) {
+                this.left = maxLeft;
+            } else {
+                this.left = left;
+            }
+            this.top = e.clientY;
+            this.visible = true;
+            this.selectedTag = tag;
+        }
+
+        private closeMenu() {
+            this.visible = false;
         }
     }
 </script>

@@ -52,7 +52,6 @@
         }
 
         get routers() {
-            console.info(UserState.routers);
             return UserState.routers;
         }
 

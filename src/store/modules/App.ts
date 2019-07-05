@@ -1,16 +1,8 @@
-import {VuexModule, Module, Mutation, Action, getModule} from 'vuex-module-decorators';
+import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 import Cookies from 'js-cookie';
 
 import store from '@/store';
-
-class Sidebar {
-    public opened!: boolean;
-    public withoutAnimation: boolean = false;
-
-    constructor(opened: boolean) {
-        this.opened = opened;
-    }
-}
+import Sidebar from '@/store/types/Sidebar';
 
 export default interface App {
     sidebar: Sidebar;

@@ -1,16 +1,15 @@
 import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 
 import store from '@/store';
+import View from '@/store/types/View';
 
-export class View {
-    public path?: string;
-    public name?: string;
-    public fullPath?: string;
-    public meta?: any;
+export interface TagsView {
+    visitedViews: View[];
+    cachedViews: View[];
 }
 
 @Module({dynamic: true, store, name: 'tagsView'})
-export default class TagsView extends VuexModule {
+export default class TagsViewImpl extends VuexModule implements TagsView {
     public visitedViews: View[] = [];
     public cachedViews: View[] = [];
 
@@ -142,4 +141,4 @@ export default class TagsView extends VuexModule {
     }
 }
 
-export const TagsViewState = getModule(TagsView);
+export const TagsViewState = getModule(TagsViewImpl);

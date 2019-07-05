@@ -30,9 +30,10 @@
     import path from 'path';
 
     import RouteRecordImpl from '@/router/RouteRecordImpl';
-    import {TagsViewState, View} from '@/store/modules/TagsView';
+    import {TagsViewState} from '@/store/modules/TagsView';
     import {UserState} from '@/store/modules/User';
     import ScrollPane from './ScrollPane.vue';
+    import View from '@/store/types/View';
 
     @Component({
         components: {
@@ -81,8 +82,8 @@
         private init() {
             const affixTags = this.affixTags = this.filterAffixTags(this.routers);
             affixTags.forEach((item) => {
-                const {path, name, fullPath, meta} = item;
-                TagsViewState.addView({path, name, fullPath, meta});
+                const {name, fullPath, meta} = item;
+                TagsViewState.addView({path: item.path, name, fullPath, meta});
             });
         }
 
@@ -113,16 +114,15 @@
         }
 
         private addTags() {
-            const {name} = this.$route;
-            if (name) {
-                const {path, name, fullPath, meta} = this.$route;
-                TagsViewState.addView({path, name, fullPath, meta});
+            if (this.$route && this.$route.name) {
+                const {fullPath, meta} = this.$route;
+                TagsViewState.addView({path: this.$route.path, name: this.$route.name, fullPath, meta});
             }
         }
 
         private closeTag(tag: RouteRecordImpl) {
-            const {path, name, fullPath, meta} = tag;
-            TagsViewState.deleteView({path, name, fullPath, meta}).then((obj: any) => {
+            const {name, fullPath, meta} = tag;
+            TagsViewState.deleteView({path: tag.path, name, fullPath, meta}).then((obj: any) => {
                 const {visitedViews} = obj;
                 if (this.isActive(tag)) {
                     this.toLastView(visitedViews, tag);
@@ -135,7 +135,7 @@
             const {fullPath} = view;
             this.$nextTick(() => {
                 this.$router.replace({
-                    path: '/redirect' + fullPath
+                    path: '/redirect' + fullPath,
                 });
             });
         }
@@ -148,7 +148,7 @@
 
         private closeAllTags(view: RouteRecordImpl) {
             TagsViewState.deleteAllViews();
-            if (this.affixTags.some(tag => tag.path === this.$route.path)) {
+            if (this.affixTags.some((tag) => tag.path === this.$route.path)) {
                 return;
             }
             this.toLastView(TagsViewState.visitedViews, view);

@@ -144,7 +144,6 @@
                         username: this.loginForm.username,
                         password: Buffer.from(this.loginForm.password).toString('base64'),
                     }).then(() => {
-                        console.info(111);
                         this.$router.push({path: this.redirect || '/'});
                         this.loading = false;
                     }).catch(() => {

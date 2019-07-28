@@ -26,7 +26,7 @@ router.beforeEach(async (to, from, next) => {
             next({path: '/'});
             NProgress.done();
         } else {
-            const isGetPermission = UserState.menus.length > 0;
+            const isGetPermission = UserState.menus && UserState.menus.length > 0;
             if (isGetPermission) {
                 next();
             } else {

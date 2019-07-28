@@ -20,12 +20,12 @@ export default interface User {
 
 @Module({dynamic: true, store, name: 'user'})
 class UserImpl extends VuexModule implements User {
-    public token = getToken();
+    public token: string | undefined = getToken();
     public name = '';
     public email = '';
     public gender = '';
     public avatar = '';
-    public roles: string[] =  [];
+    public roles: string[] = [];
     public menus: string[] = [];
     public routers: RouteConfigImpl[] = [];
 
@@ -68,7 +68,7 @@ class UserImpl extends VuexModule implements User {
     public logout() {
         return new Promise((resolve) => {
             logout().then(() => {
-                this.SET_TOKEN('');
+                this.SET_TOKEN(undefined);
                 removeToken();
                 resolve();
             });
@@ -85,7 +85,7 @@ class UserImpl extends VuexModule implements User {
     }
 
     @Mutation
-    private SET_TOKEN(token: string) {
+    private SET_TOKEN(token: string | undefined) {
         this.token = token;
     }
 

@@ -10,35 +10,35 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
 
     @Component({
-        name: 'BackToTop'
+        name: 'BackToTop',
     })
     export default class extends Vue {
-        @Prop({default: 400}) private visibilityHeight!: number;
-        @Prop({default: 'fade'}) private transitionName!: string;
-        @Prop({default: 0}) private backPosition!: number;
-        @Prop({
-            default: () => {
-                return {
-                    right: '50px',
-                    bottom: '50px',
-                    width: '40px',
-                    height: '40px',
-                    'border-radius': '4px',
-                    'line-height': '45px',
-                    background: '#e7eaf1'
-                };
-            }
-        }) private customStyle!: object;
+        @Prop()
+        private visibilityHeight = 400;
+        @Prop()
+        private transitionName = 'fade';
+        @Prop()
+        private backPosition = 0;
+        @Prop()
+        private customStyle = {
+            'right': '50px',
+            'bottom': '50px',
+            'width': '40px',
+            'height': '40px',
+            'border-radius': '4px',
+            'line-height': '45px',
+            'background': '#e7eaf1',
+        };
 
         private visible = false;
         private isMoving = false;
         private interval?: number;
 
-        mounted() {
+        private mounted() {
             window.addEventListener('scroll', this.handleScroll);
         }
 
-        beforeDestroy() {
+        private beforeDestroy() {
             window.removeEventListener('scroll', this.handleScroll);
             if (this.interval) {
                 clearInterval(this.interval);
@@ -70,10 +70,12 @@
         }
 
         private easeInOutQuad(t: number, b: number, c: number, d: number) {
-            if ((t /= d / 2) < 1) {
+            const num = t /= d / 2;
+            if (num < 1) {
                 return (c / 2) * t * t + b;
+            } else {
+                return (-c / 2) * (--t * (t - 2) - 1) + b;
             }
-            return (-c / 2) * (--t * (t - 2) - 1) + b;
         }
     }
 </script>

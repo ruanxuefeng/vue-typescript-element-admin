@@ -19,7 +19,7 @@
                         <el-dropdown-item>首页</el-dropdown-item>
                     </router-link>
                     <el-dropdown-item divided>
-                        <span style="display:block;" @click="logout">退出登录</span>
+                        <span style="display:block;" @click="log_out">退出登录</span>
                     </el-dropdown-item>
                 </el-dropdown-menu>
             </el-dropdown>
@@ -61,9 +61,10 @@
             AppState.toggleSideBar(false);
         }
 
-        private logout() {
-            UserState.logout();
-            this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+        private log_out() {
+            UserState.logout().then(() => {
+                this.$router.push(`/login?redirect=${this.$route.fullPath}`);
+            });
         }
     }
 </script>

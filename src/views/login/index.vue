@@ -114,11 +114,7 @@
 
         private checkCapsLock(shiftKey: string, key: string) {
             if (key && key.length === 1) {
-                if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
-                    this.capsTooltip = true;
-                } else {
-                    this.capsTooltip = false;
-                }
+                this.capsTooltip = shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z');
             }
             if (key === 'CapsLock' && this.capsTooltip) {
                 this.capsTooltip = false;

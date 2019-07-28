@@ -5,7 +5,7 @@ import RouteConfigImpl from '@/router/RouteRecordImpl';
 import store from '@/store';
 import {getInfo, login, logout} from '@/api/user';
 import {filterAsyncRoutes} from '@/utils/permission';
-import {asyncRoutes, constantRoutes} from '@/router';
+import {asyncRoutes, constantRoutes, resetRouter} from '@/router';
 
 export default interface User {
     token: string | undefined;
@@ -70,6 +70,7 @@ class UserImpl extends VuexModule implements User {
             logout().then(() => {
                 this.SET_TOKEN(undefined);
                 removeToken();
+                resetRouter();
                 resolve();
             });
         });

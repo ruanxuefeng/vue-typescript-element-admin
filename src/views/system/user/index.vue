@@ -6,7 +6,7 @@
             <el-input v-model="query.email" placeholder="邮箱" :clearable="true" style="width: 200px;"
                       class="filter-item" @keyup.enter.native="getList"></el-input>
             <el-input v-model="query.username" placeholder="用户名" :clearable="true" style="width: 200px;"
-                      class="filter-item" @keyup.enter.native="getList"></el-input>
+                      class="filter-item" @keyup.enter.native="search"></el-input>
 
             <el-button class="filter-item" type="primary" icon="el-icon-search" @click="getList">
                 搜索
@@ -203,6 +203,11 @@
                     callback();
                 }
             });
+        }
+
+        private search() {
+            this.query.page = 1;
+            this.getList();
         }
 
         private getList() {

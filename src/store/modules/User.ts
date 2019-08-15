@@ -38,7 +38,7 @@ class UserImpl extends VuexModule implements User {
                 const {token, menus} = data;
 
                 this.SET_TOKEN(token);
-                this.SET_MENUS(menus);
+                // this.SET_MENUS(menus);
                 setToken(data.token);
                 resolve();
             });

@@ -1,11 +1,12 @@
-import {VuexModule, Module, Mutation, Action, getModule} from 'vuex-module-decorators';
+import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 
 import {getToken, removeToken, setToken} from '@/utils/auth';
 import RouteConfigImpl from '@/router/RouteRecordImpl';
+import RouteRecordImpl from '@/router/RouteRecordImpl';
 import store from '@/store';
 import {getInfo, login, logout} from '@/api/user';
 import {filterAsyncRoutes} from '@/utils/permission';
-import {asyncRoutes, constantRoutes, resetRouter} from '@/router';
+import router, {asyncRoutes, constantRoutes, resetRouter} from '@/router';
 
 export default interface User {
     token: string | undefined;
@@ -82,6 +83,16 @@ class UserImpl extends VuexModule implements User {
             const accessedRoutes = filterAsyncRoutes(asyncRoutes, menus);
             this.SET_ROUTES(accessedRoutes);
             resolve(accessedRoutes);
+        });
+    }
+
+    @Action
+    public resetRouter() {
+        this.getInfo().then((menus) => {
+            resetRouter();
+            this.generateRoutes((menus as string[])).then((routers) => {
+                router.addRoutes((routers as RouteRecordImpl[]));
+            });
         });
     }
 

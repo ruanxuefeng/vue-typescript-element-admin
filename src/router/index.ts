@@ -81,6 +81,11 @@ export const asyncRoutes: RouteConfigImpl[] = [
             },
         ],
     },
+    {
+        path: '*',
+        redirect: '/404',
+        meta: { hidden: true },
+    },
 ];
 
 export const constantRoutes: RouteConfigImpl[] = [
@@ -106,6 +111,16 @@ export const constantRoutes: RouteConfigImpl[] = [
         path: '/auth-redirect',
         hidden: true,
         component: () => import('@/views/login/auth-redirect.vue'),
+    },
+    {
+        path: '/404',
+        component: () => import('@/components/ErrorPage/404.vue'),
+        name: 'Page404',
+        hidden: true,
+        meta: {
+            title: '404',
+            noCache: true,
+        },
     },
 ];
 

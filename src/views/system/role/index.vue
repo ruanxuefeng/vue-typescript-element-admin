@@ -108,6 +108,7 @@
     import {del, list, roleMenuList, save, update, updateMenuList} from '@/api/system/role';
     import {allMenuList} from '@/api/system/menu';
     import Rule from '@/class/Rule';
+    import {UserState} from '@/store/modules/User';
 
     @Component({
         components: {
@@ -223,6 +224,7 @@
             if (this.obj.id) {
                 updateMenuList(this.obj.id, this.$refs.tree.getCheckedKeys()).then((resp: any) => {
                     success('成功', resp.data.message);
+                    UserState.resetRouter();
                     this.dialogAssignPermissionsVisible = false;
                 });
             }

@@ -23,7 +23,7 @@
             <el-table-column type="index" width="50"></el-table-column>
             <el-table-column label="角色名称" prop="name" width="200px"
                              :align="data.commonAlign"></el-table-column>
-            <el-table-column label="备注" prop="describe" width="450px"
+            <el-table-column label="备注" prop="memo" width="450px"
                              :align="data.commonAlign"></el-table-column>
             <el-table-column label="创建人" width="150px" :align="data.commonAlign">
                 <template slot-scope="scope">
@@ -62,7 +62,7 @@
                 </el-form-item>
 
                 <el-form-item label="备注" prop="key">
-                    <el-input v-model="obj.describe" placeholder="备注" :rows="6" maxlength="200"
+                    <el-input v-model="obj.memo" placeholder="备注" :rows="6" maxlength="200"
                               type="textarea"></el-input>
                 </el-form-item>
 
@@ -159,8 +159,8 @@
         private create() {
             this.$refs.dataForm.validate((valid: boolean) => {
                 if (valid) {
-                    const {name, describe} = this.obj;
-                    save({name, describe}).then((resp: any) => {
+                    const {name, memo} = this.obj;
+                    save({name, memo}).then((resp: any) => {
                         this.editSuccess(resp.data.message);
                     });
                 }
@@ -172,8 +172,8 @@
             this.data.dialogFormVisible = true;
             this.$nextTick(() => {
                 this.$refs.dataForm.resetFields();
-                const {id, name, describe} = row;
-                this.obj = {id, name, describe};
+                const {id, name, memo} = row;
+                this.obj = {id, name, memo};
             });
         }
 

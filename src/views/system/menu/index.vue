@@ -2,9 +2,10 @@
     <div class="app-container">
         <div class="filter-container">
             <el-input v-model="query.name" placeholder="名称" :clearable="true" style="width: 200px;" class="filter-item"
-                      @keyup.enter.native="getList"></el-input>
-            <el-input v-model="query.key" placeholder="Key" :clearable="true" style="width: 200px;" class="filter-item"
-                      @keyup.enter.native="getList"></el-input>
+                      @markup.enter.native="getList"></el-input>
+            <el-input v-model="query.mark" placeholder="mark" :clearable="true" style="width: 200px;"
+                      class="filter-item"
+                      @markup.enter.native="getList"></el-input>
 
             <el-button class="filter-item" type="primary" icon="el-icon-search" @click="getList">搜索</el-button>
             <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
@@ -26,13 +27,13 @@
                     {{ scope.row.parentName }}
                 </template>
             </el-table-column>
-            <el-table-column label="Key" prop="key" width="150px" :align="data.commonAlign"></el-table-column>
+            <el-table-column label="标识" prop="mark" width="150px" :align="data.commonAlign"></el-table-column>
             <el-table-column label="创建人" width="150px" :align="data.commonAlign">
                 <template slot-scope="scope">
-                    {{ scope.row.creatorName }}
+                    {{ scope.row.createdBy }}
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="createTime" width="200px" :align="data.commonAlign"></el-table-column>
+            <el-table-column label="创建时间" prop="createdTime" width="200px" :align="data.commonAlign"></el-table-column>
 
             <el-table-column label="操作" :align="data.commonAlign" class-name="small-padding fixed-width"
                              min-width="300px">
@@ -57,13 +58,13 @@
                     <el-input v-model="obj.name" placeholder="请输入名称"></el-input>
                 </el-form-item>
 
-                <el-form-item label="Key" prop="key">
-                    <el-input v-model="obj.key" placeholder="请输入Key"></el-input>
+                <el-form-item label="mark" prop="mark">
+                    <el-input v-model="obj.mark" placeholder="请输入mark"></el-input>
                 </el-form-item>
 
                 <el-form-item label="父级" prop="pid">
                     <el-select v-model="obj.pid" :clearable="true" class="filter-item">
-                        <el-option v-for="item in parentList" :key="item.id" :label="item.name" :value="item.id"
+                        <el-option v-for="item in parentList" :key="item.id" :mark="item.id" :label="item.name" :value="item.id"
                                    :disabled="item.id === obj.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -104,9 +105,10 @@
         private obj = new Obj();
         private parentList = [];
 
+
         private rules = {
             name: [new Rule({message: '请输入名称'})],
-            key: [new Rule({message: '请输入Key'})],
+            mark: [new Rule({message: '请输入mark'})],
         };
 
         private created() {
@@ -144,8 +146,8 @@
         private create() {
             this.$refs.dataForm.validate((valid: boolean) => {
                 if (valid) {
-                    const {name, pid, key} = this.obj;
-                    save({name, pid, key}).then((resp) => {
+                    const {name, pid, mark} = this.obj;
+                    save({name, pid, mark}).then((resp) => {
                         this.editSuccess(resp.data.message);
                     });
                 }
@@ -158,16 +160,16 @@
             this.data.dialogFormVisible = true;
             this.$nextTick(() => {
                 this.$refs.dataForm.resetFields();
-                const {id, name, key, pid} = row;
-                this.obj = {id, name, key, pid};
+                const {id, name, mark, pid} = row;
+                this.obj = {id, name, mark, pid};
             });
         }
 
         private update() {
             this.$refs.dataForm.validate((valid: boolean) => {
                 if (valid) {
-                    const {id, name, pid, key} = this.obj;
-                    update({id, name, pid, key}).then((resp) => {
+                    const {id, name, pid, mark} = this.obj;
+                    update({id, name, pid, mark}).then((resp) => {
                         this.editSuccess(resp.data.message);
                     });
                 }

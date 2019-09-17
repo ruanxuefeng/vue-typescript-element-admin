@@ -1,6 +1,6 @@
 export default class Role {
     public id?: string = '';
     public name?: string = '';
-    public describe?: string = '';
+    public memo?: string = '';
     public menuList?: string[] = [];
 }

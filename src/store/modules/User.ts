@@ -72,6 +72,7 @@ class UserImpl extends VuexModule implements User {
                 this.SET_TOKEN(undefined);
                 removeToken();
                 resetRouter();
+                this.SET_MENUS([]);
                 resolve();
             });
         });

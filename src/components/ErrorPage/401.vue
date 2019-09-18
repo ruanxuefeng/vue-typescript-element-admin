@@ -73,7 +73,7 @@
         private back() {
             if (this.$route.query.noGoBack) {
                 this.$router.push(
-                    {path: '/dashboard',},
+                    {path: '/dashboard'},
                 );
             } else {
                 this.$router.go(-1);

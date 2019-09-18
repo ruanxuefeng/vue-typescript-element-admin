@@ -58,13 +58,14 @@
                     <el-input v-model="obj.name" placeholder="请输入名称"></el-input>
                 </el-form-item>
 
-                <el-form-item label="mark" prop="mark">
-                    <el-input v-model="obj.mark" placeholder="请输入mark"></el-input>
+                <el-form-item label="标识" prop="mark">
+                    <el-input v-model="obj.mark" placeholder="请输入标识"></el-input>
                 </el-form-item>
 
                 <el-form-item label="父级" prop="pid">
                     <el-select v-model="obj.pid" :clearable="true" class="filter-item">
-                        <el-option v-for="item in parentList" :key="item.id" :mark="item.id" :label="item.name" :value="item.id"
+                        <el-option v-for="item in parentList" :key="item.id" :mark="item.id" :label="item.name"
+                                   :value="item.id"
                                    :disabled="item.id === obj.id"></el-option>
                     </el-select>
                 </el-form-item>
@@ -104,7 +105,6 @@
         private query = new Query();
         private obj = new Obj();
         private parentList = [];
-
 
         private rules = {
             name: [new Rule({message: '请输入名称'})],

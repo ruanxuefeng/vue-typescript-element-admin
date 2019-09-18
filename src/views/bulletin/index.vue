@@ -30,10 +30,10 @@
             <el-table-column label="发布时间" prop="date" width="400px" :align="data.commonAlign"></el-table-column>
             <el-table-column label="创建人" width="150px" :align="data.commonAlign">
                 <template slot-scope="scope">
-                    {{ scope.row.creatorName }}
+                    {{ scope.row.creatorBy }}
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="createTime" width="200px" :align="data.commonAlign"></el-table-column>
+            <el-table-column label="创建时间" prop="createdTime" width="200px" :align="data.commonAlign"></el-table-column>
 
             <el-table-column label="操作" :align="data.commonAlign" class-name="small-padding fixed-width"
                              min-width="300px">

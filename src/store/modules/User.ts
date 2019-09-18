@@ -9,6 +9,7 @@ import {filterAsyncRoutes} from '@/utils/permission';
 import router, {asyncRoutes, constantRoutes, resetRouter} from '@/router';
 
 export default interface User {
+    id: string;
     token: string | undefined;
     name: string;
     email: string;
@@ -21,6 +22,7 @@ export default interface User {
 
 @Module({dynamic: true, store, name: 'user'})
 class UserImpl extends VuexModule implements User {
+    public id = '';
     public token: string | undefined = getToken();
     public name = '';
     public email = '';
@@ -51,7 +53,8 @@ class UserImpl extends VuexModule implements User {
         return new Promise((resolve, reject) => {
             getInfo().then((response) => {
                 const data = response.data;
-                const {name, email, gender, avatar, roles, menus} = data;
+                const {id, name, email, gender, avatar, roles, menus} = data;
+                this.SET_ID(id);
                 this.SET_NAME(name);
                 this.SET_EMAIL(email);
                 this.SET_GENDER(gender);
@@ -95,6 +98,11 @@ class UserImpl extends VuexModule implements User {
                 router.addRoutes((routers as RouteRecordImpl[]));
             });
         });
+    }
+
+    @Mutation
+    private SET_ID(id: string) {
+        this.id = id;
     }
 
     @Mutation

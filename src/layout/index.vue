@@ -5,7 +5,7 @@
     <div :class="{hasTagsView:needTagsView}" class="main-container">
       <div :class="{'fixed-header':fixedHeader}">
         <navbar/>
-        <receive-bulletin></receive-bulletin>
+        <web-socket></web-socket>
         <tags-view v-if="needTagsView" />
       </div>
       <app-main/>
@@ -20,7 +20,7 @@
   import {Component, Vue} from 'vue-property-decorator';
 
   import {AppMain, Navbar, Sidebar, TagsView} from './components';
-  import ReceiveBulletin from '@/components/ReceiveBulletin/index.vue';
+  import WebSocket from '@/components/WebSocket/index.vue';
   import {AppState} from '@/store/modules/App';
   import {SettingsState} from '@/store/modules/Setting';
 
@@ -29,7 +29,7 @@
       AppMain,
       Sidebar,
       Navbar,
-      ReceiveBulletin,
+      WebSocket,
       TagsView,
     },
   })

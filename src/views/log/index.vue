@@ -28,14 +28,13 @@
                 border
                 fit
                 highlight-current-row
-                style="width: 63%;"
         >
             <el-table-column type="index" width="50px"></el-table-column>
-            <el-table-column label="菜单" prop="menu" align="center"></el-table-column>
-            <el-table-column label="操作" prop="operate" align="center"></el-table-column>
-            <el-table-column label="操作人" prop="name" align="center"></el-table-column>
-            <el-table-column label="IP" prop="ip" align="center"></el-table-column>
-            <el-table-column label="操作时间" prop="createTime" align="center"></el-table-column>
+            <el-table-column label="菜单" prop="menu" :align="data.commonAlign"></el-table-column>
+            <el-table-column label="操作" prop="operate" :align="data.commonAlign"></el-table-column>
+            <el-table-column label="操作人" prop="name" :align="data.commonAlign"></el-table-column>
+            <el-table-column label="IP" prop="ip" :align="data.commonAlign"></el-table-column>
+            <el-table-column label="操作时间" prop="createTime" :align="data.commonAlign"></el-table-column>
         </el-table>
 
         <pagination v-show="query.total > query.pageSize" :total="query.total" :page.sync="query.page"

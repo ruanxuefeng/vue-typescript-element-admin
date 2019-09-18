@@ -6,6 +6,7 @@
     import {Component, Vue} from 'vue-property-decorator';
     import StompJS, {Client} from 'stompjs';
     import {getToken} from '@/utils/auth';
+    import {UserState} from '@/store/modules/User';
 
 
     @Component
@@ -31,23 +32,32 @@
                 }, () => {
                     that.client = client;
 
-                    client.subscribe('/topic/notice', (message) => {
+                    client.subscribe('/topic/bulletin', (message) => {
                         const bulletin = JSON.parse(message.body);
                         that.$notify({
                             title: '公告',
                             message: bulletin.content,
                             position: 'bottom-right',
                         });
+                    });
 
-                        client.disconnect = () => {
-                            console.info('web socket disconnect');
-                        };
+                    client.subscribe(`/topic/permission/${UserState.id}`, () => {
+                        that.$notify({
+                            title: '权限消息',
+                            message: '权限已被管理员更新',
+                            position: 'bottom-right',
+                        });
+                        UserState.resetRouter();
                     });
                 }, (error) => {
                     console.log('client connect error:', error);
                     console.log('try to reconnection');
                     setTimeout(that.init, 3000);
                 });
+
+                client.disconnect = () => {
+                    console.info('web socket disconnect');
+                };
             }
 
         }

@@ -153,6 +153,7 @@
     import Rule from '@/class/Rule';
     import {confirmDelete, success} from '@/utils/message';
     import Query from './Query';
+    import {UserState} from '@/store/modules/User';
 
     @Component({
         components: {
@@ -320,6 +321,7 @@
                 this.dialogUpdateRoleVisible = false;
                 this.getList();
                 this.obj = new Obj();
+                UserState.resetRouter();
             });
         }
 

@@ -1,8 +1,11 @@
+import Vue from 'vue';
+
 import router from './router/index';
 import NProgress from 'nprogress'; // progress bar
 import {UserState} from '@/store/modules/User';
 // progress bar style
 import 'nprogress/nprogress.css';
+
 // get token from cookie
 import {getToken, removeToken} from '@/utils/auth';
 import getPageTitle from '@/utils/get-page-title';
@@ -12,6 +15,14 @@ import RouteRecordImpl from '@/router/RouteRecordImpl';
 NProgress.configure({showSpinner: false}); // NProgress Configuration
 
 const whiteList = ['/login', '/auth-redirect']; // no redirect whitelist
+
+Vue.directive('permission', {
+    update: (el, binding, vnode) => {
+        if (!UserState.permissions.includes(binding.value) && el.parentElement) {
+            el.remove();
+        }
+    },
+});
 
 router.beforeEach(async (to, from, next) => {
     // start progress bar
@@ -26,7 +37,7 @@ router.beforeEach(async (to, from, next) => {
             next({path: '/'});
             NProgress.done();
         } else {
-            const isGetPermission = UserState.menus && UserState.menus.length > 0;
+            const isGetPermission = UserState.permissions && UserState.permissions.length > 0;
             if (isGetPermission) {
                 next();
             } else {

@@ -83,9 +83,9 @@
                           label: 'name',
                           children: 'children'
                      }"
-                    :data="allMenuList"
-                    :default-checked-keys="selectMenuList"
-                    node-key="id"
+                    :data="permissionTree"
+                    :default-checked-keys="rolePermission"
+                    node-key="mark"
                     show-checkbox></el-tree>
             <div slot="footer" class="dialog-footer">
                 <el-button @click="dialogAssignPermissionsVisible = false">取消</el-button>
@@ -105,8 +105,7 @@
     import Data from '@/class/Data';
     import Query from './Query';
     import Obj from './Role';
-    import {del, list, roleMenuList, save, update, updateMenuList} from '@/api/system/role';
-    import {allMenuList} from '@/api/system/menu';
+    import {del, list, save, update, rolePermission, permissionTree, updatePermission} from '@/api/system/role';
     import Rule from '@/class/Rule';
     import {UserState} from '@/store/modules/User';
 
@@ -126,8 +125,8 @@
         private query = new Query();
         private obj = new Obj();
         private dialogAssignPermissionsVisible = false;
-        private selectMenuList = [];
-        private allMenuList = [];
+        private permissionTree = [];
+        private rolePermission = [];
         private rules = {
             name: [new Rule({message: '请输入角色名称'})],
         };
@@ -211,10 +210,10 @@
 
         private openAssignPermissionsDialog(row: any) {
             const that = this;
-            axios.all([allMenuList(), roleMenuList(row.id)])
-                .then(axios.spread((allMenuListResp, roleMenuListResp) => {
-                    that.allMenuList = allMenuListResp.data;
-                    that.selectMenuList = roleMenuListResp.data;
+            axios.all([permissionTree(), rolePermission(row.id)])
+                .then(axios.spread((permissionTreeResp, rolePermissionResp) => {
+                    that.permissionTree = permissionTreeResp.data;
+                    that.rolePermission = rolePermissionResp.data;
                     that.dialogAssignPermissionsVisible = true;
                     that.obj.id = row.id;
                 }));
@@ -222,7 +221,7 @@
 
         private assignPermissions() {
             if (this.obj.id) {
-                updateMenuList(this.obj.id, this.$refs.tree.getCheckedKeys()).then((resp: any) => {
+                updatePermission(this.obj.id, this.$refs.tree.getCheckedKeys()).then((resp: any) => {
                     success('成功', resp.data.message);
                     UserState.resetRouter();
                     this.dialogAssignPermissionsVisible = false;

@@ -1,20 +1,26 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
-
 import Layout from '@/layout/index.vue';
 import RouteConfigImpl from '@/router/RouteRecordImpl';
 import VueRouter from 'vue-router';
 
 Vue.use(Router);
 
-
 export const asyncRoutes: RouteConfigImpl[] = [
     {
         path: '/system',
         component: Layout,
         name: 'system',
-        permissions: ['system', 'system-menu', 'system-role', 'system-user'],
+        permissions: [
+            'system',
+            'system-menu',
+            'system-role',
+            'system-user',
+            'system-user-list',
+            'system-user-add',
+            'system-user-update',
+        ],
         meta: {
             title: '系统管理',
             icon: 'system',
@@ -24,7 +30,7 @@ export const asyncRoutes: RouteConfigImpl[] = [
                 path: 'user',
                 component: () => import('@/views/system/user/index.vue'),
                 name: 'User',
-                permissions: ['system-user'],
+                permissions: ['system-user', 'system-user-list', 'system-user-add', 'system-user-update'],
                 meta: {title: '用户管理', icon: 'user'},
             },
             {
@@ -84,7 +90,7 @@ export const asyncRoutes: RouteConfigImpl[] = [
     {
         path: '*',
         redirect: '/404',
-        meta: { hidden: true },
+        meta: {hidden: true},
     },
 ];
 
@@ -143,6 +149,5 @@ export function resetRouter() {
     const newRouter = createRouter();
     (router as any).matcher = (newRouter as any).matcher;
 }
-
 
 export default router;

@@ -16,7 +16,7 @@ export default interface User {
     gender: string;
     avatar: string;
     roles: string[];
-    menus: string[];
+    permissions: string[];
     routers: RouteConfigImpl[];
 }
 
@@ -29,7 +29,7 @@ class UserImpl extends VuexModule implements User {
     public gender = '';
     public avatar = '';
     public roles: string[] = [];
-    public menus: string[] = [];
+    public permissions: string[] = [];
     public routers: RouteConfigImpl[] = [];
 
     @Action
@@ -38,7 +38,7 @@ class UserImpl extends VuexModule implements User {
         return new Promise((resolve) => {
             login({username, password}).then((resp) => {
                 const data = resp.data;
-                const {token, menus} = data;
+                const {token} = data;
 
                 this.SET_TOKEN(token);
                 // this.SET_MENUS(menus);
@@ -53,15 +53,15 @@ class UserImpl extends VuexModule implements User {
         return new Promise((resolve, reject) => {
             getInfo().then((response) => {
                 const data = response.data;
-                const {id, name, email, gender, avatar, roles, menus} = data;
+                const {id, name, email, gender, avatar, roles, permissions} = data;
                 this.SET_ID(id);
                 this.SET_NAME(name);
                 this.SET_EMAIL(email);
                 this.SET_GENDER(gender);
                 this.SET_AVATAR(avatar);
                 this.SET_ROLES(roles);
-                this.SET_MENUS(menus);
-                resolve(this.menus);
+                this.SET_PERMISSIONS(permissions);
+                resolve(this.permissions);
             }).catch((error) => {
                 reject(error);
             });
@@ -75,7 +75,7 @@ class UserImpl extends VuexModule implements User {
                 this.SET_TOKEN(undefined);
                 removeToken();
                 resetRouter();
-                this.SET_MENUS([]);
+                this.SET_PERMISSIONS([]);
                 resolve();
             });
         });
@@ -111,8 +111,8 @@ class UserImpl extends VuexModule implements User {
     }
 
     @Mutation
-    private SET_MENUS(menus: string[]) {
-        this.menus = menus;
+    private SET_PERMISSIONS(permissions: string[]) {
+        this.permissions = permissions;
     }
 
     @Mutation

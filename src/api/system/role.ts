@@ -34,25 +34,32 @@ export function del(id: string) {
   });
 }
 
-export function roleMenuList(id: string) {
+export function roleList() {
   return request({
-    url: '/role/menus',
+    url: '/role/all',
+    method: 'get',
+  });
+}
+
+export function rolePermission(id: string) {
+  return request({
+    url: '/role/permissions',
     method: 'get',
     params: {id},
   });
 }
 
-export function updateMenuList(id: string, menuList: string[]) {
+export function permissionTree() {
   return request({
-    url: '/role/update/menuList',
-    method: 'post',
-    data: {id, menuList},
+    url: '/role/permission/tree',
+    method: 'get',
   });
 }
 
-export function roleList() {
+export function updatePermission(id: string, permissions: string[]) {
   return request({
-    url: '/role/all',
-    method: 'get',
+    url: '/role/update/permissions',
+    method: 'post',
+    data: {id, permissions},
   });
 }

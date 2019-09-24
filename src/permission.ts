@@ -44,7 +44,6 @@ router.beforeEach(async (to, from, next) => {
                 UserState.getInfo().then((menus) => {
                     UserState.generateRoutes((menus as string[])).then((routers) => {
                         router.addRoutes((routers as RouteRecordImpl[]));
-                        console.info(to);
                         next({...to, replace: true});
                     });
                 }).catch((error) => {

@@ -9,43 +9,35 @@ import {filterAsyncRoutes} from '@/utils/permission';
 import router, {asyncRoutes, constantRoutes, resetRouter} from '@/router';
 
 export default interface User {
-    id: string;
-    token: string | undefined;
-    name: string;
-    email: string;
-    gender: string;
-    avatar: string;
-    roles: string[];
-    permissions: string[];
-    routers: RouteConfigImpl[];
+    $id: string;
+    $token: string | undefined;
+    $name: string;
+    $email: string;
+    $gender: string;
+    $avatar: string;
+    $roles: string[];
+    $permissions: string[];
+    $routers: RouteConfigImpl[];
 }
 
 @Module({dynamic: true, store, name: 'user'})
 class UserImpl extends VuexModule implements User {
-    public id = '';
-    public token: string | undefined = getToken();
-    public name = '';
-    public email = '';
-    public gender = '';
-    public avatar = '';
-    public roles: string[] = [];
-    public permissions: string[] = [];
-    public routers: RouteConfigImpl[] = [];
+    public $id = '';
+    public $token: string | undefined = getToken();
+    public $name = '';
+    public $email = '';
+    public $gender = '';
+    public $avatar = '';
+    public $roles: string[] = [];
+    public $permissions: string[] = [];
+    public $routers: RouteConfigImpl[] = [];
 
     @Action
-    public login(userInfo: any) {
+    public async login(userInfo: any) {
         const {username, password} = userInfo;
-        return new Promise((resolve) => {
-            login({username, password}).then((resp) => {
-                const data = resp.data;
-                const {token} = data;
-
-                this.SET_TOKEN(token);
-                // this.SET_MENUS(menus);
-                setToken(data.token);
-                resolve();
-            });
-        });
+        const {data} = await login({username, password});
+        this.setToken(data.token);
+        setToken(data.token);
     }
 
     @Action
@@ -54,13 +46,13 @@ class UserImpl extends VuexModule implements User {
             getInfo().then((response) => {
                 const data = response.data;
                 const {id, name, email, gender, avatar, roles, permissions} = data;
-                this.SET_ID(id);
-                this.SET_NAME(name);
-                this.SET_EMAIL(email);
-                this.SET_GENDER(gender);
-                this.SET_AVATAR(avatar);
-                this.SET_ROLES(roles);
-                this.SET_PERMISSIONS(permissions);
+                this.setId(id);
+                this.setName(name);
+                this.setEmail(email);
+                this.setGender(gender);
+                this.setAvatar(avatar);
+                this.setRoles(roles);
+                this.setPermissions(permissions);
                 resolve(this.permissions);
             }).catch((error) => {
                 reject(error);
@@ -72,10 +64,10 @@ class UserImpl extends VuexModule implements User {
     public logout() {
         return new Promise((resolve) => {
             logout().then(() => {
-                this.SET_TOKEN(undefined);
+                this.setToken(undefined);
                 removeToken();
                 resetRouter();
-                this.SET_PERMISSIONS([]);
+                this.setPermissions([]);
                 resolve();
             });
         });
@@ -85,7 +77,7 @@ class UserImpl extends VuexModule implements User {
     public generateRoutes(menus: string[]) {
         return new Promise((resolve) => {
             const accessedRoutes = filterAsyncRoutes(asyncRoutes, menus);
-            this.SET_ROUTES(accessedRoutes);
+            this.setRoutes(accessedRoutes);
             resolve(accessedRoutes);
         });
     }
@@ -100,49 +92,85 @@ class UserImpl extends VuexModule implements User {
         });
     }
 
-    @Mutation
-    private SET_ID(id: string) {
-        this.id = id;
+    get id(): string {
+        return this.$id;
+    }
+
+    get token(): string | undefined {
+        return this.$token;
+    }
+
+    get name(): string {
+        return this.$name;
+    }
+
+    get email(): string {
+        return this.$email;
+    }
+
+    get gender(): string {
+        return this.$gender;
+    }
+
+    get avatar(): string {
+        return this.$avatar;
+    }
+
+    get roles(): string[] {
+        return this.$roles;
+    }
+
+    get permissions(): string[] {
+        return this.$permissions;
+    }
+
+    get routers(): RouteConfigImpl[] {
+        return this.$routers;
     }
 
     @Mutation
-    private SET_TOKEN(token: string | undefined) {
-        this.token = token;
+    public setId(id: string) {
+        this.$id = id;
     }
 
     @Mutation
-    private SET_PERMISSIONS(permissions: string[]) {
-        this.permissions = permissions;
+    private setToken(token: string | undefined) {
+        this.$token = token;
     }
 
     @Mutation
-    private SET_NAME(name: string) {
-        this.name = name;
+    private setPermissions(permissions: string[]) {
+        this.$permissions = permissions;
     }
 
     @Mutation
-    private SET_EMAIL(email: string) {
-        this.email = email;
+    private setName(name: string) {
+        this.$name = name;
     }
 
     @Mutation
-    private SET_GENDER(gender: string) {
-        this.gender = gender;
+    private setEmail(email: string) {
+        this.$email = email;
     }
 
     @Mutation
-    private SET_AVATAR(avatar: string) {
-        this.avatar = avatar;
+    private setGender(gender: string) {
+        this.$gender = gender;
     }
 
     @Mutation
-    private SET_ROLES(roles: string[]) {
-        this.roles = roles;
+    private setAvatar(avatar: string) {
+        this.$avatar = avatar;
     }
 
     @Mutation
-    private SET_ROUTES(routes: RouteConfigImpl[]) {
-        this.routers = constantRoutes.concat(routes);
+    private setRoles(roles: string[]) {
+        this.$roles = roles;
+    }
+
+    @Mutation
+    private setRoutes(routes: RouteConfigImpl[]) {
+        this.$routers = constantRoutes.concat(routes);
     }
 }
 

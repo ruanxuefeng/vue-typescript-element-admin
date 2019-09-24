@@ -3,11 +3,9 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+    import {Component, Vue, Watch} from 'vue-property-decorator';
     import StompJS, {Client} from 'stompjs';
-    import {getToken} from '@/utils/auth';
     import {UserState} from '@/store/modules/User';
-
 
     @Component
     export default class ReceiveBulletin extends Vue {
@@ -16,6 +14,19 @@
 
         private created() {
             this.init();
+        }
+
+        get token() {
+            return UserState.token;
+        }
+
+        @Watch('token')
+        private tokenChange(token: string) {
+            if (!token) {
+                this.client.disconnect(() => {
+                    console.info('token had removed!');
+                });
+            }
         }
 
         private init() {
@@ -28,7 +39,7 @@
                 client.heartbeat.incoming = 0;
 
                 client.connect({
-                    'AM-TOKEN': getToken(),
+                    'AM-TOKEN': that.token,
                 }, () => {
                     that.client = client;
 

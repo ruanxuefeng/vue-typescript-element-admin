@@ -133,18 +133,24 @@
         }
 
         private handleLogin() {
-            this.$refs.loginForm.validate((valid: boolean) => {
+            this.$refs.loginForm.validate(async (valid: boolean) => {
                 if (valid) {
                     this.loading = true;
-                    UserState.login({
+                    await UserState.login({
+                        username: this.loginForm.username,
+                        password: Buffer.from(this.loginForm.password).toString('base64'),
+                    });
+
+                    this.$router.push({path: this.redirect || '/'});
+                    this.loading = false;
+                    /*UserState.login({
                         username: this.loginForm.username,
                         password: Buffer.from(this.loginForm.password).toString('base64'),
                     }).then(() => {
-                        this.$router.push({path: this.redirect || '/'});
-                        this.loading = false;
+
                     }).catch(() => {
                         this.loading = false;
-                    });
+                    });*/
                 } else {
                     console.log('error submit!!');
                     return false;

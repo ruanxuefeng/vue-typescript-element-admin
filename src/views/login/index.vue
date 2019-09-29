@@ -1,5 +1,8 @@
 <template>
-    <div class="login-container">
+    <div class="login-container" :style="{
+    'background-image': `url(${background.img})`,
+    'background-size': '100%'
+    }">
         <el-form :model="loginForm" :rules="loginRules" auto-complete="on" class="login-form" label-position="left"
                  ref="loginForm">
 
@@ -51,7 +54,9 @@
                 登录
             </el-button>
         </el-form>
-
+        <div style="position: absolute; bottom: 0; width: 100%;">
+            <p style="color: white; text-align: center" v-html="background.provide"></p>
+        </div>
     </div>
 </template>
 
@@ -98,6 +103,33 @@
         private capsTooltip: boolean = false;
         private loading: boolean = false;
         private redirect?: string;
+        private background = {};
+        private backgroundList = [
+            {
+                img: 'https://ruanxuefeng.gitee.io/source/bg/am/portrait-1462944_1920.jpg',
+                provide: '该图片由<a href="https://pixabay.com/zh/users/melancholiaphotography-2312503/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1462944">melancholiaphotography</a>在<a href="https://pixabay.com/zh/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1462944">Pixabay</a>上发布',
+            },
+            {
+                img: 'https://ruanxuefeng.gitee.io/source/bg/am/girl-1775035_1920.jpg',
+                provide: '该图片由<a href="https://pixabay.com/zh/users/ivanovgood-1982503/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1775035">Alexandr Ivanov</a>在<a href="https://pixabay.com/zh/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1775035">Pixabay</a>上发布',
+            },
+            {
+                img: 'https://ruanxuefeng.gitee.io/source/bg/am/sea-2755908_1920.jpg',
+                provide: '该图片由<a href="https://pixabay.com/zh/users/michasager-6459346/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=2755908">Micha Sager</a>在<a href="https://pixabay.com/zh/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=2755908">Pixabay</a>上发布',
+            },
+            {
+                img: 'https://ruanxuefeng.gitee.io/source/bg/am/moon-1527501_1920.jpg',
+                provide: '该图片由<a href="https://pixabay.com/zh/users/Ponciano-1905611/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1527501">Ponciano</a>在<a href="https://pixabay.com/zh/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1527501">Pixabay</a>上发布',
+            },
+            {
+                img: 'https://ruanxuefeng.gitee.io/source/bg/am/kid-2529907_1920.jpg',
+                provide: '该图片由<a href="https://pixabay.com/zh/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1527501">Pixabay</a>提供'
+            },
+            {
+                img: 'https://ruanxuefeng.gitee.io/source/bg/am/siblings-817369_1920.jpg',
+                provide: '该图片由<a href="https://pixabay.com/zh/users/Bessi-909086/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=817369">Bessi</a>在<a href="https://pixabay.com/zh/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=817369">Pixabay</a>上发布'
+            }
+        ];
 
         private mounted() {
             if (this.loginForm.username === '') {
@@ -105,6 +137,8 @@
             } else if (this.loginForm.password === '') {
                 this.$refs.password.focus();
             }
+            const index = new Date().getSeconds() % this.backgroundList.length;
+            this.background = this.backgroundList[index];
         }
 
         @Watch('$route')
@@ -143,14 +177,6 @@
 
                     this.$router.push({path: this.redirect || '/'});
                     this.loading = false;
-                    /*UserState.login({
-                        username: this.loginForm.username,
-                        password: Buffer.from(this.loginForm.password).toString('base64'),
-                    }).then(() => {
-
-                    }).catch(() => {
-                        this.loading = false;
-                    });*/
                 } else {
                     console.log('error submit!!');
                     return false;
@@ -210,14 +236,14 @@
 </style>
 
 <style lang="scss" scoped>
-    $bg: #2d3a4b;
-    $dark_gray: #889aa4;
-    $light_gray: #eee;
+    $bg: #283443;
+    $dark_gray: #fff;
+    $light_gray: #fff;
 
     .login-container {
         min-height: 100%;
         width: 100%;
-        background-color: $bg;
+        /*background-color: $bg;*/
         overflow: hidden;
 
         .login-form {

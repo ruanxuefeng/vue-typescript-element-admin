@@ -190,7 +190,7 @@
 
         private handleDelete(row: any) {
             const that = this;
-            confirmDelete('删除提示', `公告将会被删除`, '确定', '取消', () => {
+            confirmDelete('删除提示', '公告将会被删除', '确定', '取消', () => {
                 del(row.id).then((resp) => {
                     success('成功', resp.data.message);
                     that.getList();

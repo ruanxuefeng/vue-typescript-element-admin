@@ -12,9 +12,7 @@
     "sourceMap": true,
     "baseUrl": ".",
     "types": [
-      "webpack-env",
-      "jest",
-      "node"
+      "webpack-env"
     ],
     "paths": {
       "@/*": [

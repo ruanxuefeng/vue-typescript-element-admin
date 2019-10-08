@@ -118,7 +118,7 @@
         private obj = new Obj();
         private roles = [];
         private dialogUpdateRoleVisible = false;
-        private tabs:Tab[] = [];
+        private tabs: Tab[] = [];
 
         private created() {
             this.getList();

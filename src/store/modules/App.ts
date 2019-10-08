@@ -4,14 +4,14 @@ import Cookies from 'js-cookie';
 import store from '@/store';
 import Sidebar from '@/store/types/Sidebar';
 
-export default interface App {
+interface App {
     $sidebar: Sidebar;
     $device: string;
     $size: string;
 }
 
 @Module({dynamic: true, store, name: 'app'})
-class AppImpl extends VuexModule implements App {
+export default class AppImpl extends VuexModule implements App {
     public $sidebar = new Sidebar(true);
     public $device: string = 'desktop';
     public $size: string = Cookies.get('size') || 'medium';

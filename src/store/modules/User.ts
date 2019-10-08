@@ -8,7 +8,7 @@ import {getInfo, login, logout} from '@/api/user';
 import {filterAsyncRoutes} from '@/utils/permission';
 import router, {asyncRoutes, constantRoutes, resetRouter} from '@/router';
 
-export default interface User {
+interface User {
     $id: string;
     $token: string | undefined;
     $name: string;
@@ -21,7 +21,7 @@ export default interface User {
 }
 
 @Module({dynamic: true, store, name: 'user'})
-class UserImpl extends VuexModule implements User {
+export default class UserImpl extends VuexModule implements User {
     public $id = '';
     public $token: string | undefined = getToken();
     public $name = '';

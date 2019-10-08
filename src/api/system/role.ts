@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 import Query from '@/class/Query';
-import Role from '@/views/system/role/Role';
+import Role from '@/views/role/Role';
 
 export function list(query: Query) {
   return request({

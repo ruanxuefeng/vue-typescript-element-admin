@@ -14,7 +14,6 @@ export const asyncRoutes: RouteConfigImpl[] = [
         name: 'system',
         permissions: [
             'system',
-            'system-menu',
             'system-role',
             'system-user',
             'system-user-list',
@@ -28,24 +27,17 @@ export const asyncRoutes: RouteConfigImpl[] = [
         children: [
             {
                 path: 'user',
-                component: () => import('@/views/system/user/index.vue'),
+                component: () => import('@/views/user/index.vue'),
                 name: 'User',
                 permissions: ['system-user', 'system-user-list', 'system-user-add', 'system-user-update'],
                 meta: {title: '用户管理', icon: 'user'},
             },
             {
                 path: 'role',
-                component: () => import('@/views/system/role/index.vue'),
+                component: () => import('@/views/role/index.vue'),
                 name: 'Role',
                 permissions: ['system-role'],
                 meta: {title: '角色管理', icon: 'role'},
-            },
-            {
-                path: 'menu',
-                component: () => import('@/views/system/menu/index.vue'),
-                name: 'Menu',
-                permissions: ['system-menu'],
-                meta: {title: '菜单管理', icon: 'menu'},
             },
         ],
     },

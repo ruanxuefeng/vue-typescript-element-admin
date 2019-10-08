@@ -123,12 +123,12 @@
             },
             {
                 img: 'https://ruanxuefeng.gitee.io/source/bg/am/kid-2529907_1920.jpg',
-                provide: '该图片由<a href="https://pixabay.com/zh/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1527501">Pixabay</a>提供'
+                provide: '该图片由<a href="https://pixabay.com/zh/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=1527501">Pixabay</a>提供',
             },
             {
                 img: 'https://ruanxuefeng.gitee.io/source/bg/am/siblings-817369_1920.jpg',
-                provide: '该图片由<a href="https://pixabay.com/zh/users/Bessi-909086/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=817369">Bessi</a>在<a href="https://pixabay.com/zh/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=817369">Pixabay</a>上发布'
-            }
+                provide: '该图片由<a href="https://pixabay.com/zh/users/Bessi-909086/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=817369">Bessi</a>在<a href="https://pixabay.com/zh/?utm_source=link-attribution&amp;utm_medium=referral&amp;utm_campaign=image&amp;utm_content=817369">Pixabay</a>上发布',
+            },
         ];
 
         private mounted() {

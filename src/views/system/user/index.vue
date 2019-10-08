@@ -1,29 +1,23 @@
 <template>
-    <div class="app-container">
-        <div class="filter-container">
-            <el-input v-model="query.name" placeholder="姓名" :clearable="true" style="width: 200px;"
-                      class="filter-item" @keyup.enter.native="getList"></el-input>
-            <el-input v-model="query.email" placeholder="邮箱" :clearable="true" style="width: 200px;"
-                      class="filter-item" @keyup.enter.native="getList"></el-input>
-            <el-input v-model="query.username" placeholder="用户名" :clearable="true" style="width: 200px;"
-                      class="filter-item" @keyup.enter.native="search"></el-input>
-
-            <el-button class="filter-item" type="primary" icon="el-icon-search" @click="getList">
-                搜索
-            </el-button>
-            <el-button v-permission="'system-user-add'" class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
-                       @click="handleCreate">
-                新增
-            </el-button>
-        </div>
-        <el-table
-                v-loading="data.tableLoading"
-                :data="data.list"
-                border
-                fit
-                highlight-current-row
-                style="width: 100%;"
-        >
+    <el-card shadow="hover">
+        <el-form :inline="true">
+            <el-form-item>
+                <el-input v-model="query.name" placeholder="姓名" clearable @keyup.enter.native="getList"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input v-model="query.email" placeholder="邮箱" clearable @keyup.enter.native="getList"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-input v-model="query.username" placeholder="用户名" clearable @keyup.enter.native="search"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click="getList">搜索</el-button>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
+            </el-form-item>
+        </el-form>
+        <el-table v-loading="data.tableLoading" :data="data.list" border fit highlight-current-row>
             <el-table-column type="index" width="50"></el-table-column>
             <el-table-column label="头像" prop="avatar" width="100px" :align="data.commonAlign">
                 <template slot-scope="scope">
@@ -31,12 +25,9 @@
                          style="width: 40px;height: 40px;border-radius: 10px" alt="头像">
                 </template>
             </el-table-column>
-            <el-table-column label="用户名" prop="username" width="200px"
-                             :align="data.commonAlign"></el-table-column>
-            <el-table-column label="姓名" prop="name" width="200px"
-                             :align="data.commonAlign"></el-table-column>
-            <el-table-column label="邮箱" prop="email" width="300px"
-                             :align="data.commonAlign"></el-table-column>
+            <el-table-column label="用户名" prop="username" width="200px" :align="data.commonAlign"></el-table-column>
+            <el-table-column label="姓名" prop="name" width="200px" :align="data.commonAlign"></el-table-column>
+            <el-table-column label="邮箱" prop="email" width="300px" :align="data.commonAlign"></el-table-column>
             <el-table-column label="性别" prop="gender" width="100px" :align="data.commonAlign">
                 <template slot-scope="scope">
                     <el-tag v-if="scope.row.gender === '男'" type="success">男</el-tag>
@@ -51,17 +42,12 @@
             <el-table-column label="创建时间" prop="createTime" width="200px"
                              :align="data.commonAlign"></el-table-column>
 
-            <el-table-column label="操作" :align="data.commonAlign" class-name="small-padding fixed-width"
-                             min-width="300px">
+            <el-table-column label="操作" :align="data.commonAlign" min-width="300px">
                 <template slot-scope="scope">
                     <el-button-group>
                         <el-button type="primary" @click="handleUpdate(scope.row)">编辑</el-button>
-                        <el-button type="primary" @click="openUpdateRoleDialog(scope.row)">
-                            分配角色
-                        </el-button>
-                        <el-button type="danger" @click="handleDelete(scope.row)">
-                            删除
-                        </el-button>
+                        <el-button type="primary" @click="openUpdateRoleDialog(scope.row)">分配角色</el-button>
+                        <el-button type="danger" @click="handleDelete(scope.row)">删除</el-button>
                     </el-button-group>
                 </template>
             </el-table-column>
@@ -72,8 +58,7 @@
 
         <!--编辑弹窗-->
         <el-dialog :visible.sync="data.dialogFormVisible" :title="data.dialogStatus === 'create' ? '新增' : '编辑'">
-            <el-form ref="dataForm" :rules="rules" :model="obj" label-position="left" label-width="70px"
-                     style="width: 800px; margin-left:50px;">
+            <el-form ref="dataForm" :rules="rules" :model="obj" :label-position="data.labelPosition" label-width="70px">
 
                 <el-form-item label="用户名" prop="username">
                     <el-input v-model="obj.username" placeholder="用户名" maxlength="64"></el-input>
@@ -96,13 +81,8 @@
                 </el-form-item>
 
                 <el-form-item label="头像" prop="avatar">
-                    <el-upload
-                            :show-file-list="false"
-                            :auto-upload="false"
-                            :on-change="avatarChange"
-                            class="avatar-uploader"
-                            action="https://jsonplaceholder.typicode.com/posts/"
-                    >
+                    <el-upload :show-file-list="false" :auto-upload="false" :on-change="avatarChange"
+                               class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/">
                         <img v-if="obj.avatar" :src="obj.avatar" class="avatar"
                              alt="">
                         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -110,11 +90,9 @@
                 </el-form-item>
 
             </el-form>
-            <div slot="footer" class="dialog-footer">
+            <div slot="footer">
                 <el-button @click="cancel">取消</el-button>
-                <el-button type="primary" @click="data.dialogStatus==='create'?create():update()">
-                    保存
-                </el-button>
+                <el-button type="primary" @click="data.dialogStatus==='create'?create():update()">保存</el-button>
             </div>
         </el-dialog>
 
@@ -131,12 +109,12 @@
                     :titles="['待选角色', '已选角色']"
                     filterable
                     filter-placeholder="请输入角色名称"></el-transfer>
-            <div slot="footer" class="dialog-footer">
+            <div slot="footer">
                 <el-button @click="dialogUpdateRoleVisible = false">取消</el-button>
                 <el-button type="primary" @click="updateRole">保存</el-button>
             </div>
         </el-dialog>
-    </div>
+    </el-card>
 </template>
 
 <script lang="ts">
@@ -153,7 +131,6 @@
     import Rule from '@/class/Rule';
     import {confirmDelete, success} from '@/utils/message';
     import Query from './Query';
-    import {UserState} from '@/store/modules/User';
 
     @Component({
         components: {
@@ -321,7 +298,6 @@
                 this.dialogUpdateRoleVisible = false;
                 this.getList();
                 this.obj = new Obj();
-                UserState.resetRouter();
             });
         }
 
@@ -332,8 +308,8 @@
     }
 </script>
 
-<style>
-    .avatar-uploader .el-upload {
+<style scoped>
+    .avatar-uploader >>> .el-upload {
         border: 1px dashed #d9d9d9;
         border-radius: 6px;
         cursor: pointer;
@@ -341,7 +317,7 @@
         overflow: hidden;
     }
 
-    .avatar-uploader .el-upload:hover {
+    .avatar-uploader >>> .el-upload:hover {
         border-color: #409EFF;
     }
 

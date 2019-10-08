@@ -1,39 +1,29 @@
 <template>
-    <div class="app-container">
-        <div class="filter-container">
-            <el-input v-model="query.name" placeholder="角色名称" :clearable="true" style="width: 200px;"
-                      class="filter-item" @keyup.enter.native="getList"></el-input>
-
-            <el-button class="filter-item" type="primary" icon="el-icon-search" @click="getList">
-                搜索
-            </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
-                       @click="handleCreate">
-                新增
-            </el-button>
-        </div>
-        <el-table
-                v-loading="data.tableLoading"
-                :data="data.list"
-                border
-                fit
-                highlight-current-row
-                style="width: 100%;"
-        >
+    <el-card shadow="hover">
+        <el-form :inline="true">
+            <el-form-item>
+                <el-input v-model="query.name" placeholder="角色名称" clearable @keyup.enter.native="getList"></el-input>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" icon="el-icon-search" @click="getList">搜索</el-button>
+            </el-form-item>
+            <el-form-item>
+                <el-button  type="primary" icon="el-icon-edit" @click="handleCreate">新增</el-button>
+            </el-form-item>
+        </el-form>
+        <el-table v-loading="data.tableLoading" :data="data.list" border fit highlight-current-row>
             <el-table-column type="index" width="50"></el-table-column>
-            <el-table-column label="角色名称" prop="name" width="200px"
-                             :align="data.commonAlign"></el-table-column>
+            <el-table-column label="角色名称" prop="name" :align="data.commonAlign"></el-table-column>
             <el-table-column label="备注" prop="memo" width="450px"
                              :align="data.commonAlign"></el-table-column>
-            <el-table-column label="创建人" width="150px" :align="data.commonAlign">
+            <el-table-column label="创建人" :align="data.commonAlign">
                 <template slot-scope="scope">
                     {{ scope.row.creatorName }}
                 </template>
             </el-table-column>
-            <el-table-column label="创建时间" prop="createTime" width="200px" :align="data.commonAlign"></el-table-column>
+            <el-table-column label="创建时间" prop="createTime"  :align="data.commonAlign"></el-table-column>
 
-            <el-table-column label="操作" :align="data.commonAlign" class-name="small-padding fixed-width"
-                             min-width="300px">
+            <el-table-column label="操作" :align="data.commonAlign" min-width="300px">
                 <template slot-scope="scope">
                     <el-button-group>
                         <el-button type="primary" @click="handleUpdate(scope.row)">编辑</el-button>
@@ -54,8 +44,7 @@
 
         <!--编辑弹窗-->
         <el-dialog :visible.sync="data.dialogFormVisible" :title="data.dialogStatus === 'create' ? '新增' : '编辑'">
-            <el-form ref="dataForm" :rules="rules" :model="obj" label-position="left" label-width="80px"
-                     style="width: 800px; margin-left:50px;">
+            <el-form ref="dataForm" :rules="rules" :model="obj" :label-position="data.labelPosition" label-width="80px">
 
                 <el-form-item label="角色名称" prop="name">
                     <el-input v-model="obj.name" placeholder="角色名称" maxlength="20"></el-input>
@@ -67,7 +56,7 @@
                 </el-form-item>
 
             </el-form>
-            <div slot="footer" class="dialog-footer">
+            <div slot="footer">
                 <el-button @click="cancel">取消</el-button>
                 <el-button type="primary" @click="data.dialogStatus==='create'?create():update()">
                     保存
@@ -83,16 +72,16 @@
                           label: 'name',
                           children: 'children'
                      }"
-                    :data="permissionTree"
-                    :default-checked-keys="rolePermission"
-                    node-key="mark"
+                    :data="allMenuList"
+                    :default-checked-keys="selectMenuList"
+                    node-key="id"
                     show-checkbox></el-tree>
-            <div slot="footer" class="dialog-footer">
+            <div slot="footer">
                 <el-button @click="dialogAssignPermissionsVisible = false">取消</el-button>
                 <el-button type="primary" @click="assignPermissions">保存</el-button>
             </div>
         </el-dialog>
-    </div>
+    </el-card>
 </template>
 
 <script lang="ts">
@@ -105,9 +94,9 @@
     import Data from '@/class/Data';
     import Query from './Query';
     import Obj from './Role';
-    import {del, list, save, update, rolePermission, permissionTree, updatePermission} from '@/api/system/role';
+    import {del, list, roleMenuList, save, update, updateMenuList} from '@/api/system/role';
+    import {allMenuList} from '@/api/system/menu';
     import Rule from '@/class/Rule';
-    import {UserState} from '@/store/modules/User';
 
     @Component({
         components: {
@@ -125,8 +114,8 @@
         private query = new Query();
         private obj = new Obj();
         private dialogAssignPermissionsVisible = false;
-        private permissionTree = [];
-        private rolePermission = [];
+        private selectMenuList = [];
+        private allMenuList = [];
         private rules = {
             name: [new Rule({message: '请输入角色名称'})],
         };
@@ -210,10 +199,10 @@
 
         private openAssignPermissionsDialog(row: any) {
             const that = this;
-            axios.all([permissionTree(), rolePermission(row.id)])
-                .then(axios.spread((permissionTreeResp, rolePermissionResp) => {
-                    that.permissionTree = permissionTreeResp.data;
-                    that.rolePermission = rolePermissionResp.data;
+            axios.all([allMenuList(), roleMenuList(row.id)])
+                .then(axios.spread((allMenuListResp, roleMenuListResp) => {
+                    that.allMenuList = allMenuListResp.data;
+                    that.selectMenuList = roleMenuListResp.data;
                     that.dialogAssignPermissionsVisible = true;
                     that.obj.id = row.id;
                 }));
@@ -221,9 +210,8 @@
 
         private assignPermissions() {
             if (this.obj.id) {
-                updatePermission(this.obj.id, this.$refs.tree.getCheckedKeys()).then((resp: any) => {
+                updateMenuList(this.obj.id, this.$refs.tree.getCheckedKeys()).then((resp: any) => {
                     success('成功', resp.data.message);
-                    UserState.resetRouter();
                     this.dialogAssignPermissionsVisible = false;
                 });
             }

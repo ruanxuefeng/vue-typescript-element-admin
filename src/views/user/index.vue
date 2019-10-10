@@ -1,7 +1,8 @@
 <template>
     <el-card shadow="hover">
-        <el-tabs type="border-card" :value="activeTab">
-            <el-tab-pane name="list">
+        <el-tabs type="border-card" v-model="activeTab" @tab-remove="removeTab">
+            <!--列表-->
+            <el-tab-pane name="list" :closable='false'>
                 <span slot="label"><svg-icon icon-class="list"></svg-icon> 用户列表</span>
                 <el-form :inline="true">
                     <el-form-item>
@@ -60,19 +61,22 @@
                 <pagination v-show="query.total > query.pageSize" :total="query.total" :page.sync="query.page"
                             :limit.sync="query.pageSize" @pagination="getList"/>
             </el-tab-pane>
-            <el-tab-pane name="add">
+            <!--新增tab-->
+            <el-tab-pane name="add" :closable='false'>
                 <span slot="label"><svg-icon icon-class="add"></svg-icon> 新增</span>
-                <user-form :obj="obj" type="add" @handle-update="saveHandle"></user-form>
+                <user-form type="ADD" @handle-update="saveHandle"></user-form>
             </el-tab-pane>
-            <el-tab-pane v-for="(tab,index) in tabs" :key="index" :name="tab.name">
+            <!--编辑tabs-->
+            <el-tab-pane v-for="(tab,index) in tabs" :key="index" :name="tab.name" closable>
                 <span slot="label"><svg-icon icon-class="edit"></svg-icon> {{tab.label}}</span>
+                <user-form :obj="tab.obj" type="UPDATE" @handle-update="updateHandle"></user-form>
             </el-tab-pane>
         </el-tabs>
 
         <!--更该角色弹窗-->
         <el-dialog :visible.sync="dialogUpdateRoleVisible" title="编辑角色">
             <el-transfer
-                    v-model="obj.roleIdList"
+                    v-model="userRole.roleIdList"
                     :filter-method="filterRole"
                     :data="roles"
                     :props="{
@@ -98,11 +102,13 @@
     import UserForm from '@/views/user/components/Form.vue';
 
     import Data from '@/class/Data';
-    import Obj from '@/views/user/class/User';
-    import {del, isUsernameExist, list, save, update, updateRole, userRoleList} from '@/api/system/user';
-    import {roleList} from '@/api/system/role';
-    import {confirmDelete, success} from '@/utils/message';
+    import {del, list, save, update, updateRole, userRoleList} from '@/views/user/api';
+    import {roleList} from '@/views/role/api';
+    import {confirmDelete, success} from '@/util/MessageUtils';
     import Query from '@/views/user/class/Query';
+    import UserTab from './class/UserTab';
+    import UserRole from './class/UserRole';
+    import {getTabEditName, removeTab} from '@/util/TabUtils';
 
     @Component({
         components: {
@@ -115,10 +121,10 @@
         private activeTab = 'list';
         private query = new Query();
         private data = new Data();
-        private obj = new Obj();
         private roles = [];
+        private userRole: UserRole = {id: '', roleIdList: []};
         private dialogUpdateRoleVisible = false;
-        private tabs: Tab[] = [];
+        private tabs: UserTab[] = [];
 
         private created() {
             this.getList();
@@ -143,29 +149,44 @@
         private saveHandle(data: FormData) {
             save(data).then((resp) => {
                 this.editSuccess(resp.data.message);
+                this.activeTab = 'list';
             });
         }
 
         private handleUpdate(row: any) {
             const {id, name, username, email, gender, avatar, roleIdList} = row;
-            const tab = {
-                name: `edit-${id}`,
-                label: `编辑-${name}`,
-                obj: {id, name, username, email, gender, avatar, roleIdList},
-            };
-            this.tabs.push(tab);
+            const tabs = this.tabs.filter(tab => tab.name === `edit-${id}`);
+            if (tabs.length === 0) {
+                const tab = {
+                    name: getTabEditName(id),
+                    label: `编辑-${name}`,
+                    obj: {id, name, username, email, gender, avatar, roleIdList},
+                };
+                this.tabs.push(tab);
+                this.activeTab = tab.name;
+            } else {
+                this.activeTab = tabs[0].name;
+            }
         }
 
         private updateHandle(data: FormData) {
             update(data).then((resp) => {
                 this.editSuccess(resp.data.message);
+                this.removeTab(this.activeTab);
+                this.activeTab = 'list';
             });
+        }
+
+        private removeTab(tabName: string) {
+            if (this.activeTab === tabName) {
+                this.activeTab = 'list';
+            }
+            this.tabs = removeTab(this.tabs, tabName);
         }
 
         private editSuccess(message: string) {
             success('成功', message);
             this.data.dialogFormVisible = false;
-            this.obj = new Obj();
             this.getList();
         }
 
@@ -174,14 +195,10 @@
             confirmDelete('删除提示', `${row.name}将会被删除`, '确定', '取消', () => {
                 del(row.id).then((resp) => {
                     success('成功', resp.data.message);
+                    that.tabs = removeTab(this.tabs, getTabEditName(row.id));
                     that.getList();
                 });
             });
-        }
-
-        private cancel() {
-            this.data.dialogFormVisible = false;
-            this.obj = new Obj();
         }
 
         private filterRole(query: string, item: any) {
@@ -196,27 +213,20 @@
                 .then(axios.spread((allRoleListResp, userRoleListResp) => {
                     that.roles = allRoleListResp.data;
                     // this.$set(this.obj, 'roleIdList',  userRoleListResp.data);
-                    this.obj.roleIdList = userRoleListResp.data;
-                    that.obj.id = row.id;
+                    that.userRole = {roleIdList: (userRoleListResp.data as string[]), id: (row.id as string)};
                     that.dialogUpdateRoleVisible = true;
                 }));
         }
 
         private updateRole() {
-            updateRole(this.obj.id, this.obj.roleIdList).then((resp) => {
+            updateRole(this.userRole).then((resp) => {
                 success('成功', resp.data.message);
                 this.dialogUpdateRoleVisible = false;
                 this.getList();
-                this.obj = new Obj();
+                this.userRole = {id: '', roleIdList: []};
             });
         }
 
-    }
-
-    class Tab {
-        public name!: string;
-        public label!: string;
-        public obj!: Obj;
     }
 </script>
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {Message} from 'element-ui';
 
-import {getToken} from '@/utils/auth';
+import {getToken} from '@/util/AuthUtils';
 
 // create an axios instance
 const service = axios.create({
@@ -22,7 +22,6 @@ service.interceptors.request.use(
     },
     (error: any) => {
         // do something with request error
-        console.log(error); // for debug
         return Promise.reject(error);
     },
 );
@@ -33,8 +32,6 @@ service.interceptors.response.use(
         return response;
     },
     (error) => {
-        console.log(`err: ${error}`);
-
         Message({
             message: error.response.data.message,
             type: 'error',

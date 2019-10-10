@@ -90,7 +90,7 @@
     import Obj from './Bulletin';
     import Rule from '@/class/Rule';
     import {del, list, publish, save, update} from '@/api/bulletion';
-    import {confirmDelete, success} from '@/utils/message';
+    import {confirmDelete, success} from '@/util/MessageUtils';
 
     @Component({
         components: {
@@ -174,7 +174,6 @@
         private handlePublish(row: any) {
             this.publishDialogVisible = true;
             const {id, content} = row;
-            console.info(id);
             this.publishObj = {id, content};
         }
 

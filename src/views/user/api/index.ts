@@ -1,5 +1,6 @@
-import request from '@/utils/request';
+import request from '@/util/RequestUtils';
 import Query from '@/class/Query';
+import UserRole from '@/views/user/class/UserRole';
 
 export function list(query: Query) {
   return request({
@@ -49,10 +50,10 @@ export function userRoleList(id: string) {
   });
 }
 
-export function updateRole(id: string, roleIdList: string[]) {
+export function updateRole(userRole: UserRole) {
   return request({
     url: '/user/updateRole',
     method: 'post',
-    data: {id, roleIdList},
+    data: userRole,
   });
 }

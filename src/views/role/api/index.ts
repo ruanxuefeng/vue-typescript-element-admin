@@ -1,6 +1,6 @@
-import request from '@/utils/request';
+import request from '@/util/RequestUtils';
 import Query from '@/class/Query';
-import Role from '@/views/role/Role';
+import Role from '@/views/role/class/Role';
 
 export function list(query: Query) {
   return request({
@@ -10,11 +10,12 @@ export function list(query: Query) {
   });
 }
 
-export function save(data: Role) {
+export function save(role: Role) {
+  const {name, memo} = role;
   return request({
     url: '/role/save',
     method: 'post',
-    data,
+    data: {name, memo},
   });
 }
 

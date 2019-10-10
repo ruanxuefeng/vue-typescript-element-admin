@@ -35,8 +35,8 @@ export default class TagsViewImpl extends VuexModule implements TagsView {
             this.delVisitedViewMutation(view);
             this.delCachedViewMutation(view);
             resolve({
-                $visitedViews: [...this.$visitedViews],
-                $cachedViews: [...this.$cachedViews],
+                visitedViews: [...this.$visitedViews],
+                cachedViews: [...this.$cachedViews],
             });
         }));
     }

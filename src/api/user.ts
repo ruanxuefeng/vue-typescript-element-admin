@@ -1,4 +1,4 @@
-import request from '@/utils/request';
+import request from '@/util/RequestUtils';
 
 export function login(data: object) {
   return request({

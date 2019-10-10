@@ -9,7 +9,7 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
 
     // doc: https://panjiachen.github.io/vue-element-admin-site/feature/component/svg-icon.html#usage
-    import {isExternal} from '@/utils/validate';
+    import {isExternal} from '@/util/ValidateUtils';
 
     @Component
     export default class SvgClass extends Vue {

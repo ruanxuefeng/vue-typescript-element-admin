@@ -23,9 +23,7 @@
         @Watch('token')
         private tokenChange(token: string) {
             if (!token) {
-                this.client.disconnect(() => {
-                    console.info('token had removed!');
-                });
+                this.client.disconnect(() => {});
             }
         }
 
@@ -61,13 +59,11 @@
                         UserState.resetRouter();
                     });
                 }, (error) => {
-                    console.log('client connect error:', error);
-                    console.log('try to reconnection');
                     setTimeout(that.init, 3000);
                 });
 
                 client.disconnect = () => {
-                    console.info('web socket disconnect');
+
                 };
             }
 

@@ -7,8 +7,8 @@ import { UserState } from '@/store/modules/User';
 import 'nprogress/nprogress.css';
 
 // get token from cookie
-import { getToken, removeToken } from '@/utils/auth';
-import getPageTitle from '@/utils/get-page-title';
+import { getToken, removeToken } from '@/util/AuthUtils';
+import getPageTitle from '@/util/GetPageTitleUtils';
 import { Message } from 'element-ui';
 import RouteRecordImpl from '@/router/RouteRecordImpl';
 
@@ -54,10 +54,9 @@ router.beforeEach(async (to, from, next) => {
                             },
                         );
                     })
-                    .catch(error => {
+                    .catch(() => {
                         Message.error('获取用户信息失败，返回登录页');
                         removeToken();
-                        console.error(error);
                         next(`/login?redirect=${to.path}`);
                         NProgress.done();
                     });

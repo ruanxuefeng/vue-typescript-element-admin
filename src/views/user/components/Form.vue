@@ -1,5 +1,6 @@
+import {FormType} from '@/class/FormType';
 <template>
-    <el-form ref="dataForm" :rules="rules" :model="obj" :label-position="data.labelPosition" label-width="70px">
+    <el-form ref="dataForm" :rules="rules" :model="obj" :label-position="data.labelPosition" label-width="80px">
 
         <el-form-item label="用户名" prop="username">
             <el-input v-model="obj.username" placeholder="用户名" maxlength="64" class="input"></el-input>
@@ -32,18 +33,18 @@
 
         <el-form-item>
             <el-button type="primary" @click="submit">{{label}}</el-button>
-            <el-button>取消</el-button>
+            <el-button @click="cancel">重置</el-button>
         </el-form-item>
     </el-form>
 </template>
 
 <script lang="ts">
-    import {Component, Vue, Prop} from 'vue-property-decorator';
+    import {Component, Prop, Vue} from 'vue-property-decorator';
     import Obj from '@/views/user/class/User';
-    import {validEmail} from '@/utils/validate';
+    import {validEmail} from '@/util/ValidateUtils';
     import Rule from '@/class/Rule';
     import Data from '@/class/Data';
-    import {isUsernameExist, save, update} from '@/api/system/user';
+    import {isUsernameExist} from '@/views/user/api';
     import {FormType} from '@/class/FormType';
 
     @Component
@@ -60,18 +61,23 @@
             dataForm: HTMLFormElement,
         };
 
-        @Prop({required: true})
+        @Prop({
+            default: () => new Obj()
+        })
         private obj!: Obj;
 
         @Prop({required: true})
         private type!: FormType;
 
         get label() {
-            return '新增';
+            switch (this.type) {
+                case FormType.ADD:
+                    return '新增';
+                case FormType.UPDATE:
+                    return '修改';
+            }
         }
 
-        private formType!: string;
-        private user = new Obj();
         private data = new Data();
         private img!: File;
 
@@ -88,7 +94,7 @@
         };
 
         private created() {
-            console.info(this.formType);
+            console.info(this.type);
         }
 
         private validateUsername(rule: Rule, value: string, callback: (error?: Error) => void) {
@@ -124,8 +130,15 @@
             this.$refs.dataForm.validate((valid: boolean) => {
                 if (valid) {
                     this.$emit('handle-update', this.createFormData());
+                    if (this.type === FormType.ADD) {
+                        this.$refs.dataForm.resetFields();
+                    }
                 }
             });
+        }
+
+        private cancel() {
+            this.$refs.dataForm.resetFields();
         }
     }
 </script>

@@ -41,7 +41,7 @@ import {FormType} from '@/class/FormType';
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
     import Obj from '@/views/user/class/User';
-    import {validEmail} from '@/util/ValidateUtils';
+    import {validEmail} from '@/utils/ValidateUtils';
     import Rule from '@/class/Rule';
     import Data from '@/class/Data';
     import {isUsernameExist} from '@/views/user/api';

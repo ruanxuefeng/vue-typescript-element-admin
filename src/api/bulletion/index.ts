@@ -1,4 +1,4 @@
-import request from '@/util/RequestUtils';
+import request from '@/utils/RequestUtils';
 import BulletinQuery from '@/views/bulletin/Query';
 import Bulletin from '@/views/bulletin/Bulletin';
 

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import {Message} from 'element-ui';
 
-import {getToken} from '@/util/AuthUtils';
+import {getToken} from '@/utils/AuthUtils';
 
 // create an axios instance
 const service = axios.create({
@@ -17,7 +17,7 @@ const service = axios.create({
 service.interceptors.request.use(
     (config: any) => {
         // do something before request is sent
-        config.headers['AM-TOKEN'] = getToken();
+        config.headers['ENJOY-BOOK-TOKEN'] = getToken();
         return config;
     },
     (error: any) => {

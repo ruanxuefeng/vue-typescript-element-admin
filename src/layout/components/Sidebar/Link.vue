@@ -8,7 +8,7 @@
 <script lang="ts">
     import {Component, Prop, Vue} from 'vue-property-decorator';
 
-    import {isExternal} from '@/util/ValidateUtils';
+    import {isExternal} from '@/utils/ValidateUtils';
 
     @Component
     export default class AppLink extends Vue {

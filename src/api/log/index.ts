@@ -1,4 +1,4 @@
-import request from '@/util/RequestUtils';
+import request from '@/utils/RequestUtils';
 import Query from '@/views/log/Query';
 
 export function list(query: Query) {

@@ -92,13 +92,13 @@
     import Pagination from '@/components/Pagination/index.vue';
     import RoleForm from './components/Form.vue';
 
-    import {confirmDelete, success} from '@/util/MessageUtils';
+    import {confirmDelete, success} from '@/utils/MessageUtils';
     import Data from '@/class/Data';
     import Query from '@/views/role/class/Query';
     import RoleTab from '@/views/role/class/RoleTab';
     import {del, list, save, update, rolePermission, permissionTree, updatePermission} from '@/views/role/api';
     import Obj from './class/Role';
-    import {getTabEditName, removeTab} from '@/util/TabUtils';
+    import {getTabEditName, removeTab} from '@/utils/TabUtils';
     import {UserState} from '@/store/modules/User';
     import RolePermission from '@/views/role/class/RolePermission';
 

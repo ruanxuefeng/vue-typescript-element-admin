@@ -33,6 +33,7 @@
         get roles() {
             return UserState.roles;
         }
+
         get avatar() {
             return UserState.avatar;
         }

@@ -1,10 +1,9 @@
 import request from '@/utils/RequestUtils';
 import Query from '@/class/Query';
-import UserRole from '@/views/user/class/UserRole';
 
 export function list(query: Query) {
     return request({
-        url: '/user/list',
+        url: '/book/list',
         method: 'get',
         params: query,
     });
@@ -12,7 +11,7 @@ export function list(query: Query) {
 
 export function save(data: FormData) {
     return request({
-        url: '/user/save',
+        url: '/book/save',
         method: 'post',
         data,
     });
@@ -20,7 +19,7 @@ export function save(data: FormData) {
 
 export function update(data: FormData) {
     return request({
-        url: '/user/update',
+        url: '/book/update',
         method: 'post',
         data,
     });
@@ -28,32 +27,22 @@ export function update(data: FormData) {
 
 export function del(id: string) {
     return request({
-        url: '/user/delete',
+        url: '/book/delete',
         method: 'delete',
         params: {id},
     });
 }
 
-export function isUsernameExist(id: string, username: string) {
+export function statusList() {
     return request({
-        url: '/user/isUsernameExist',
+        url: '/book/status/list',
         method: 'get',
-        params: {id, username},
     });
 }
 
-export function userRoleList(id: string) {
+export function getById(id: string) {
     return request({
-        url: '/user/roleIdList',
+        url: `/book/${id}`,
         method: 'get',
-        params: {id},
-    });
-}
-
-export function updateRole(userRole: UserRole) {
-    return request({
-        url: '/user/updateRole',
-        method: 'post',
-        data: userRole,
     });
 }

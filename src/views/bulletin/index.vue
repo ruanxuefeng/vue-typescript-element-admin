@@ -90,7 +90,7 @@
     import Obj from './Bulletin';
     import Rule from '@/class/Rule';
     import {del, list, publish, save, update} from '@/api/bulletion';
-    import {confirmDelete, success} from '@/util/MessageUtils';
+    import {confirmDelete, success} from '@/utils/MessageUtils';
 
     @Component({
         components: {

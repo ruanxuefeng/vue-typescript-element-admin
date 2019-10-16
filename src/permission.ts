@@ -7,8 +7,8 @@ import { UserState } from '@/store/modules/User';
 import 'nprogress/nprogress.css';
 
 // get token from cookie
-import { getToken, removeToken } from '@/util/AuthUtils';
-import getPageTitle from '@/util/GetPageTitleUtils';
+import { getToken, removeToken } from '@/utils/AuthUtils';
+import getPageTitle from '@/utils/GetPageTitleUtils';
 import { Message } from 'element-ui';
 import RouteRecordImpl from '@/router/RouteRecordImpl';
 

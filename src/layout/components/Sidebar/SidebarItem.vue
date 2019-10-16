@@ -34,7 +34,7 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
 
     import AppLink from './Link.vue';
-    import {isExternal} from '@/util/ValidateUtils';
+    import {isExternal} from '@/utils/ValidateUtils';
     import RouteConfigImpl from '@/router/RouteRecordImpl';
     import {AppState} from '@/store/modules/App';
 

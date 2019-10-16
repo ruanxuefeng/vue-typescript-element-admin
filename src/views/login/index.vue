@@ -64,7 +64,7 @@
 
     import {Component, Vue, Watch} from 'vue-property-decorator';
 
-    import {validUsername} from '@/util/ValidateUtils';
+    import {validUsername} from '@/utils/ValidateUtils';
     import Rule from '@/class/Rule';
     import LoginForm from '@/class/LoginForm';
     import {UserState} from '@/store/modules/User';

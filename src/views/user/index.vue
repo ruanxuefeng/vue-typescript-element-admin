@@ -104,11 +104,11 @@
     import Data from '@/class/Data';
     import {del, list, save, update, updateRole, userRoleList} from '@/views/user/api';
     import {roleList} from '@/views/role/api';
-    import {confirmDelete, success} from '@/util/MessageUtils';
+    import {confirmDelete, success} from '@/utils/MessageUtils';
     import Query from '@/views/user/class/Query';
     import UserTab from './class/UserTab';
     import UserRole from './class/UserRole';
-    import {getTabEditName, removeTab} from '@/util/TabUtils';
+    import {getTabEditName, removeTab} from '@/utils/TabUtils';
 
     @Component({
         components: {

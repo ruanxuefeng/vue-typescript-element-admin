@@ -1,4 +1,4 @@
-import request from '@/util/RequestUtils';
+import request from '@/utils/RequestUtils';
 import Query from '@/class/Query';
 import UserRole from '@/views/user/class/UserRole';
 

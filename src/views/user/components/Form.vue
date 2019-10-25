@@ -1,4 +1,3 @@
-import {FormType} from '@/class/FormType';
 <template>
     <el-form ref="dataForm" :rules="rules" :model="obj" :label-position="data.labelPosition" label-width="80px">
 
@@ -92,10 +91,6 @@ import {FormType} from '@/class/FormType';
                 new Rule({}, Form.validateEmail),
             ],
         };
-
-        private created() {
-            console.info(this.type);
-        }
 
         private validateUsername(rule: Rule, value: string, callback: (error?: Error) => void) {
             isUsernameExist(this.obj.id, value).then((resp: any) => {

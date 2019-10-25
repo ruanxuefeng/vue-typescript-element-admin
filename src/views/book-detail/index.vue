@@ -1,7 +1,5 @@
 <template>
     <el-card shadow='hover'>
-
-
         <el-row>
             <el-col :span='4' :offset='6'>
                 <img alt='封面' width='180' height='240' :src='book.cover'>
@@ -18,7 +16,7 @@
                 </div>
             </el-col>
         </el-row>
-        <el-row>
+        <el-row style="margin-top: 10px;">
             <el-col :span='8' :offset='6'>
                 {{book.summary}}
             </el-col>
@@ -69,17 +67,17 @@
     import {Component, Prop, Vue} from 'vue-property-decorator';
 
     import Pagination from '@/components/Pagination/index.vue';
-    import AddBookChapter from './Add-Book-Chapter.vue';
-    import UpdateBookChapter from './Update-Book-Chapter.vue';
+    import AddBookChapter from './components/Add-Book-Chapter.vue';
+    import UpdateBookChapter from './components/Update-Book-Chapter.vue';
 
     import {getById as getBookById} from '@/views/book/api';
     import {list} from '@/views/book/api/book-chapter';
 
-    import Book from '../Book';
-    import Query from './Query';
+    import Book from '../book/class/Book';
+    import Query from './class/Query';
     import Data from '@/class/Data';
     import Rule from '@/class/Rule';
-    import Tab from '../class/Tab';
+    import Tab from '../book/class/Tab';
 
     @Component({
         components: {

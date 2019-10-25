@@ -26,10 +26,10 @@
     import {save} from '@/views/book/api/book-chapter';
     import {success} from '@/utils/MessageUtils';
 
-    import Obj from './BookChapter';
+    import Obj from '../class/BookChapter';
     import Data from '@/class/Data';
     import Rule from '@/class/Rule';
-    import {plugins, toolbar} from './config';
+    import {plugins, toolbar} from '../config';
 
     @Component({
         components: {

@@ -60,7 +60,7 @@
                 <role-form type="ADD" @handle-update="saveHandle"></role-form>
             </el-tab-pane>
             <!--编辑tabs-->
-            <el-tab-pane v-for="(tab,index) in tabs" :key="index" :name="tab.name" closable>
+            <el-tab-pane v-for="tab in tabs" :key="tab.name" :name="tab.name" closable>
                 <span slot="label"><svg-icon icon-class="edit"></svg-icon> {{tab.label}}</span>
                 <role-form :obj="tab.obj" type="UPDATE" @handle-update="updateHandle"></role-form>
             </el-tab-pane>

@@ -67,7 +67,7 @@
                 <user-form type="ADD" @handle-update="saveHandle"></user-form>
             </el-tab-pane>
             <!--编辑tabs-->
-            <el-tab-pane v-for="(tab,index) in tabs" :key="index" :name="tab.name" closable>
+            <el-tab-pane v-for="tab in tabs" :key="tab.name" :name="tab.name" closable>
                 <span slot="label"><svg-icon icon-class="edit"></svg-icon> {{tab.label}}</span>
                 <user-form :obj="tab.obj" type="UPDATE" @handle-update="updateHandle"></user-form>
             </el-tab-pane>
@@ -155,7 +155,7 @@
 
         private handleUpdate(row: any) {
             const {id, name, username, email, gender, avatar, roleIdList} = row;
-            const tabs = this.tabs.filter(tab => tab.name === `edit-${id}`);
+            const tabs = this.tabs.filter(tab => tab.name === getTabEditName(id));
             if (tabs.length === 0) {
                 const tab = {
                     name: getTabEditName(id),

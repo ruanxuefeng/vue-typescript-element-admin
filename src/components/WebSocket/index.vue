@@ -37,7 +37,7 @@
                 client.heartbeat.incoming = 0;
 
                 client.connect({
-                    'AM-TOKEN': that.token,
+                    'ENJOY-BOOK-TOKEN': that.token,
                 }, () => {
                     that.client = client;
 

@@ -42,39 +42,6 @@ export const asyncRoutes: RouteConfigImpl[] = [
         ],
     },
     {
-        path: '/book',
-        component: Layout,
-        name: 'Book',
-        permissions: ['book', 'book-type'],
-        redirect: '/book/index',
-        meta: {
-            title: '书籍',
-            icon: 'book',
-        },
-        children: [
-            {
-                path: 'index',
-                component: () => import('@/views/book/index.vue'),
-                name: 'BookIndex',
-                permissions: ['book'],
-                meta: {
-                    title: '书籍管理',
-                    icon: 'book-manage',
-                },
-            },
-            {
-                path: 'type',
-                component: () => import('@/views/book-type/index.vue'),
-                name: 'BookType',
-                permissions: ['book-type'],
-                meta: {
-                    title: '书籍类别管理',
-                    icon: 'book-type',
-                },
-            },
-        ],
-    },
-    {
         path: '/bulletin',
         component: Layout,
         name: 'Bulletin',
@@ -87,7 +54,7 @@ export const asyncRoutes: RouteConfigImpl[] = [
                 name: 'BulletinIndex',
                 permissions: ['bulletin'],
                 meta: {
-                    title: '公告',
+                    title: '公告管理',
                     icon: 'bulletin',
                 },
             },

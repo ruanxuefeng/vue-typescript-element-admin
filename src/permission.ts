@@ -2,17 +2,16 @@ import Vue from 'vue';
 
 import router from './router/index';
 import NProgress from 'nprogress'; // progress bar
-import { UserState } from '@/store/modules/User';
+import {UserState} from '@/store/modules/User';
 // progress bar style
 import 'nprogress/nprogress.css';
-
 // get token from cookie
-import { getToken, removeToken } from '@/utils/AuthUtils';
+import {getToken, removeToken} from '@/utils/AuthUtils';
 import getPageTitle from '@/utils/GetPageTitleUtils';
-import { Message } from 'element-ui';
+import {Message} from 'element-ui';
 import RouteRecordImpl from '@/router/RouteRecordImpl';
 
-NProgress.configure({ showSpinner: false }); // NProgress Configuration
+NProgress.configure({showSpinner: false}); // NProgress Configuration
 
 const whiteList = ['/login', '/auth-redirect']; // no redirect whitelist
 
@@ -24,7 +23,7 @@ Vue.directive('permission', {
         ) {
             el.remove();
         }
-    },
+    }
 });
 
 router.beforeEach(async (to, from, next) => {
@@ -37,7 +36,7 @@ router.beforeEach(async (to, from, next) => {
     if (hasToken) {
         if (to.path === '/login') {
             // if is logged in, redirect to the home page
-            next({ path: '/' });
+            next({path: '/'});
             NProgress.done();
         } else {
             const isGetPermission =
@@ -50,8 +49,9 @@ router.beforeEach(async (to, from, next) => {
                         UserState.generateRoutes(menus as string[]).then(
                             routers => {
                                 router.addRoutes(routers as RouteRecordImpl[]);
-                                next({ ...to, replace: true });
-                            },
+                                const {path} = to;
+                                next({path, replace: true});
+                            }
                         );
                     })
                     .catch(() => {

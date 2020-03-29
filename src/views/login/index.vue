@@ -170,15 +170,18 @@
             this.$refs.loginForm.validate(async (valid: boolean) => {
                 if (valid) {
                     this.loading = true;
-                    await UserState.login({
-                        username: this.loginForm.username,
-                        password: Buffer.from(this.loginForm.password).toString('base64'),
-                    });
+                    try {
+                        await UserState.login({
+                            username: this.loginForm.username,
+                            password: Buffer.from(this.loginForm.password).toString('base64'),
+                        });
+                        this.$router.push({path: this.redirect || '/'});
+                    }catch (e) {
+                        throw e;
+                    }
 
-                    this.$router.push({path: this.redirect || '/'});
                     this.loading = false;
                 } else {
-                    console.log('error submit!!');
                     return false;
                 }
             });

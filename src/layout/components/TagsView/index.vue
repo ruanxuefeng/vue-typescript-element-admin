@@ -37,8 +37,8 @@
 
     @Component({
         components: {
-            ScrollPane,
-        },
+            ScrollPane
+        }
     })
     export default class TagsView extends Vue {
 
@@ -99,7 +99,7 @@
                         fullPath: tagPath,
                         children,
                         meta,
-                        component,
+                        component
                     };
                     tags.push(newRoute);
                 }
@@ -135,7 +135,7 @@
             const {fullPath} = view;
             this.$nextTick(() => {
                 this.$router.replace({
-                    path: '/redirect' + fullPath,
+                    path: '/redirect' + fullPath
                 });
             });
         }
@@ -162,7 +162,9 @@
                         (this.$refs.scrollPane as ScrollPane).moveToTarget(tag as any);
                         // When query is different then update
                         if ((tag.to as View).fullPath !== this.$route.fullPath) {
-                            TagsViewState.updateVisitedView(this.$route);
+                            const {path, fullPath, meta} = this.$route;
+                            const view: View = {path, fullPath, meta};
+                            TagsViewState.updateVisitedView(view);
                         }
                         break;
                     }

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {Message} from 'element-ui';
+import {TOKEN_NAME} from '@/class/Constant';
 
 import {getToken} from '@/utils/AuthUtils';
 
@@ -17,7 +18,7 @@ const service = axios.create({
 service.interceptors.request.use(
     (config: any) => {
         // do something before request is sent
-        config.headers['ENJOY-BOOK-TOKEN'] = getToken();
+        config.headers[TOKEN_NAME] = getToken();
         return config;
     },
     (error: any) => {

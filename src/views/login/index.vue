@@ -177,10 +177,9 @@
                         });
                         this.$router.push({path: this.redirect || '/'});
                     }catch (e) {
+                        this.loading = false;
                         throw e;
                     }
-
-                    this.loading = false;
                 } else {
                     return false;
                 }

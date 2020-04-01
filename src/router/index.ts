@@ -1,11 +1,10 @@
 import Vue from 'vue';
-import Router from 'vue-router';
 
 import Layout from '@/layout/index.vue';
 import RouteConfigImpl from '@/router/RouteRecordImpl';
 import VueRouter from 'vue-router';
 
-Vue.use(Router);
+Vue.use(VueRouter);
 
 export const asyncRoutes: RouteConfigImpl[] = [
     {

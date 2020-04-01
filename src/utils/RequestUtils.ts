@@ -33,8 +33,9 @@ service.interceptors.response.use(
         return response;
     },
     (error) => {
+        const message = error.response ? error.response.data.message : '系统异常';
         Message({
-            message: error.response.data.message,
+            message,
             type: 'error',
             duration: 5 * 1000,
         });

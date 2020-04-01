@@ -11,8 +11,8 @@
     @Component
     export default class ScreenFull extends Vue {
 
-        private static isScreenFull(sf: Screenfull | false) {
-            return (sf as Screenfull).isFullscreen;
+        private static isScreenFull(sf: Screenfull) {
+            return sf.isFullscreen;
         }
 
         private isFullscreen = false;
@@ -26,8 +26,8 @@
         }
 
         private click() {
-            const sf = screenFull as Screenfull;
-            if (!sf.enabled) {
+            const sf = screenFull;
+            if (!sf.isEnabled) {
                 this.$message({
                     message: '您的浏览器不支持全屏显示',
                     type: 'warning',
@@ -38,19 +38,19 @@
         }
 
         private change() {
-            this.isFullscreen = ScreenFull.isScreenFull(screenFull);
+            this.isFullscreen = ScreenFull.isScreenFull(screenFull as Screenfull);
         }
 
         private init() {
-            const sf = screenFull as Screenfull;
-            if (sf.enabled) {
+            const sf = screenFull;
+            if (sf.isEnabled) {
                 sf.on('change', this.change);
             }
         }
 
         private destroy() {
-            const sf = screenFull as Screenfull;
-            if (sf.enabled) {
+            const sf = screenFull;
+            if (sf.isEnabled) {
                 sf.off('change', this.change);
             }
         }

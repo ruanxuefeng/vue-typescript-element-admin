@@ -16,7 +16,7 @@ NProgress.configure({showSpinner: false}); // NProgress Configuration
 const whiteList = ['/login', '/auth-redirect']; // no redirect whitelist
 
 Vue.directive('permission', {
-    update: (el, binding, vnode) => {
+    update: (el, binding) => {
         if (
             !UserState.permissions.includes(binding.value) &&
             el.parentElement
@@ -44,17 +44,17 @@ router.beforeEach(async (to, from, next) => {
             if (isGetPermission) {
                 next();
             } else {
-                UserState.getInfo()
-                    .then(menus => {
-                        UserState.generateRoutes(menus as string[]).then(
-                            routers => {
+                UserState.getInfo().then(menus => {
+                        const permission = menus as string[];
+                        UserState.generateRoutes(permission).then(routers => {
                                 router.addRoutes(routers as RouteRecordImpl[]);
                                 const {path} = to;
                                 next({path, replace: true});
                             }
                         );
                     })
-                    .catch(() => {
+                    .catch((e) => {
+                        console.log(e);
                         Message.error('获取用户信息失败，返回登录页');
                         removeToken();
                         next(`/login?redirect=${to.path}`);

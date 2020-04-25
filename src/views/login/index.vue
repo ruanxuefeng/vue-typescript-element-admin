@@ -74,7 +74,7 @@
 
         private static validateUsername(rule: Rule, value: string, callback: (error?: Error) => void): void {
             if (validUsername(value)) {
-                callback(new Error('请输入用户名'));
+                callback(new Error(rule.message));
             } else {
                 callback();
             }
@@ -82,7 +82,7 @@
 
         private static validatePassword(rule: Rule, value: string, callback: (error?: Error) => void): void {
             if (value.length < 5) {
-                callback(new Error('密码必须超过5位'));
+                callback(new Error(rule.message));
             } else {
                 callback();
             }
@@ -96,8 +96,8 @@
 
         private loginForm = new LoginForm();
         private loginRules = {
-            username: [new Rule({}, Login.validateUsername)],
-            password: [new Rule({}, Login.validatePassword)],
+            username: [new Rule({message: '请输入用户名'}, Login.validateUsername)],
+            password: [new Rule({message: '密码必须超过5位'}, Login.validatePassword)],
         };
         private passwordType: string = 'password';
         private capsTooltip: boolean = false;
@@ -178,7 +178,6 @@
                         this.$router.push({path: this.redirect || '/'});
                     }catch (e) {
                         this.loading = false;
-                        throw e;
                     }
                 } else {
                     return false;

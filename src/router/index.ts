@@ -38,6 +38,13 @@ export const asyncRoutes: RouteConfigImpl[] = [
                 permissions: ['system-role'],
                 meta: {title: '角色管理', icon: 'role'},
             },
+            {
+                path: 'scheduled/task',
+                component: () => import('@/views/scheduled-task/index.vue'),
+                name: 'ScheduledTask',
+                permissions: ['system-scheduled-task'],
+                meta: {title: '定时任务管理', icon: 'scheduled-task'},
+            },
         ],
     },
     {

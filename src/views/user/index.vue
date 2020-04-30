@@ -7,11 +7,11 @@
                 <el-form :inline="true">
                     <el-form-item>
                         <el-input v-model="query.name" placeholder="姓名" clearable
-                                  @keyup.enter.native="getList"></el-input>
+                                  @keyup.enter.native="search"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-input v-model="query.email" placeholder="邮箱" clearable
-                                  @keyup.enter.native="getList"></el-input>
+                                  @keyup.enter.native="search"></el-input>
                     </el-form-item>
                     <el-form-item>
                         <el-input v-model="query.username" placeholder="用户名" clearable

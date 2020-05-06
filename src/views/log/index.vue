@@ -46,7 +46,7 @@
     import {Component, Vue} from 'vue-property-decorator';
     import Pagination from '../../components/Pagination/index.vue';
     import Query from './Query';
-    import {list} from '@/api/log';
+    import {list} from '@/views/log/api';
     import Data from '@/class/Data';
 
     @Component({

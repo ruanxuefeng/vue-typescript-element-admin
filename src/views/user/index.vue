@@ -148,7 +148,7 @@
 
         private saveHandle(data: FormData) {
             save(data).then((resp) => {
-                this.editSuccess(resp.data.message);
+                success('成功', resp.data.message, this.editSuccess);
                 this.activeTab = 'list';
             });
         }
@@ -171,7 +171,7 @@
 
         private updateHandle(data: FormData) {
             update(data).then((resp) => {
-                this.editSuccess(resp.data.message);
+                success('成功', resp.data.message, this.editSuccess);
                 this.removeTab(this.activeTab);
                 this.activeTab = 'list';
             });
@@ -184,8 +184,7 @@
             this.tabs = removeTab(this.tabs, tabName);
         }
 
-        private editSuccess(message: string) {
-            success('成功', message);
+        private editSuccess() {
             this.data.dialogFormVisible = false;
             this.getList();
         }

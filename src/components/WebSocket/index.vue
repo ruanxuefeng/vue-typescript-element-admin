@@ -42,10 +42,10 @@
                     heartbeatOutgoing: 4000,
                     onConnect: function (frame) {
                         client.subscribe('/topic/bulletin', (message: Message) => {
-                            const bulletin = JSON.parse(message.body);
+                            const {title, content} = JSON.parse(message.body);
                             that.$notify({
-                                title: '公告',
-                                message: bulletin.content,
+                                title: title,
+                                message: content,
                                 position: 'bottom-right'
                             });
                         });

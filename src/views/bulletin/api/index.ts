@@ -1,6 +1,6 @@
 import request from '@/utils/RequestUtils';
-import BulletinQuery from '@/views/bulletin/Query';
-import Bulletin from '@/views/bulletin/Bulletin';
+import BulletinQuery from '@/views/bulletin/class/Query';
+import Bulletin from '@/views/bulletin/class/Bulletin';
 
 export function list(query: BulletinQuery) {
     return request({
@@ -11,10 +11,11 @@ export function list(query: BulletinQuery) {
 }
 
 export function save(data: Bulletin) {
+    const {title, content, days} = data;
     return request({
         url: '/bulletin/save',
         method: 'post',
-        data,
+        data: {title, content, days},
     });
 }
 

@@ -3,7 +3,7 @@
         <el-tabs @tab-remove="removeTab" type="border-card" v-model="activeTab">
             <!--列表-->
             <el-tab-pane :closable='false' name="list">
-                <span slot="label"><svg-icon icon-class="list"></svg-icon> 用户列表</span>
+                <span slot="label"><svg-icon icon-class="list"></svg-icon> 定时任务列表</span>
                 <el-form :inline="true">
                     <el-form-item>
                         <el-input @keyup.enter.native="getList" clearable placeholder="姓名"
@@ -158,7 +158,6 @@
 
         private editSuccess() {
             this.data.dialogFormVisible = false;
-            this.activeTab = 'list';
             this.getList();
         }
 

@@ -4,7 +4,7 @@ import {getToken, removeToken, setToken} from '@/utils/AuthUtils';
 import RouteConfigImpl from '@/router/RouteRecordImpl';
 import RouteRecordImpl from '@/router/RouteRecordImpl';
 import store from '@/store';
-import {getInfo, login, logout} from '@/api/user';
+import {getInfo, login, logout} from '@/views/login/api/user';
 import {filterAsyncRoutes} from '@/utils/PermissionUtils';
 import router, {asyncRoutes, constantRoutes, resetRouter} from '@/router';
 

@@ -1,94 +1,95 @@
 <template>
     <el-card shadow="hover">
-        <el-tabs type="border-card" v-model="activeTab" @tab-remove="removeTab">
+        <el-tabs @tab-remove="removeTab" type="border-card" v-model="activeTab">
             <!--列表-->
-            <el-tab-pane name="list" :closable='false'>
+            <el-tab-pane :closable='false' name="list">
                 <span slot="label"><svg-icon icon-class="list"></svg-icon> 用户列表</span>
                 <el-form :inline="true">
                     <el-form-item>
-                        <el-input v-model="query.name" placeholder="姓名" clearable
-                                  @keyup.enter.native="search"></el-input>
+                        <el-input @keyup.enter.native="search" clearable placeholder="姓名"
+                                  v-model="query.name"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-input v-model="query.email" placeholder="邮箱" clearable
-                                  @keyup.enter.native="search"></el-input>
+                        <el-input @keyup.enter.native="search" clearable placeholder="邮箱"
+                                  v-model="query.email"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-input v-model="query.username" placeholder="用户名" clearable
-                                  @keyup.enter.native="search"></el-input>
+                        <el-input @keyup.enter.native="search" clearable placeholder="用户名"
+                                  v-model="query.username"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" icon="el-icon-search" @click="getList">搜索</el-button>
+                        <el-button @click="getList" icon="el-icon-search" type="primary">搜索</el-button>
                     </el-form-item>
                 </el-form>
-                <el-table v-loading="data.tableLoading" :data="data.list" border fit highlight-current-row>
+                <el-table :data="data.list" border fit highlight-current-row v-loading="data.tableLoading">
                     <el-table-column type="index" width="50"></el-table-column>
-                    <el-table-column label="头像" prop="avatar" width="100px" :align="data.commonAlign">
+                    <el-table-column :align="data.commonAlign" label="头像" prop="avatar" width="100px">
                         <template slot-scope="scope">
                             <img :src="`${scope.row.avatar}?d=${new Date().getTime()}`"
-                                 style="width: 40px;height: 40px;border-radius: 10px" alt="头像">
+                                 alt="头像" style="width: 40px;height: 40px;border-radius: 10px">
                         </template>
                     </el-table-column>
-                    <el-table-column label="用户名" prop="username" width="200px"
-                                     :align="data.commonAlign"></el-table-column>
-                    <el-table-column label="姓名" prop="name" width="200px" :align="data.commonAlign"></el-table-column>
-                    <el-table-column label="邮箱" prop="email" width="300px" :align="data.commonAlign"></el-table-column>
-                    <el-table-column label="性别" prop="gender" width="100px" :align="data.commonAlign">
+                    <el-table-column :align="data.commonAlign" label="用户名" prop="username"
+                                     width="200px"></el-table-column>
+                    <el-table-column :align="data.commonAlign" label="姓名" prop="name" width="200px"></el-table-column>
+                    <el-table-column :align="data.commonAlign" label="邮箱" prop="email" width="300px"></el-table-column>
+                    <el-table-column :align="data.commonAlign" label="性别" prop="gender" width="100px">
                         <template slot-scope="scope">
-                            <el-tag v-if="scope.row.gender === '男'" type="success">男</el-tag>
-                            <el-tag v-else type="warning">女</el-tag>
+                            <el-tag type="success" v-if="scope.row.gender === '男'">男</el-tag>
+                            <el-tag type="warning" v-else>女</el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column label="创建人" width="150px" :align="data.commonAlign">
+                    <el-table-column :align="data.commonAlign" label="创建人" width="150px">
                         <template slot-scope="scope">
                             {{ scope.row['creatorName'] }}
                         </template>
                     </el-table-column>
-                    <el-table-column label="创建时间" prop="createTime" width="200px"
-                                     :align="data.commonAlign"></el-table-column>
+                    <el-table-column :align="data.commonAlign" label="创建时间" prop="createTime"
+                                     width="200px"></el-table-column>
 
-                    <el-table-column label="操作" :align="data.commonAlign" min-width="300px">
+                    <el-table-column :align="data.commonAlign" label="操作" min-width="300px">
                         <template slot-scope="scope">
                             <el-button-group>
-                                <el-button type="primary" @click="handleUpdate(scope.row)">编辑</el-button>
-                                <el-button type="primary" @click="openUpdateRoleDialog(scope.row)">分配角色</el-button>
-                                <el-button type="danger" @click="handleDelete(scope.row)">删除</el-button>
+                                <el-button @click="handleUpdate(scope.row)" type="primary">编辑</el-button>
+                                <el-button @click="restPassword(scope.row)" type="primary">重置密码</el-button>
+                                <el-button @click="openUpdateRoleDialog(scope.row)" type="primary">分配角色</el-button>
+                                <el-button @click="handleDelete(scope.row)" type="danger">删除</el-button>
                             </el-button-group>
                         </template>
                     </el-table-column>
                 </el-table>
 
-                <pagination v-show="query.total > query.pageSize" :total="query.total" :page.sync="query.page"
-                            :limit.sync="query.pageSize" @pagination="getList"/>
+                <pagination :limit.sync="query.pageSize" :page.sync="query.page" :total="query.total"
+                            @pagination="getList" v-show="query.total > query.pageSize"/>
             </el-tab-pane>
             <!--新增tab-->
-            <el-tab-pane name="add" :closable='false'>
+            <el-tab-pane :closable='false' name="add">
                 <span slot="label"><svg-icon icon-class="add"></svg-icon> 新增</span>
-                <user-form type="ADD" @handle-update="saveHandle"></user-form>
+                <user-form @handle-update="saveHandle" type="ADD"></user-form>
             </el-tab-pane>
             <!--编辑tabs-->
-            <el-tab-pane v-for="tab in tabs" :key="tab.name" :name="tab.name" closable>
+            <el-tab-pane :key="tab.name" :name="tab.name" closable v-for="tab in tabs">
                 <span slot="label"><svg-icon icon-class="edit"></svg-icon> {{tab.label}}</span>
-                <user-form :obj="tab.obj" type="UPDATE" @handle-update="updateHandle"></user-form>
+                <user-form :obj="tab.obj" @handle-update="updateHandle" type="UPDATE"></user-form>
             </el-tab-pane>
         </el-tabs>
 
         <!--更该角色弹窗-->
         <el-dialog :visible.sync="dialogUpdateRoleVisible" title="编辑角色">
             <el-transfer
-                    v-model="userRole.roleIdList"
-                    :filter-method="filterRole"
                     :data="roles"
+                    :filter-method="filterRole"
                     :props="{
                         key:'id',
                         label:'name'
                      }"
                     :titles="['待选角色', '已选角色']"
+                    filter-placeholder="请输入角色名称"
                     filterable
-                    filter-placeholder="请输入角色名称"></el-transfer>
+                    v-model="userRole.roleIdList"></el-transfer>
             <div slot="footer">
                 <el-button @click="dialogUpdateRoleVisible = false">取消</el-button>
-                <el-button type="primary" @click="updateRole">保存</el-button>
+                <el-button @click="updateRole" type="primary">保存</el-button>
             </div>
         </el-dialog>
     </el-card>
@@ -102,7 +103,7 @@
     import UserForm from '@/views/user/components/Form.vue';
 
     import Data from '@/class/Data';
-    import {del, list, save, update, updateRole, userRoleList} from '@/views/user/api';
+    import {del, list, resetPassword, save, update, updateRole, userRoleList} from '@/views/user/api';
     import {roleList} from '@/views/role/api';
     import {confirmDelete, success} from '@/utils/MessageUtils';
     import Query from '@/views/user/class/Query';
@@ -223,6 +224,13 @@
                 this.dialogUpdateRoleVisible = false;
                 this.getList();
                 this.userRole = {id: '', roleIdList: []};
+            });
+        }
+
+        private restPassword(row: any) {
+            const {id} = row;
+            resetPassword(id).then((resp) => {
+                success('成功', resp.data.message);
             });
         }
 

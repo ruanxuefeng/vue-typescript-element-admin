@@ -57,3 +57,11 @@ export function updateRole(userRole: UserRole) {
         data: userRole,
     });
 }
+
+export function resetPassword(id: string) {
+    return request({
+        url: '/user/reset/password',
+        method: 'put',
+        params: {id},
+    });
+}

@@ -5,13 +5,9 @@
         <div :class="{hasTagsView:needTagsView}" class="main-container">
             <div :class="{'fixed-header':fixedHeader}">
                 <navbar/>
-                <web-socket></web-socket>
                 <tags-view v-if="needTagsView"/>
             </div>
             <app-main/>
-            <!--<right-panel v-if="showSettings">
-              <settings />
-            </right-panel>-->
         </div>
     </div>
 </template>
@@ -20,7 +16,6 @@
     import {Component, Vue} from 'vue-property-decorator';
 
     import {AppMain, Navbar, Sidebar, TagsView} from './components';
-    import WebSocket from '@/components/WebSocket/index.vue';
     import {AppState} from '@/store/modules/App';
     import {SettingsState} from '@/store/modules/Setting';
 
@@ -29,7 +24,6 @@
             AppMain,
             Sidebar,
             Navbar,
-            WebSocket,
             TagsView,
         },
     })

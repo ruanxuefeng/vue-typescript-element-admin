@@ -1,12 +1,12 @@
 import {Action, getModule, Module, Mutation, VuexModule} from 'vuex-module-decorators';
 
 import {getToken, removeToken, setToken} from '@/utils/AuthUtils';
-import RouteConfigImpl from '@/router/RouteRecordImpl';
 import RouteRecordImpl from '@/router/RouteRecordImpl';
 import store from '@/store';
 import {getInfo, login, logout} from '@/views/login/api/user';
 import {filterAsyncRoutes} from '@/utils/PermissionUtils';
 import router, {asyncRoutes, constantRoutes, resetRouter} from '@/router';
+import WebSocket from '@/websocket';
 
 interface User {
     $id: string;
@@ -17,7 +17,7 @@ interface User {
     $avatar: string;
     $roles: string[];
     $permissions: string[];
-    $routers: RouteConfigImpl[];
+    $routers: RouteRecordImpl[];
 }
 
 @Module({dynamic: true, store, name: 'user'})
@@ -30,7 +30,7 @@ export default class UserImpl extends VuexModule implements User {
     public $avatar = '';
     public $roles: string[] = [];
     public $permissions: string[] = [];
-    public $routers: RouteConfigImpl[] = [];
+    public $routers: RouteRecordImpl[] = [];
 
     @Action
     public async login(userInfo: any) {
@@ -53,6 +53,7 @@ export default class UserImpl extends VuexModule implements User {
                 this.setAvatar(avatar);
                 this.setRoles(roles);
                 this.setPermissions(permissions);
+                WebSocket.start();
                 resolve(this.permissions);
             }).catch((error) => {
                 reject(error);
@@ -68,6 +69,7 @@ export default class UserImpl extends VuexModule implements User {
                 removeToken();
                 resetRouter();
                 this.setPermissions([]);
+                WebSocket.stop();
                 resolve();
             });
         });
@@ -124,7 +126,7 @@ export default class UserImpl extends VuexModule implements User {
         return this.$permissions;
     }
 
-    get routers(): RouteConfigImpl[] {
+    get routers(): RouteRecordImpl[] {
         return this.$routers;
     }
 
@@ -169,7 +171,7 @@ export default class UserImpl extends VuexModule implements User {
     }
 
     @Mutation
-    private setRoutes(routes: RouteConfigImpl[]) {
+    private setRoutes(routes: RouteRecordImpl[]) {
         this.$routers = constantRoutes.concat(routes);
     }
 }

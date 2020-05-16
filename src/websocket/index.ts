@@ -1,38 +1,15 @@
-<template>
-    <div></div>
-</template>
-
-<script lang="ts">
-import {Component, Vue, Watch} from 'vue-property-decorator';
+import {Notification} from 'element-ui';
 import {Client, Message, StompHeaders} from '@stomp/stompjs/esm6';
-import {UserState} from '@/store/modules/User';
 import {TOKEN_NAME} from '@/class/Constant';
+import {UserState} from '@/store/modules/User';
 
-@Component
-export default class ReceiveBulletin extends Vue {
+export default class WebSocket {
+    private static client: Client;
 
-    private client!: Client;
-
-    get token() {
-        return UserState.token;
-    }
-
-    private created() {
-        this.init();
-    }
-
-    @Watch('token')
-    private tokenChange(token: string) {
-        if (!token) {
-
-        }
-    }
-
-    private init() {
-        const that = this;
-        if (process.env.VUE_APP_WEB_SOCKET) {
+    public static start() {
+        if (process.env.VUE_APP_WEB_SOCKET && !WebSocket.client) {
             const connectHeaders: StompHeaders = new StompHeaders();
-            connectHeaders[TOKEN_NAME] = this.token || '';
+            connectHeaders[TOKEN_NAME] = UserState.token || '';
 
             const client = new Client({
                 brokerURL: process.env.VUE_APP_WEB_SOCKET,
@@ -42,16 +19,16 @@ export default class ReceiveBulletin extends Vue {
                 heartbeatOutgoing: 4000,
                 onConnect: function (frame) {
                     client.subscribe('/topic/bulletin', (message: Message) => {
-                        const {title, content} = JSON.parse(message.body);
-                        that.$notify({
-                            title: title,
-                            message: content,
+                        const bulletin = JSON.parse(message.body);
+                        Notification({
+                            title: '公告',
+                            message: bulletin.content,
                             position: 'bottom-right'
                         });
                     });
 
                     client.subscribe(`/topic/permission/${UserState.id}`, () => {
-                        that.$notify({
+                        Notification({
                             title: '权限消息',
                             message: '权限已被管理员更新',
                             position: 'bottom-right'
@@ -62,13 +39,13 @@ export default class ReceiveBulletin extends Vue {
             });
 
             client.activate();
-
+            WebSocket.client = client;
         }
+    }
 
+    public static stop() {
+        if (WebSocket.client) {
+            WebSocket.client.deactivate();
+        }
     }
 }
-</script>
-
-<style scoped>
-
-</style>

@@ -5,24 +5,24 @@
                 <slot/>
             </div>
         </div>
-        <img :src="image" class="pan-thumb" alt="">
+        <img :src="image" alt="" class="pan-thumb">
     </div>
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
 
-    @Component
-    export default class PanThumb extends Vue {
-        @Prop(String)
-        private image!: string;
-        @Prop(Number)
-        private zIndex!: number;
-        @Prop(String)
-        private width!: string;
-        @Prop(String)
-        private height!: string;
-    }
+@Component
+export default class PanThumb extends Vue {
+    @Prop(String)
+    private image!: string;
+    @Prop(Number)
+    private zIndex!: number;
+    @Prop(String)
+    private width!: string;
+    @Prop(String)
+    private height!: string;
+}
 </script>
 
 <style scoped>

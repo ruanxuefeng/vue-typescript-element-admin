@@ -1,9 +1,9 @@
 <template>
     <div class="errPage-container">
         <el-button
-                @click="back"
-                class="back-btn"
-                icon="el-icon-arrow-left"
+            @click="back"
+            class="back-btn"
+            icon="el-icon-arrow-left"
         >
             返回
         </el-button>
@@ -13,8 +13,8 @@
                     Oops!
                 </h1>
                 gif来源<a
-                    href="https://zh.airbnb.com/"
-                    target="_blank"
+                href="https://zh.airbnb.com/"
+                target="_blank"
             >airbnb</a> 页面
                 <h2>你没有权限去该页面</h2>
                 <h6>如有不满请联系你领导</h6>
@@ -30,56 +30,56 @@
                     </li>
                     <li>
                         <a
-                                @click.prevent="dialogVisible=true"
-                                href="#"
+                            @click.prevent="dialogVisible=true"
+                            href="#"
                         >点我看图</a>
                     </li>
                 </ul>
             </el-col>
             <el-col :span="12">
                 <img
-                        :src="errGif"
-                        alt="Girl has dropped her ice cream."
-                        class="some-gif"
-                        height="428"
-                        width="313"
+                    :src="errGif"
+                    alt="Girl has dropped her ice cream."
+                    class="some-gif"
+                    height="428"
+                    width="313"
                 >
             </el-col>
         </el-row>
         <el-dialog
-                :visible.sync="dialogVisible"
-                title="随便看"
+            :visible.sync="dialogVisible"
+            title="随便看"
         >
             <img
-                    :src="ewizardClap"
-                    class="some-img"
+                :src="ewizardClap"
+                class="some-img"
             >
         </el-dialog>
     </div>
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
-    import errGif from '@/assets/401-images/401.gif';
+import {Component, Vue} from 'vue-property-decorator';
+import errGif from '@/assets/401-images/401.gif';
 
-    @Component({
-        name: 'Page401',
-    })
-    export default class extends Vue {
-        private errGif = errGif + '?' + +new Date();
-        private ewizardClap = 'https://wpimg.wallstcn.com/007ef517-bafd-4066-aae4-6883632d9646';
-        private dialogVisible = false;
+@Component({
+    name: 'Page401',
+})
+export default class extends Vue {
+    private errGif = errGif + '?' + +new Date();
+    private ewizardClap = 'https://wpimg.wallstcn.com/007ef517-bafd-4066-aae4-6883632d9646';
+    private dialogVisible = false;
 
-        private back() {
-            if (this.$route.query.noGoBack) {
-                this.$router.push(
-                    {path: '/dashboard'},
-                );
-            } else {
-                this.$router.go(-1);
-            }
+    private back() {
+        if (this.$route.query.noGoBack) {
+            this.$router.push(
+                {path: '/dashboard'},
+            );
+        } else {
+            this.$router.go(-1);
         }
     }
+}
 </script>
 
 <style lang="scss" scoped>

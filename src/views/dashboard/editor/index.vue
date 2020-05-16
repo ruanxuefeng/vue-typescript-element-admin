@@ -3,7 +3,7 @@
         <div class=" clearfix">
             <pan-thumb :image="avatar" style="float: left">
                 Your roles:
-                <span v-for="item in roles" :key="item" class="pan-info-roles">{{ item }}</span>
+                <span :key="item" class="pan-info-roles" v-for="item in roles">{{ item }}</span>
             </pan-thumb>
             <div class="info-container">
                 <span class="display_name">{{ name }}</span>
@@ -17,31 +17,31 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+import {Component, Vue} from 'vue-property-decorator';
 
-    import PanThumb from '@/components/PanThumb/index.vue';
-    import {UserState} from '@/store/modules/User';
+import PanThumb from '@/components/PanThumb/index.vue';
+import {UserState} from '@/store/modules/User';
 
-    @Component({
-        components: {
-            PanThumb,
-        },
-    })
-    export default class EditorDashboard extends Vue {
-        private emptyGif: string = 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3';
+@Component({
+    components: {
+        PanThumb,
+    },
+})
+export default class EditorDashboard extends Vue {
+    private emptyGif: string = 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3';
 
-        get roles() {
-            return UserState.roles;
-        }
-
-        get avatar() {
-            return UserState.avatar;
-        }
-
-        get name() {
-            return UserState.name;
-        }
+    get roles() {
+        return UserState.roles;
     }
+
+    get avatar() {
+        return UserState.avatar;
+    }
+
+    get name() {
+        return UserState.name;
+    }
+}
 </script>
 
 <style lang="scss" scoped>

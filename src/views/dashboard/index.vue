@@ -5,18 +5,17 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+import {Component, Vue} from 'vue-property-decorator';
+import EditorDashboard from './editor/index.vue';
 
-    import EditorDashboard from './editor/index.vue';
-
-    @Component({
-        components: {
-            EditorDashboard,
-        },
-    })
-    export default class Dashboard extends Vue {
-        private currentRole: string = 'EditorDashboard';
-    }
+@Component({
+    components: {
+        EditorDashboard,
+    },
+})
+export default class Dashboard extends Vue {
+    private currentRole: string = 'EditorDashboard';
+}
 </script>
 
 <style scoped>

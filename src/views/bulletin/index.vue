@@ -16,12 +16,12 @@
                     </el-form-item>
                 </el-form>
                 <el-table
-                        :data="data.list"
-                        border
-                        fit
-                        highlight-current-row
-                        style="width: 100%;"
-                        v-loading="data.tableLoading"
+                    :data="data.list"
+                    border
+                    fit
+                    highlight-current-row
+                    style="width: 100%;"
+                    v-loading="data.tableLoading"
                 >
                     <el-table-column type="index" width="50"></el-table-column>
                     <el-table-column :align="data.commonAlign" label="标题" prop="title"></el-table-column>
@@ -67,9 +67,9 @@
                 <bulletin-form @handle-update="saveHandle" type="ADD"/>
             </el-tab-pane>
             <!--编辑tabs-->
-            <el-tab-pane v-for="tab in tabs" :key="tab.name" :name="tab.name" closable>
+            <el-tab-pane :key="tab.name" :name="tab.name" closable v-for="tab in tabs">
                 <span slot="label"><svg-icon icon-class="edit"></svg-icon> {{tab.label}}</span>
-                <bulletin-form :obj="tab.obj" type="UPDATE" @handle-update="updateHandle"></bulletin-form>
+                <bulletin-form :obj="tab.obj" @handle-update="updateHandle" type="UPDATE"></bulletin-form>
             </el-tab-pane>
 
             <el-dialog :visible.sync="publishDialogVisible" title="发布提示">
@@ -84,125 +84,125 @@
 </template>
 
 <script lang="ts">
-    import {Component, Vue} from 'vue-property-decorator';
+import {Component, Vue} from 'vue-property-decorator';
 
-    import Pagination from '@/components/Pagination/index.vue';
-    import BulletinForm from './components/Form.vue';
+import Pagination from '@/components/Pagination/index.vue';
+import BulletinForm from './components/Form.vue';
 
-    import Data from '@/class/Data';
-    import Query from './class/Query';
-    import Obj from './class/Bulletin';
-    import {del, list, publish, save, update} from '@/views/bulletin/api';
-    import {confirmDelete, success} from '@/utils/MessageUtils';
-    import {getTabEditName, removeTab} from '@/utils/TabUtils';
-    import BulletinTab from '@/views/bulletin/class/BulletinTab';
+import Data from '@/class/Data';
+import Query from './class/Query';
+import Obj from './class/Bulletin';
+import {del, list, publish, save, update} from '@/views/bulletin/api';
+import {confirmDelete, success} from '@/utils/MessageUtils';
+import {getTabEditName, removeTab} from '@/utils/TabUtils';
+import BulletinTab from '@/views/bulletin/class/BulletinTab';
 
-    @Component({
-        components: {
-            Pagination,
-            BulletinForm
-        },
-    })
-    export default class Menu extends Vue {
+@Component({
+    components: {
+        Pagination,
+        BulletinForm
+    },
+})
+export default class Menu extends Vue {
 
-        public $refs!: {
-            dataForm: HTMLFormElement,
-        };
+    public $refs!: {
+        dataForm: HTMLFormElement,
+    };
 
-        private activeTab = 'list';
-        private data = new Data();
-        private tabs: BulletinTab[] = [];
-        private query = new Query();
-        private publishDialogVisible = false;
-        private publishObj: Obj = {};
+    private activeTab = 'list';
+    private data = new Data();
+    private tabs: BulletinTab[] = [];
+    private query = new Query();
+    private publishDialogVisible = false;
+    private publishObj: Obj = {};
 
 
-        private created() {
-            this.getList();
-        }
+    private created() {
+        this.getList();
+    }
 
-        private getList() {
-            this.data.tableLoading = true;
-            list(this.query).then((resp) => {
-                const data = resp.data;
-                this.data.list = data.rows;
-                this.query.total = data.total;
-                this.query.pageSize = data.pageSize;
+    private getList() {
+        this.data.tableLoading = true;
+        list(this.query).then((resp) => {
+            const data = resp.data;
+            this.data.list = data.rows;
+            this.query.total = data.total;
+            this.query.pageSize = data.pageSize;
 
-                this.data.tableLoading = false;
-            });
-        }
+            this.data.tableLoading = false;
+        });
+    }
 
-        private saveHandle(data: Obj) {
-            save(data).then((resp) => {
-                success('成功', resp.data.message, this.editSuccess);
-            });
-        }
+    private saveHandle(data: Obj) {
+        save(data).then((resp) => {
+            success('成功', resp.data.message, this.editSuccess);
+        });
+    }
 
-        private handleUpdate(row: any) {
-            const {id, title, content, days} = row;
-            const tabs = this.tabs.filter(tab => tab.name === `edit-${id}`);
-            if (tabs.length === 0) {
-                const tab = {
-                    name: getTabEditName(id),
-                    label: `编辑-${title}`,
-                    obj: {id, title, content, days}
-                };
-                this.tabs.push(tab);
-                this.activeTab = tab.name;
-            } else {
-                this.activeTab = tabs[0].name;
-            }
-        }
-
-        private updateHandle(data: Obj) {
-            update(data).then((resp) => {
-                success('成功', resp.data.message, this.editSuccess);
-                this.removeTab(this.activeTab);
-            });
-        }
-
-        private handlePublish(row: any) {
-            this.publishDialogVisible = true;
-            const {id, content} = row;
-            this.publishObj = {id, content};
-        }
-
-        private publish() {
-            if (this.publishObj.id) {
-                publish(this.publishObj.id).then((resp) => {
-                    success('成功', resp.data.message);
-                    this.publishDialogVisible = false;
-                    this.getList();
-                });
-            }
-        }
-
-        private handleDelete(row: any) {
-            const that = this;
-            confirmDelete('删除提示', '公告将会被删除', '确定', '取消', () => {
-                del(row.id).then((resp) => {
-                    success('成功', resp.data.message);
-                    that.getList();
-                });
-            });
-        }
-
-        private editSuccess() {
-            this.data.dialogFormVisible = false;
-            this.getList();
-        }
-
-        private removeTab(tabName: string) {
-            console.log(tabName);
-            if (this.activeTab === tabName) {
-                this.activeTab = 'list';
-            }
-
-            console.log(this.tabs);
-            this.tabs = removeTab(this.tabs, tabName);
+    private handleUpdate(row: any) {
+        const {id, title, content, days} = row;
+        const tabs = this.tabs.filter(tab => tab.name === `edit-${id}`);
+        if (tabs.length === 0) {
+            const tab = {
+                name: getTabEditName(id),
+                label: `编辑-${title}`,
+                obj: {id, title, content, days}
+            };
+            this.tabs.push(tab);
+            this.activeTab = tab.name;
+        } else {
+            this.activeTab = tabs[0].name;
         }
     }
+
+    private updateHandle(data: Obj) {
+        update(data).then((resp) => {
+            success('成功', resp.data.message, this.editSuccess);
+            this.removeTab(this.activeTab);
+        });
+    }
+
+    private handlePublish(row: any) {
+        this.publishDialogVisible = true;
+        const {id, content} = row;
+        this.publishObj = {id, content};
+    }
+
+    private publish() {
+        if (this.publishObj.id) {
+            publish(this.publishObj.id).then((resp) => {
+                success('成功', resp.data.message);
+                this.publishDialogVisible = false;
+                this.getList();
+            });
+        }
+    }
+
+    private handleDelete(row: any) {
+        const that = this;
+        confirmDelete('删除提示', '公告将会被删除', '确定', '取消', () => {
+            del(row.id).then((resp) => {
+                success('成功', resp.data.message);
+                that.getList();
+            });
+        });
+    }
+
+    private editSuccess() {
+        this.data.dialogFormVisible = false;
+        this.getList();
+    }
+
+    private removeTab(tabName: string) {
+        console.log(tabName);
+        if (this.activeTab === tabName) {
+            this.activeTab = 'list';
+        }
+
+        console.log(this.tabs);
+        this.tabs = removeTab(this.tabs, tabName);
+    }
+}
 </script>
 
 <style scoped>

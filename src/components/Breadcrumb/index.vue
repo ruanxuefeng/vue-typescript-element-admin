@@ -1,7 +1,7 @@
 <template>
     <el-breadcrumb class="app-breadcrumb" separator="/">
         <transition-group name="breadcrumb">
-            <el-breadcrumb-item v-for="(item) in levelList" :key="item.path">
+            <el-breadcrumb-item :key="item.path" v-for="(item) in levelList">
                 <svg-icon :icon-class="item.meta.icon" style="margin-right: 5px"></svg-icon>
                 <span class="no-redirect">{{ item.meta.title }}</span>
             </el-breadcrumb-item>
@@ -10,57 +10,57 @@
 </template>
 
 <script lang="ts">
-    import pathToRegexp from 'path-to-regexp';
-    import {Component, Vue, Watch} from 'vue-property-decorator';
-    import {RouteRecord} from 'vue-router';
+import pathToRegexp from 'path-to-regexp';
+import {Component, Vue, Watch} from 'vue-property-decorator';
+import {RouteRecord} from 'vue-router';
 
-    @Component
-    export default class Breadcrumb extends Vue {
+@Component
+export default class Breadcrumb extends Vue {
 
-        private static isDashboard(route: any) {
-            const name = route && route.name;
-            if (!name) {
-                return false;
-            }
-            return name.trim().toLocaleLowerCase() === 'Dashboard'.toLocaleLowerCase();
+    private levelList: RouteRecord[] = [];
+
+    private static isDashboard(route: any) {
+        const name = route && route.name;
+        if (!name) {
+            return false;
         }
-
-        private levelList: RouteRecord[] = [];
-
-        @Watch('$route')
-        private routeChange(route: any) {
-            // if you go to the redirect page, do not update the breadcrumbs
-            if (route.path.startsWith('/redirect/')) {
-                return;
-            }
-            this.getBreadcrumb();
-        }
-
-        private created() {
-            this.getBreadcrumb();
-        }
-
-        private getBreadcrumb() {
-            // only show routes with meta.title
-            this.levelList = this.$route.matched.filter((item) => item.meta && item.meta.title);
-        }
-
-        private pathCompile(path: any) {
-            // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561
-            const {params} = this.$route;
-            const toPath = pathToRegexp.compile(path);
-            return toPath(params);
-        }
-
-        private handleLink(item: any) {
-            const {redirect, path} = item;
-            if (redirect) {
-                this.$router.push(redirect);
-                return;
-            }
-            this.$router.push(this.pathCompile(path));
-        }
+        return name.trim().toLocaleLowerCase() === 'Dashboard'.toLocaleLowerCase();
     }
+
+    @Watch('$route')
+    private routeChange(route: any) {
+        // if you go to the redirect page, do not update the breadcrumbs
+        if (route.path.startsWith('/redirect/')) {
+            return;
+        }
+        this.getBreadcrumb();
+    }
+
+    private created() {
+        this.getBreadcrumb();
+    }
+
+    private getBreadcrumb() {
+        // only show routes with meta.title
+        this.levelList = this.$route.matched.filter((item) => item.meta && item.meta.title);
+    }
+
+    private pathCompile(path: any) {
+        // To solve this problem https://github.com/PanJiaChen/vue-element-admin/issues/561
+        const {params} = this.$route;
+        const toPath = pathToRegexp.compile(path);
+        return toPath(params);
+    }
+
+    private handleLink(item: any) {
+        const {redirect, path} = item;
+        if (redirect) {
+            this.$router.push(redirect);
+            return;
+        }
+        this.$router.push(this.pathCompile(path));
+    }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -5,56 +5,56 @@
 </template>
 
 <script lang="ts">
-    import screenFull, {Screenfull} from 'screenfull';
-    import {Component, Vue} from 'vue-property-decorator';
+import screenFull, {Screenfull} from 'screenfull';
+import {Component, Vue} from 'vue-property-decorator';
 
-    @Component
-    export default class ScreenFull extends Vue {
+@Component
+export default class ScreenFull extends Vue {
 
-        private static isScreenFull(sf: Screenfull) {
-            return sf.isFullscreen;
+    private isFullscreen = false;
+
+    private static isScreenFull(sf: Screenfull) {
+        return sf.isFullscreen;
+    }
+
+    private mounted() {
+        this.init();
+    }
+
+    private beforeDestroy() {
+        this.destroy();
+    }
+
+    private click() {
+        const sf = screenFull;
+        if (!sf.isEnabled) {
+            this.$message({
+                message: '您的浏览器不支持全屏显示',
+                type: 'warning',
+            });
+            return false;
         }
+        sf.toggle();
+    }
 
-        private isFullscreen = false;
+    private change() {
+        this.isFullscreen = ScreenFull.isScreenFull(screenFull as Screenfull);
+    }
 
-        private mounted() {
-            this.init();
-        }
-
-        private beforeDestroy() {
-            this.destroy();
-        }
-
-        private click() {
-            const sf = screenFull;
-            if (!sf.isEnabled) {
-                this.$message({
-                    message: '您的浏览器不支持全屏显示',
-                    type: 'warning',
-                });
-                return false;
-            }
-            sf.toggle();
-        }
-
-        private change() {
-            this.isFullscreen = ScreenFull.isScreenFull(screenFull as Screenfull);
-        }
-
-        private init() {
-            const sf = screenFull;
-            if (sf.isEnabled) {
-                sf.on('change', this.change);
-            }
-        }
-
-        private destroy() {
-            const sf = screenFull;
-            if (sf.isEnabled) {
-                sf.off('change', this.change);
-            }
+    private init() {
+        const sf = screenFull;
+        if (sf.isEnabled) {
+            sf.on('change', this.change);
         }
     }
+
+    private destroy() {
+        const sf = screenFull;
+        if (sf.isEnabled) {
+            sf.off('change', this.change);
+        }
+    }
+}
 </script>
 
 <style scoped>

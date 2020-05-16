@@ -1,46 +1,45 @@
 <template>
-    <div v-if="isExternal" :style="styleExternalIcon" class="svg-external-icon svg-icon" v-on="$listeners"></div>
-    <svg v-else :class="svgClass" aria-hidden="true" v-on="$listeners">
+    <div :style="styleExternalIcon" class="svg-external-icon svg-icon" v-if="isExternal" v-on="$listeners"></div>
+    <svg :class="svgClass" aria-hidden="true" v-else v-on="$listeners">
         <use :xlink:href="iconName"></use>
     </svg>
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
+import {Component, Prop, Vue} from 'vue-property-decorator';
+// doc: https://panjiachen.github.io/vue-element-admin-site/feature/component/svg-icon.html#usage
+import {isExternal} from '@/utils/ValidateUtils';
 
-    // doc: https://panjiachen.github.io/vue-element-admin-site/feature/component/svg-icon.html#usage
-    import {isExternal} from '@/utils/ValidateUtils';
+@Component
+export default class SvgClass extends Vue {
+    @Prop(String)
+    private iconClass!: string;
+    @Prop(String)
+    private className?: string;
 
-    @Component
-    export default class SvgClass extends Vue {
-        @Prop(String)
-        private iconClass!: string;
-        @Prop(String)
-        private className?: string;
+    get styleExternalIcon(): object {
+        return {
+            'mask': `url(${this.iconClass}) no-repeat 50% 50%`,
+            '-webkit-mask': `url(${this.iconClass}) no-repeat 50% 50%`,
+        };
+    }
 
-        get styleExternalIcon(): object {
-            return {
-                'mask': `url(${this.iconClass}) no-repeat 50% 50%`,
-                '-webkit-mask': `url(${this.iconClass}) no-repeat 50% 50%`,
-            };
-        }
+    get isExternal() {
+        return isExternal(this.iconClass);
+    }
 
-        get isExternal() {
-            return isExternal(this.iconClass);
-        }
+    get iconName(): string {
+        return `#icon-${this.iconClass}`;
+    }
 
-        get iconName(): string {
-            return `#icon-${this.iconClass}`;
-        }
-
-        get svgClass(): string {
-            if (this.className) {
-                return 'svg-icon ' + this.className;
-            } else {
-                return 'svg-icon';
-            }
+    get svgClass(): string {
+        if (this.className) {
+            return 'svg-icon ' + this.className;
+        } else {
+            return 'svg-icon';
         }
     }
+}
 </script>
 
 <style scoped>

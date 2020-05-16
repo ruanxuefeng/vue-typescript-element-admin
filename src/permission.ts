@@ -45,14 +45,14 @@ router.beforeEach(async (to, from, next) => {
                 next();
             } else {
                 UserState.getInfo().then(menus => {
-                        const permission = menus as string[];
-                        UserState.generateRoutes(permission).then(routers => {
-                                router.addRoutes(routers as RouteRecordImpl[]);
-                                const {path} = to;
-                                next({path, replace: true});
-                            }
-                        );
-                    })
+                    const permission = menus as string[];
+                    UserState.generateRoutes(permission).then(routers => {
+                            router.addRoutes(routers as RouteRecordImpl[]);
+                            const {path} = to;
+                            next({path, replace: true});
+                        }
+                    );
+                })
                     .catch((e) => {
                         console.log(e);
                         Message.error('获取用户信息失败，返回登录页');

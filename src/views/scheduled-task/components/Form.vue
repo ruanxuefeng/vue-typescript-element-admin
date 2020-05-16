@@ -14,7 +14,7 @@
         </el-form-item>
 
         <el-form-item label="备注" prop="memo">
-            <el-input :rows="6" class="input" type="textarea" show-word-limit maxlength="128" placeholder="备注"
+            <el-input :rows="6" class="input" maxlength="128" placeholder="备注" show-word-limit type="textarea"
                       v-model="obj.memo"></el-input>
         </el-form-item>
 
@@ -26,57 +26,57 @@
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Obj from '@/views/scheduled-task/class/ScheduledTask';
-    import Data from '@/class/Data';
-    import {FormType} from '@/class/FormType';
+import {Component, Prop, Vue} from 'vue-property-decorator';
+import Obj from '@/views/scheduled-task/class/ScheduledTask';
+import Data from '@/class/Data';
+import {FormType} from '@/class/FormType';
 
-    @Component
-    export default class Form extends Vue {
+@Component
+export default class Form extends Vue {
 
-        public $refs!: {
-            dataForm: HTMLFormElement,
-        };
+    public $refs!: {
+        dataForm: HTMLFormElement,
+    };
 
-        @Prop({
-            default: () => new Obj()
-        })
-        private obj!: Obj;
+    @Prop({
+        default: () => new Obj()
+    })
+    private obj!: Obj;
 
-        @Prop({required: true})
-        private type!: FormType;
-        private data = new Data();
-        private rules = {
-            name: [{required: true, trigger: 'blur', message: '请输入名称'}],
-            corn: [{required: true, trigger: 'blur', message: '请输入corn表达式'}],
-            bean: [{required: true, trigger: 'blur', message: '请输入标识'}],
-        };
+    @Prop({required: true})
+    private type!: FormType;
+    private data = new Data();
+    private rules = {
+        name: [{required: true, trigger: 'blur', message: '请输入名称'}],
+        corn: [{required: true, trigger: 'blur', message: '请输入corn表达式'}],
+        bean: [{required: true, trigger: 'blur', message: '请输入标识'}],
+    };
 
-        get label() {
-            switch (this.type) {
-                case FormType.ADD:
-                    return '新增';
-                case FormType.UPDATE:
-                    return '修改';
-            }
-        }
-
-
-        private submit() {
-            this.$refs.dataForm.validate((valid: boolean) => {
-                if (valid) {
-                    this.$emit('handle-update', this.obj);
-                    if (this.type === FormType.ADD) {
-                        this.$refs.dataForm.resetFields();
-                    }
-                }
-            });
-        }
-
-        private cancel() {
-            this.$refs.dataForm.resetFields();
+    get label() {
+        switch (this.type) {
+            case FormType.ADD:
+                return '新增';
+            case FormType.UPDATE:
+                return '修改';
         }
     }
+
+
+    private submit() {
+        this.$refs.dataForm.validate((valid: boolean) => {
+            if (valid) {
+                this.$emit('handle-update', this.obj);
+                if (this.type === FormType.ADD) {
+                    this.$refs.dataForm.resetFields();
+                }
+            }
+        });
+    }
+
+    private cancel() {
+        this.$refs.dataForm.resetFields();
+    }
+}
 </script>
 
 <style scoped>

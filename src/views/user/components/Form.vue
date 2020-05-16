@@ -1,17 +1,17 @@
 <template>
-    <el-form ref="dataForm" :rules="rules" :model="obj" :label-position="data.labelPosition" label-width="80px">
+    <el-form :label-position="data.labelPosition" :model="obj" :rules="rules" label-width="80px" ref="dataForm">
 
         <el-form-item label="用户名" prop="username">
-            <el-input v-model="obj.username" placeholder="用户名" maxlength="64" class="input"></el-input>
+            <el-input class="input" maxlength="64" placeholder="用户名" v-model="obj.username"></el-input>
         </el-form-item>
 
         <el-form-item label="姓名" prop="name">
-            <el-input v-model="obj.name" placeholder="姓名" maxlength="20" class="input"></el-input>
+            <el-input class="input" maxlength="20" placeholder="姓名" v-model="obj.name"></el-input>
         </el-form-item>
 
         <el-form-item label="邮箱" prop="email">
-            <el-input v-model="obj.email" placeholder="邮箱" :rows="6" class="input"
-                      maxlength="128"></el-input>
+            <el-input :rows="6" class="input" maxlength="128" placeholder="邮箱"
+                      v-model="obj.email"></el-input>
         </el-form-item>
 
         <el-form-item label="性别" prop="gender">
@@ -22,120 +22,116 @@
         </el-form-item>
 
         <el-form-item label="头像" prop="avatar">
-            <el-upload :show-file-list="false" :auto-upload="false" :on-change="avatarChange"
-                       class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/">
-                <img v-if="obj.avatar" :src="obj.avatar" class="avatar"
-                     alt="">
-                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <el-upload :auto-upload="false" :on-change="avatarChange" :show-file-list="false"
+                       action="https://jsonplaceholder.typicode.com/posts/" class="avatar-uploader">
+                <img :src="obj.avatar" alt="" class="avatar"
+                     v-if="obj.avatar">
+                <i class="el-icon-plus avatar-uploader-icon" v-else></i>
             </el-upload>
         </el-form-item>
 
         <el-form-item>
-            <el-button type="primary" @click="submit">{{label}}</el-button>
+            <el-button @click="submit" type="primary">{{label}}</el-button>
             <el-button @click="cancel">重置</el-button>
         </el-form-item>
     </el-form>
 </template>
 
 <script lang="ts">
-    import {Component, Prop, Vue} from 'vue-property-decorator';
-    import Obj from '@/views/user/class/User';
-    import {validEmail} from '@/utils/ValidateUtils';
-    import Rule from '@/class/Rule';
-    import Data from '@/class/Data';
-    import {isUsernameExist} from '@/views/user/api';
-    import {FormType} from '@/class/FormType';
+import {Component, Prop, Vue} from 'vue-property-decorator';
+import Obj from '@/views/user/class/User';
+import {validEmail} from '@/utils/ValidateUtils';
+import Rule from '@/class/Rule';
+import Data from '@/class/Data';
+import {isUsernameExist} from '@/views/user/api';
+import {FormType} from '@/class/FormType';
 
-    @Component
-    export default class Form extends Vue {
-        private static validateEmail(rule: Rule, value: string, callback: (error?: Error) => void) {
-            if (!validEmail(value)) {
-                callback(new Error('邮箱格式不正确'));
+@Component
+export default class Form extends Vue {
+    public $refs!: {
+        dataForm: HTMLFormElement,
+    };
+    @Prop({
+        default: () => new Obj()
+    })
+    private obj!: Obj;
+    @Prop({required: true})
+    private type!: FormType;
+    private data = new Data();
+    private img!: File;
+    private rules = {
+        name: [{required: true, trigger: 'blur', message: '请输入姓名'}],
+        username: [
+            new Rule({message: '用户名不能为空'}),
+            new Rule({}, this.validateUsername),
+        ],
+        email: [
+            new Rule({message: '邮箱不能为空'}),
+            new Rule({}, Form.validateEmail),
+        ],
+    };
+
+    get label() {
+        switch (this.type) {
+            case FormType.ADD:
+                return '新增';
+            case FormType.UPDATE:
+                return '修改';
+        }
+    }
+
+    private static validateEmail(rule: Rule, value: string, callback: (error?: Error) => void) {
+        if (!validEmail(value)) {
+            callback(new Error('邮箱格式不正确'));
+        } else {
+            callback();
+        }
+    }
+
+    private validateUsername(rule: Rule, value: string, callback: (error?: Error) => void) {
+        isUsernameExist(this.obj.id, value).then((resp: any) => {
+            if (resp.data.isExist) {
+                callback(new Error('用户名已存在'));
             } else {
                 callback();
             }
-        }
-
-        public $refs!: {
-            dataForm: HTMLFormElement,
-        };
-
-        @Prop({
-            default: () => new Obj()
-        })
-        private obj!: Obj;
-
-        @Prop({required: true})
-        private type!: FormType;
-
-        get label() {
-            switch (this.type) {
-                case FormType.ADD:
-                    return '新增';
-                case FormType.UPDATE:
-                    return '修改';
-            }
-        }
-
-        private data = new Data();
-        private img!: File;
-
-        private rules = {
-            name: [{required: true, trigger: 'blur', message: '请输入姓名'}],
-            username: [
-                new Rule({message: '用户名不能为空'}),
-                new Rule({}, this.validateUsername),
-            ],
-            email: [
-                new Rule({message: '邮箱不能为空'}),
-                new Rule({}, Form.validateEmail),
-            ],
-        };
-
-        private validateUsername(rule: Rule, value: string, callback: (error?: Error) => void) {
-            isUsernameExist(this.obj.id, value).then((resp: any) => {
-                if (resp.data.isExist) {
-                    callback(new Error('用户名已存在'));
-                } else {
-                    callback();
-                }
-            });
-        }
-
-        private avatarChange(file: any) {
-            this.img = file.raw;
-            this.obj.avatar = URL.createObjectURL(file.raw);
-        }
-
-        private createFormData(): FormData {
-            const data = new FormData();
-            data.append('id', this.obj.id);
-            data.append('name', this.obj.name);
-            data.append('username', this.obj.username);
-            data.append('email', this.obj.email);
-            data.append('gender', this.obj.gender);
-            data.append('avatar', this.obj.avatar);
-            if (this.img) {
-                data.append('img', this.img);
-            }
-            return data;
-        }
-
-        private submit() {
-            this.$refs.dataForm.validate((valid: boolean) => {
-                if (valid) {
-                    this.$emit('handle-update', this.createFormData());
-                    if (this.type === FormType.ADD) {
-                        this.$refs.dataForm.resetFields();
-                    }
-                }
-            });
-        }
-
-        private cancel() {
-            this.$refs.dataForm.resetFields();
-        }
+        });
     }
+
+    private avatarChange(file: any) {
+        this.img = file.raw;
+        this.obj.avatar = URL.createObjectURL(file.raw);
+    }
+
+    private createFormData(): FormData {
+        const data = new FormData();
+        data.append('id', this.obj.id);
+        data.append('name', this.obj.name);
+        data.append('username', this.obj.username);
+        data.append('email', this.obj.email);
+        data.append('gender', this.obj.gender);
+        data.append('avatar', this.obj.avatar);
+        if (this.img) {
+            data.append('img', this.img);
+        }
+        return data;
+    }
+
+    private submit() {
+        this.$refs.dataForm.validate((valid: boolean) => {
+            if (valid) {
+                this.$emit('handle-update', this.createFormData());
+                if (this.type === FormType.ADD) {
+                    this.$refs.dataForm.resetFields();
+                }
+            }
+        });
+    }
+
+    private cancel() {
+        this.$refs.dataForm.resetFields();
+    }
+}
 </script>
 
 <style scoped>

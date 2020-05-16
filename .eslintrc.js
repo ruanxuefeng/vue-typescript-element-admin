@@ -3,7 +3,6 @@ module.exports = {
     env: {
         node: true
     },
-    extends: ['plugin:vue/essential', '@vue/typescript'],
     rules: {
         //强制使用单引号
         quotes: ['error', 'single'],

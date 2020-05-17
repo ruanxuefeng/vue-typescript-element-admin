@@ -9,7 +9,7 @@ module.exports = {
     quotes: ['error', 'single'],
     //强制不使用分号结尾
     semi: ['error', 'always'],
-    'vue/script-indent': ['error', 4, {'baseIndent': 1}],
+    'vue/script-indent': 0,
     "indent": 'off',
     "no-console": process.env.NODE_ENV === "production" ? "error" : "off",
     "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off"

@@ -82,7 +82,7 @@ import Data from '@/class/Data';
 import {del, list, save, trigger, update, updateStatus} from '@/views/scheduled-task/api';
 import ScheduledTaskTab from './class/ScheduledTaskTab';
 import Obj from './class/ScheduledTask';
-import {success} from '@/utils/MessageUtils';
+import {confirmDelete, success} from '@/utils/MessageUtils';
 
 @Component({
     components: {
@@ -153,14 +153,21 @@ export default class ScheduledTask extends Vue {
     }
 
     private trigger(row: any) {
+        const that = this;
         trigger(row.id).then((resp) => {
             success('成功', resp.data.message);
+            that.getList();
         });
     }
 
-    private del(row: any) {
-        del(row.id).then((resp) => {
-            success('成功', resp.data.message);
+    private handleDelete(row: any) {
+        const that = this;
+        confirmDelete('删除提示', `${row.name}将会被删除`, '确定', '取消', () => {
+            del(row.id).then((resp) => {
+                success('成功', resp.data.message);
+                that.tabs = removeTab(this.tabs, getTabEditName(row.id));
+                that.getList();
+            });
         });
     }
 

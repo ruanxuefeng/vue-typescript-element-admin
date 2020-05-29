@@ -24,8 +24,7 @@
         <el-form-item label="头像" prop="avatar">
             <el-upload :auto-upload="false" :on-change="avatarChange" :show-file-list="false"
                        action="https://jsonplaceholder.typicode.com/posts/" class="avatar-uploader">
-                <img :src="obj.avatar" alt="" class="avatar"
-                     v-if="obj.avatar">
+                <pic :data="obj.avatar" :type="avatarType" class="avatar" v-if="obj.avatar"/>
                 <i class="el-icon-plus avatar-uploader-icon" v-else></i>
             </el-upload>
         </el-form-item>
@@ -45,11 +44,13 @@ import Rule from '@/class/Rule';
 import Data from '@/class/Data';
 import {isUsernameExist} from '@/views/user/api';
 import {FormType} from '@/class/FormType';
+import Picture from '@/components/Picture/index.vue';
 
 @Component
 export default class Form extends Vue {
     public $refs!: {
         dataForm: HTMLFormElement,
+        avatar: Picture
     };
     @Prop({
         default: () => new Obj()
@@ -59,6 +60,7 @@ export default class Form extends Vue {
     private type!: FormType;
     private data = new Data();
     private img!: File;
+    private avatarType = 'SERVER_RESOURCE';
     private rules = {
         name: [{required: true, trigger: 'blur', message: '请输入姓名'}],
         username: [
@@ -100,7 +102,8 @@ export default class Form extends Vue {
 
     private avatarChange(file: any) {
         this.img = file.raw;
-        this.obj.avatar = URL.createObjectURL(file.raw);
+        this.obj.avatar = file.raw;
+        this.avatarType = 'FILE';
     }
 
     private createFormData(): FormData {
@@ -110,9 +113,10 @@ export default class Form extends Vue {
         data.append('username', this.obj.username);
         data.append('email', this.obj.email);
         data.append('gender', this.obj.gender);
-        data.append('avatar', this.obj.avatar);
         if (this.img) {
             data.append('img', this.img);
+        } else {
+            data.append('avatar', this.obj.avatar);
         }
         return data;
     }

@@ -25,8 +25,9 @@
                     <el-table-column type="index" width="50"></el-table-column>
                     <el-table-column :align="data.commonAlign" label="头像" prop="avatar" width="100px">
                         <template slot-scope="scope">
-                            <img :src="`${scope.row.avatar}?d=${new Date().getTime()}`"
-                                 alt="头像" style="width: 40px;height: 40px;border-radius: 10px">
+                            <!--<img :src="`${scope.row.avatar}?d=${new Date().getTime()}`"
+                                 alt="头像" style="width: 40px;height: 40px;border-radius: 10px">-->
+                            <pic :data="`${scope.row.avatar}?${new Date().getTime()}`" type="SERVER_RESOURCE" style="width: 40px;height: 40px;border-radius: 10px"></pic>
                         </template>
                     </el-table-column>
                     <el-table-column :align="data.commonAlign" label="用户名" prop="username"
@@ -102,6 +103,7 @@ import axios from 'axios';
 import Pagination from '@/components/Pagination/index.vue';
 import UserForm from '@/views/user/components/Form.vue';
 
+import Obj from '@/views/user/class/User';
 import Data from '@/class/Data';
 import {del, list, resetPassword, save, update, updateRole, userRoleList} from '@/views/user/api';
 import {roleList} from '@/views/role/api';
@@ -170,11 +172,12 @@ export default class User extends Vue {
         }
     }
 
-    private updateHandle(data: FormData) {
+    private updateHandle(data: FormData, user: Obj) {
         update(data).then((resp) => {
             success('成功', resp.data.message, this.editSuccess);
             this.removeTab(this.activeTab);
             this.activeTab = 'list';
+            // (this.$refs[`avatar${data.get('id')}`] as Vue).$forceUpdate();
         });
     }
 

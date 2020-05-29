@@ -11,7 +11,8 @@
             </div>
         </div>
         <div>
-            <img :src="emptyGif" class="emptyGif">
+<!--            <img :src="emptyGif" class="emptyGif">-->
+            <pic :data="emptyGif" type="URL" class="emptyGif" />
         </div>
     </div>
 </template>

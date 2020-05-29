@@ -12,11 +12,15 @@ import store from './store/index';
 import '@/icons';
 import '@/permission';
 
+import Picture from '@/components/Picture/index.vue';
+
 Vue.config.productionTip = false;
 Vue.use(Element, {
     // set element-ui default size
     size: Cookies.get('size') || 'medium'
 });
+
+Vue.component('pic', Picture);
 
 new Vue({
     router,

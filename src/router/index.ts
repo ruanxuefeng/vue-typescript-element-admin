@@ -17,11 +17,11 @@ export const asyncRoutes: RouteConfigImpl[] = [
             'system-user',
             'system-user-list',
             'system-user-add',
-            'system-user-update',
+            'system-user-update'
         ],
         meta: {
             title: '系统管理',
-            icon: 'system',
+            icon: 'system'
         },
         children: [
             {
@@ -29,23 +29,23 @@ export const asyncRoutes: RouteConfigImpl[] = [
                 component: () => import('@/views/user/index.vue'),
                 name: 'User',
                 permissions: ['system-user', 'system-user-list', 'system-user-add', 'system-user-update'],
-                meta: {title: '用户管理', icon: 'user'},
+                meta: {title: '用户管理', icon: 'user'}
             },
             {
                 path: 'role',
                 component: () => import('@/views/role/index.vue'),
                 name: 'Role',
                 permissions: ['system-role'],
-                meta: {title: '角色管理', icon: 'role'},
+                meta: {title: '角色管理', icon: 'role'}
             },
             {
                 path: 'scheduled/task',
                 component: () => import('@/views/scheduled-task/index.vue'),
                 name: 'ScheduledTask',
                 permissions: ['system-scheduled-task'],
-                meta: {title: '定时任务管理', icon: 'scheduled-task'},
-            },
-        ],
+                meta: {title: '定时任务管理', icon: 'scheduled-task'}
+            }
+        ]
     },
     {
         path: '/bulletin',
@@ -61,10 +61,10 @@ export const asyncRoutes: RouteConfigImpl[] = [
                 permissions: ['bulletin'],
                 meta: {
                     title: '公告管理',
-                    icon: 'bulletin',
-                },
-            },
-        ],
+                    icon: 'bulletin'
+                }
+            }
+        ]
     },
     {
         path: '/log',
@@ -80,16 +80,16 @@ export const asyncRoutes: RouteConfigImpl[] = [
                 permissions: ['log'],
                 meta: {
                     title: '日志',
-                    icon: 'log',
-                },
-            },
-        ],
+                    icon: 'log'
+                }
+            }
+        ]
     },
     {
         path: '*',
         redirect: '/404',
-        meta: {hidden: true},
-    },
+        meta: {hidden: true}
+    }
 ];
 
 export const constantRoutes: RouteConfigImpl[] = [
@@ -102,19 +102,36 @@ export const constantRoutes: RouteConfigImpl[] = [
                 path: 'dashboard',
                 component: () => import('@/views/dashboard/index.vue'),
                 name: 'Dashboard',
-                meta: {title: '首页', icon: 'dashboard', affix: true},
-            },
-        ],
+                meta: {title: '首页', icon: 'dashboard', affix: true}
+            }
+        ]
+    },
+    {
+        path: '/test',
+        component: Layout,
+        redirect: '/test',
+        children: [
+            {
+                path: '/index',
+                component: () => import('@/components/Iframe/index.vue'),
+                name: 'Test',
+                meta: {
+                    title: 'SQL监控',
+                    icon: 'SQL',
+                    url: `${process.env.VUE_APP_BASE_URI}/druid/index.html`
+                }
+            }
+        ]
     },
     {
         path: '/login',
         hidden: true,
-        component: () => import('@/views/login/index.vue'),
+        component: () => import('@/views/login/index.vue')
     },
     {
         path: '/auth-redirect',
         hidden: true,
-        component: () => import('@/views/login/auth-redirect.vue'),
+        component: () => import('@/views/login/auth-redirect.vue')
     },
     {
         path: '/404',
@@ -123,9 +140,9 @@ export const constantRoutes: RouteConfigImpl[] = [
         hidden: true,
         meta: {
             title: '404',
-            noCache: true,
-        },
-    },
+            noCache: true
+        }
+    }
 ];
 
 const createRouter = () => new VueRouter({
@@ -138,7 +155,7 @@ const createRouter = () => new VueRouter({
     },
     // mode: 'history',
     base: process.env.BASE_URL,
-    routes: constantRoutes,
+    routes: constantRoutes
 });
 
 const router = createRouter();

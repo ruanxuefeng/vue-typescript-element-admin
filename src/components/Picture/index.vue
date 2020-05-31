@@ -1,5 +1,5 @@
 <template>
-    <el-image :src="pic">
+    <el-image v-if="pic" :src="pic">
         <i class="image-slot el-icon-picture-outline" slot="error"></i>
     </el-image>
 </template>
@@ -10,28 +10,29 @@ import {request} from '@/components/Picture/api';
 
 @Component
 export default class Picture extends Vue {
+
     @Prop({
         default: () => null
     })
-    private data!: string | File | null;
+    private content!: string | File | null;
 
-    @Prop({
-        default: () => PictureType.URL
-    })
-    private type!: PictureType;
     private pic: string | ArrayBuffer | File | null = null;
 
-    @Watch('data', {immediate: true, deep: true})
-    onDataChange(newData: string | File, oldData: string | File) {
-        if (!newData) {
-            return;
-        }
-        this.load(newData);
+    private created() {
+        this.load();
     }
 
-    private load(data: string | File) {
-        if (typeof data === 'string') {
-            request(data as string).then((resp) => {
+    @Watch('content', {immediate: false, deep: false})
+    private contentChange(newContent: string | File, oldContent: string | File) {
+        console.log(newContent);
+        this.load();
+    }
+
+
+
+    private load() {
+        if (typeof this.content === 'string') {
+            request(this.content as string).then((resp) => {
                 const {data} = resp;
                 let reader = new FileReader();
                 reader.onload = (e) => {
@@ -42,7 +43,7 @@ export default class Picture extends Vue {
                 reader.readAsDataURL(data as Blob);
             });
         } else {
-            this.pic = URL.createObjectURL(data);
+            this.pic = URL.createObjectURL(this.content);
         }
     }
 

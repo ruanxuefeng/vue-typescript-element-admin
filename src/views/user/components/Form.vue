@@ -24,7 +24,7 @@
         <el-form-item label="头像" prop="avatar">
             <el-upload :auto-upload="false" :on-change="avatarChange" :show-file-list="false"
                        action="https://jsonplaceholder.typicode.com/posts/" class="avatar-uploader">
-                <pic :data="obj.avatar" :type="avatarType" class="avatar" v-if="obj.avatar"/>
+                <pic :content="obj.avatar" :type="avatarType" class="avatar" v-if="obj.avatar"/>
                 <i class="el-icon-plus avatar-uploader-icon" v-else></i>
             </el-upload>
         </el-form-item>
@@ -101,6 +101,7 @@ export default class Form extends Vue {
     }
 
     private avatarChange(file: any) {
+        console.log(11);
         this.img = file.raw;
         this.obj.avatar = file.raw;
         this.avatarType = 'FILE';

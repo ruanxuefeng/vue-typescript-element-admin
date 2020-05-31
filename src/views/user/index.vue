@@ -25,7 +25,7 @@
                     <el-table-column type="index" width="50"></el-table-column>
                     <el-table-column :align="data.commonAlign" label="头像" prop="avatar" width="100px">
                         <template slot-scope="scope">
-                            <pic :data="scope.row.avatar" type="SERVER_RESOURCE" style="width: 40px;height: 40px;border-radius: 10px;font-size: 20px;"></pic>
+                            <pic :content="scope.row.avatar" type="SERVER_RESOURCE" style="width: 40px;height: 40px;border-radius: 10px;font-size: 20px;"></pic>
                         </template>
                     </el-table-column>
                     <el-table-column :align="data.commonAlign" label="用户名" prop="username"

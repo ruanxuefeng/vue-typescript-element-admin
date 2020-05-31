@@ -1,5 +1,7 @@
 <template>
-    <img :src="pic" v-loading="loading"/>
+    <el-image :src="pic">
+        <i class="image-slot el-icon-picture-outline" slot="error"></i>
+    </el-image>
 </template>
 
 <script lang="ts">
@@ -18,41 +20,30 @@ export default class Picture extends Vue {
     })
     private type!: PictureType;
     private pic: string | ArrayBuffer | File | null = null;
-    private loading = false;
 
     @Watch('data', {immediate: true, deep: true})
-    onDataChange() {
-        this.load();
+    onDataChange(newData: string | File, oldData: string | File) {
+        if (!newData) {
+            return;
+        }
+        this.load(newData);
     }
 
-    private load() {
-        this.loading = true;
-        switch (this.type) {
-            case PictureType.URL:
-                if (typeof this.data === 'string') {
-                    this.pic = this.data;
-                } else {
-                    throw new Error(`类型${PictureType.URL}data只能是string类型`);
-                }
-                break;
-            case PictureType.SERVER_RESOURCE: {
-                request(this.data as string).then((resp) => {
-                    const {data} = resp;
-                    let reader = new FileReader();
-                    reader.onload = (e) => {
-                        if (e.target) {
-                            this.pic = e.target.result;
-                        }
-                    };
-                    reader.readAsDataURL(data as Blob);
-                });
-                break;
-            }
-            case PictureType.FILE:
-                this.pic = URL.createObjectURL(this.data);
-                break;
+    private load(data: string | File) {
+        if (typeof data === 'string') {
+            request(data as string).then((resp) => {
+                const {data} = resp;
+                let reader = new FileReader();
+                reader.onload = (e) => {
+                    if (e.target) {
+                        this.pic = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(data as Blob);
+            });
+        } else {
+            this.pic = URL.createObjectURL(data);
         }
-        this.loading = false;
     }
 
 }
@@ -74,5 +65,13 @@ enum PictureType {
 </script>
 
 <style scoped>
-
+    .image-slot {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background: #f5f7fa;
+        color: #909399;
+    }
 </style>

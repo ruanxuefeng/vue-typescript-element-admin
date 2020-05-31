@@ -108,15 +108,13 @@ export default class Form extends Vue {
 
     private createFormData(): FormData {
         const data = new FormData();
-        data.append('id', this.obj.id);
-        data.append('name', this.obj.name);
-        data.append('username', this.obj.username);
-        data.append('email', this.obj.email);
-        data.append('gender', this.obj.gender);
+        for (const key in this.obj) {
+            if (this.obj.hasOwnProperty(key) && typeof this.obj[key] === 'string') {
+                data.append(key, this.obj[key] as string);
+            }
+        }
         if (this.img) {
             data.append('img', this.img);
-        } else {
-            data.append('avatar', this.obj.avatar);
         }
         return data;
     }

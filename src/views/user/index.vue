@@ -25,9 +25,7 @@
                     <el-table-column type="index" width="50"></el-table-column>
                     <el-table-column :align="data.commonAlign" label="头像" prop="avatar" width="100px">
                         <template slot-scope="scope">
-                            <!--<img :src="`${scope.row.avatar}?d=${new Date().getTime()}`"
-                                 alt="头像" style="width: 40px;height: 40px;border-radius: 10px">-->
-                            <pic :data="`${scope.row.avatar}?${new Date().getTime()}`" type="SERVER_RESOURCE" style="width: 40px;height: 40px;border-radius: 10px"></pic>
+                            <pic :data="scope.row.avatar" type="SERVER_RESOURCE" style="width: 40px;height: 40px;border-radius: 10px;font-size: 20px;"></pic>
                         </template>
                     </el-table-column>
                     <el-table-column :align="data.commonAlign" label="用户名" prop="username"
@@ -103,7 +101,6 @@ import axios from 'axios';
 import Pagination from '@/components/Pagination/index.vue';
 import UserForm from '@/views/user/components/Form.vue';
 
-import Obj from '@/views/user/class/User';
 import Data from '@/class/Data';
 import {del, list, resetPassword, save, update, updateRole, userRoleList} from '@/views/user/api';
 import {roleList} from '@/views/role/api';
@@ -157,13 +154,12 @@ export default class User extends Vue {
     }
 
     private handleUpdate(row: any) {
-        const {id, name, username, email, gender, avatar, roleIdList} = row;
-        const tabs = this.tabs.filter(tab => tab.name === getTabEditName(id));
+        const tabs = this.tabs.filter(tab => tab.name === getTabEditName(row.id));
         if (tabs.length === 0) {
             const tab = {
-                name: getTabEditName(id),
-                label: `编辑-${name}`,
-                obj: {id, name, username, email, gender, avatar, roleIdList},
+                name: getTabEditName(row.id),
+                label: `编辑-${row.name}`,
+                obj: row,
             };
             this.tabs.push(tab);
             this.activeTab = tab.name;
@@ -172,12 +168,11 @@ export default class User extends Vue {
         }
     }
 
-    private updateHandle(data: FormData, user: Obj) {
+    private updateHandle(data: FormData) {
         update(data).then((resp) => {
             success('成功', resp.data.message, this.editSuccess);
             this.removeTab(this.activeTab);
             this.activeTab = 'list';
-            // (this.$refs[`avatar${data.get('id')}`] as Vue).$forceUpdate();
         });
     }
 

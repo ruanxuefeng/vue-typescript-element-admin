@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard-editor-container">
-        <div class=" clearfix">
+        <div class="clearfix">
             <pan-thumb :image="avatar" style="float: left">
                 Your roles:
                 <span :key="item" class="pan-info-roles" v-for="item in roles">{{ item }}</span>
@@ -11,8 +11,7 @@
             </div>
         </div>
         <div>
-<!--            <img :src="emptyGif" class="emptyGif">-->
-            <pic :data="emptyGif" type="URL" class="emptyGif" />
+            <el-image :src="emptyGif" class="emptyGif" />
         </div>
     </div>
 </template>

@@ -5,7 +5,7 @@
                 <slot/>
             </div>
         </div>
-        <pic :data="image" type="SERVER_RESOURCE" class="pan-thumb" />
+        <pic :content="image" class="pan-thumb" />
     </div>
 </template>
 

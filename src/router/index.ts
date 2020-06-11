@@ -70,16 +70,29 @@ export const asyncRoutes: RouteConfigImpl[] = [
         path: '/log',
         component: Layout,
         name: 'Log',
-        permissions: ['log'],
-        redirect: '/log/index',
+        permissions: ['log','log-operate'],
+        meta: {
+            title: '日志管理',
+            icon: 'log'
+        },
         children: [
             {
-                path: 'index',
-                component: () => import('@/views/log/index.vue'),
-                name: 'LogIndex',
+                path: 'operate',
+                component: () => import('@/views/operate-log/index.vue'),
+                name: 'OperateLog',
+                permissions: ['log-operate'],
+                meta: {
+                    title: '操作日志',
+                    icon: 'log'
+                }
+            },
+            {
+                path: 'system',
+                component: () => import('@/views/system-log/index.vue'),
+                name: 'SystemLog',
                 permissions: ['log'],
                 meta: {
-                    title: '日志',
+                    title: '系统日志',
                     icon: 'log'
                 }
             }

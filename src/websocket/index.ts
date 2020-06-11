@@ -1,13 +1,15 @@
 import {Notification} from 'element-ui';
-import {Client, Message, StompHeaders} from '@stomp/stompjs/esm6';
+import {Client, Message, StompHeaders, StompSubscription} from '@stomp/stompjs/esm6';
 import {TOKEN_NAME} from '@/class/Constant';
 import {UserState} from '@/store/modules/User';
+import {SystemLogState} from '@/store/modules/SystemLog';
 
 export default class WebSocket {
     private static client: Client;
 
     public static start() {
         if (process.env.VUE_APP_WEB_SOCKET && !WebSocket.client) {
+            console.log('websocket init start');
             const connectHeaders: StompHeaders = new StompHeaders();
             connectHeaders[TOKEN_NAME] = UserState.token || '';
 
@@ -18,8 +20,8 @@ export default class WebSocket {
                 heartbeatIncoming: 4000,
                 heartbeatOutgoing: 4000,
                 onConnect: function (frame) {
-                    client.subscribe('/topic/bulletin', (message: Message) => {
-                        const bulletin = JSON.parse(message.body);
+                    client.subscribe('/topic/bulletin', (req: Message) => {
+                        const bulletin = JSON.parse(req.body);
                         Notification({
                             title: '公告',
                             message: bulletin.content,
@@ -35,17 +37,37 @@ export default class WebSocket {
                         });
                         UserState.resetRouter();
                     });
+
+                    client.subscribe('/topic/log', (req: Message) => {
+                        const {dateTime, level, levelName, message} = JSON.parse(req.body);
+                        console.log({dateTime, level, levelName, message});
+                        SystemLogState.addLog({dateTime, level, levelName, message});
+                    });
                 }
             });
 
             client.activate();
             WebSocket.client = client;
+            console.log('websocket init end');
         }
     }
 
     public static stop() {
         if (WebSocket.client) {
             WebSocket.client.deactivate();
+        }
+    }
+
+    public static subscribe(url: string, callback: (message: Message) => void): StompSubscription | null {
+        if (!WebSocket.client) {
+            WebSocket.start();
+        }
+        return WebSocket.client.subscribe(url, callback);
+    }
+
+    public static unsubscribe(id: string) {
+        if (WebSocket.client) {
+            WebSocket.client.unsubscribe(id);
         }
     }
 }

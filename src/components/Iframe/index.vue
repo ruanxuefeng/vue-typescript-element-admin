@@ -1,6 +1,6 @@
 <template>
     <div class="app-container" ref="appContainer">
-        <iframe ref="myIframe" :style="{height: iframeHeight}" @load="changeFrameHeight" v-bind:src="url" v-if="url"></iframe>
+        <iframe :style="{height: iframeHeight}" @load="changeFrameHeight" v-bind:src="url" v-if="url"></iframe>
     </div>
 </template>
 
@@ -13,7 +13,6 @@ import RouteRecordImpl from '@/router/RouteRecordImpl';
 })
 export default class Iframe extends Vue {
     public $refs!: {
-        myIframe: HTMLElement,
         appContainer: HTMLDivElement,
     };
     private url = '';
@@ -24,7 +23,6 @@ export default class Iframe extends Vue {
         this.url = meta.url;
         const appMainHeight = this.$refs.appContainer.parentElement?.offsetHeight ?? 1000;
         this.iframeHeight = `${appMainHeight - 55}px`;
-        console.log(this.iframeHeight);
     }
 }
 </script>

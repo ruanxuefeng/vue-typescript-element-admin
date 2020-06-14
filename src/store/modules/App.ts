@@ -21,6 +21,21 @@ export default class AppImpl extends VuexModule implements App {
         this.toggleSidebarMutation(withoutAnimation);
     }
 
+    @Action
+    closeSideBar(withoutAnimation: boolean) {
+        this.closeSidebarMutation(withoutAnimation);
+    }
+
+    @Action
+    toggleDevice(device: string) {
+        this.toggleDeviceMutation(device);
+    }
+
+    @Action
+    setSize(size: string) {
+        this.setSizeMutation(size);
+    }
+
     get sidebar(): Sidebar {
         return this.$sidebar;
     }
@@ -43,6 +58,24 @@ export default class AppImpl extends VuexModule implements App {
             Cookies.set('sidebarStatus', '0');
         }
     }
+
+    @Mutation
+    closeSidebarMutation(withoutAnimation: boolean) {
+        Cookies.set('sidebarStatus', '0');
+        this.$sidebar.opened = false;
+        this.$sidebar.withoutAnimation = withoutAnimation;
+    }
+
+    @Mutation
+    toggleDeviceMutation(device: string) {
+        this.$device = device;
+    }
+
+    @Mutation
+    setSizeMutation(size: string) {
+        this.$size = size;
+        Cookies.set('size', size);
+    };
 
 }
 

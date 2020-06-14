@@ -52,8 +52,6 @@ export default class SystemLog extends Vue {
 
     private mounted() {
         const appMainHeight = this.$refs.appContainer.parentElement?.offsetHeight ?? 1000;
-        console.log(this.$refs.appContainer);
-        console.log(appMainHeight);
         this.maxHeight = appMainHeight - 55;
     }
 

@@ -55,6 +55,7 @@
         }
 
         private handleClickOutside() {
+            AppState.closeSideBar(false);
         }
 
     }

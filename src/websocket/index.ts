@@ -40,7 +40,6 @@ export default class WebSocket {
 
                     client.subscribe('/topic/log', (req: Message) => {
                         const {dateTime, level, levelName, message} = JSON.parse(req.body);
-                        console.log({dateTime, level, levelName, message});
                         SystemLogState.addLog({dateTime, level, levelName, message});
                     });
                 }

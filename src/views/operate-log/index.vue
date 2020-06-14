@@ -49,7 +49,7 @@
                     <el-table-column :align="data.commonAlign" label="操作时间" prop="createTime"></el-table-column>
                 </el-table>
 
-                <pagination :limit.sync="query.pageSize" :page.sync="query.page" :total="query.total"
+                <pagination :limit.sync="query.pageSize" :page.sync="query.page" :total="query.total" :auto-scroll="true"
                             @pagination="getList" v-show="query.total > query.pageSize"/>
             </el-tab-pane>
         </el-tabs>

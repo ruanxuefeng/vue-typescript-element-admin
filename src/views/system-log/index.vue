@@ -19,6 +19,9 @@
                     <el-option :value="2000" label="2000"></el-option>
                 </el-select>
             </el-form-item>
+            <el-form-item>
+                <el-button circle icon="el-icon-delete" type="primary" @click="cleanLogs"></el-button>
+            </el-form-item>
         </el-form>
         <el-card ref="card" shadow="hover" style="height: 100%;overflow:auto;">
             <li :key="index" class="log" v-for="(log, index) in logs">
@@ -91,6 +94,10 @@ export default class SystemLog extends Vue {
             default :
                 return '';
         }
+    }
+
+    private cleanLogs() {
+        SystemLogState.clean();
     }
 }
 </script>

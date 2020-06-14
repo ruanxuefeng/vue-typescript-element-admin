@@ -11,12 +11,12 @@ interface SystemLog {
 @Module({dynamic: true, store, name: 'systemLog'})
 export default class SystemLogImpl extends VuexModule implements SystemLog{
     $logs: Array<Log> = [];
-    $level: number = 20000;
+    $level: number = 10000;
     $maxCount: number = 500;
 
     @Action
     public addLog(log: Log) {
-        if (log.level >= this.$level) {
+        if (log.level < this.$level) {
             return;
         }
 
@@ -24,6 +24,11 @@ export default class SystemLogImpl extends VuexModule implements SystemLog{
             this.logs.shift();
         }
         this.logs.push(log);
+    }
+
+    @Action
+    public clean() {
+        this.cleanLogsMutation();
     }
 
     get logs() {
@@ -47,6 +52,11 @@ export default class SystemLogImpl extends VuexModule implements SystemLog{
     @Mutation
     public setMaxCount(maxCount: number) {
         this.$maxCount = maxCount;
+    }
+
+    @Mutation
+    public cleanLogsMutation() {
+        this.$logs = [];
     }
 }
 export const SystemLogState = getModule(SystemLogImpl);

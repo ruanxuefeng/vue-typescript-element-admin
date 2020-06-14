@@ -2,7 +2,7 @@
     <div :style="{height: `${maxHeight}px`}" class="log-list app-container" ref="appContainer">
         <el-form :inline="true">
             <el-form-item label="日志级别">
-                <el-select placeholder="请选择" v-model="level" @change="levelChange">
+                <el-select @change="levelChange" placeholder="请选择" v-model="level">
                     <el-option :value="40000" label="ERROR"/>
                     <el-option :value="30000" label="WARN"/>
                     <el-option :value="20000" label="INFO"/>
@@ -12,7 +12,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item label="缓存条数">
-                <el-select placeholder="请选择" v-model="maxCount" @change="maxCountChange">
+                <el-select @change="maxCountChange" placeholder="请选择" v-model="maxCount">
                     <el-option :value="500" label="500"></el-option>
                     <el-option :value="1000" label="1000"></el-option>
                     <el-option :value="1500" label="1500"></el-option>
@@ -20,7 +20,7 @@
                 </el-select>
             </el-form-item>
         </el-form>
-        <el-card shadow="hover" style="height: 100%;overflow:auto;" ref="card">
+        <el-card ref="card" shadow="hover" style="height: 100%;overflow:auto;">
             <li :key="index" class="log" v-for="(log, index) in logs">
                 <el-tag :type="getLeveColor(log.level)">{{log.levelName}}</el-tag>
                 {{` ${log.dateTime} ${log.message}`}}
@@ -50,12 +50,20 @@ export default class SystemLog extends Vue {
         return SystemLogState.logs;
     }
 
+    public activated() {
+        this.scrollToBottom();
+    }
+
     private mounted() {
-        const appMainHeight = this.$refs.appContainer.parentElement?.offsetHeight ?? 1000;
+        const appMainHeight = this.$refs.appContainer?.parentElement?.offsetHeight ?? 1000;
         this.maxHeight = appMainHeight - 55;
     }
 
-    private updated(){
+    private updated() {
+        this.scrollToBottom();
+    }
+
+    private scrollToBottom() {
         this.$nextTick(() => {
             const container = this.$refs.card.$el;
             container.scrollTop = container.scrollHeight;
@@ -66,7 +74,7 @@ export default class SystemLog extends Vue {
         SystemLogState.setLevel(level);
     }
 
-    private maxCountChange(maxCount:number) {
+    private maxCountChange(maxCount: number) {
         SystemLogState.setMaxCount(maxCount);
     }
 

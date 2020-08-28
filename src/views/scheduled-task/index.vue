@@ -42,9 +42,9 @@
                         <template slot-scope="scope">
                             <el-button-group>
                                 <el-button @click="handleUpdate(scope.row)" type="primary">编辑</el-button>
-                                <el-button :type="scope.row.status === 'Enable'?'danger':'success'"
+                                <el-button :type="scope.row.status === 'ENABLE'?'danger':'success'"
                                            @click="handleUpdateStatus(scope.row)">
-                                    {{scope.row.status === 'Enable'?'禁用':'启用'}}
+                                    {{scope.row.status === 'ENABLE'?'禁用':'启用'}}
                                 </el-button>
                                 <el-button @click="trigger(scope.row)" type="primary">直接触发</el-button>
                                 <el-button @click="handleDelete(scope.row)" type="danger">删除</el-button>

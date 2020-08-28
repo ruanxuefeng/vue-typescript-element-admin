@@ -120,23 +120,6 @@ export const constantRoutes: RouteConfigImpl[] = [
         ]
     },
     {
-        path: '/test',
-        component: Layout,
-        redirect: '/test',
-        children: [
-            {
-                path: '/index',
-                component: () => import('@/components/Iframe/index.vue'),
-                name: 'Test',
-                meta: {
-                    title: 'SQL监控',
-                    icon: 'SQL',
-                    url: `${process.env.VUE_APP_BASE_URI}/druid/index.html`
-                }
-            }
-        ]
-    },
-    {
         path: '/login',
         hidden: true,
         component: () => import('@/views/login/index.vue')
